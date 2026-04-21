@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from bt_api_base.plugins.protocol import PluginInfo
-from bt_api_base.registry import ExchangeRegistry
 
 from bt_api_binance import __version__
 from bt_api_binance.gateway.adapter import BinanceGatewayAdapter
 from bt_api_binance.registry_registration import register_binance
+
+if TYPE_CHECKING:
+    from bt_api_base.registry import ExchangeRegistry
 
 
 def register_plugin(registry: ExchangeRegistry, runtime_factory: Any) -> PluginInfo:

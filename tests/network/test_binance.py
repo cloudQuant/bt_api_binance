@@ -29,7 +29,7 @@ from bt_api_binance.containers.orders.binance_order import (
     BinanceRequestOrderData,
 )
 from bt_api_binance.containers.tickers import BinanceRequestTickerData
-from bt_api_py.registry import ExchangeRegistry
+from bt_api_base.registry import ExchangeRegistry
 
 register_binance(ExchangeRegistry)
 

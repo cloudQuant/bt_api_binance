@@ -7,4 +7,3 @@ from bt_api_binance.containers.incomes.binance_income import (
 __all__ = [
     "BinanceIncomeData",
 ]
-

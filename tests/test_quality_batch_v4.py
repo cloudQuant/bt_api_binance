@@ -15,16 +15,16 @@ from typing import cast
 
 import pytest
 
-from bt_api_py.connection_pool import (
+from bt_api_base.connection_pool import (
     AsyncConnectionPool,
     AsyncPooledConnection,
     ConnectionPool,
     PooledConnection,
 )
-from bt_api_py.containers.instrument import AssetType, Instrument
-from bt_api_py.event_bus import EventBus
-from bt_api_py.instrument_manager import InstrumentManager
-from bt_api_py.security import SecureCredentialManager
+from bt_api_base.containers.instrument import AssetType, Instrument
+from bt_api_base.event_bus import EventBus
+from bt_api_base.instrument_manager import InstrumentManager
+from bt_api_base.security import SecureCredentialManager
 
 # ── AsyncConnectionPool.release semaphore fix ────────────────────
 

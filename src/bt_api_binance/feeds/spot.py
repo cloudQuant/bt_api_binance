@@ -4,18 +4,20 @@ import json
 import time
 from typing import Any
 
+from bt_api_base.functions.utils import update_extra_data
+from bt_api_base.logging_factory import get_logger
+
 from bt_api_binance.containers.accounts.binance_account import BinanceSpotWssAccountData
-from bt_api_binance.exchange_data import BinanceExchangeDataSpot
 from bt_api_binance.containers.orders.binance_order import (
     BinanceRequestOrderData,
     BinanceSpotWssOrderData,
 )
 from bt_api_binance.containers.trades.binance_trade import BinanceSpotWssTradeData
+from bt_api_binance.exchange_data import BinanceExchangeDataSpot
+
 from .account_wss_base import BinanceAccountWssData
 from .market_wss_base import BinanceMarketWssData
 from .request_base import BinanceRequestData
-from bt_api_base.functions.utils import update_extra_data
-from bt_api_base.logging_factory import get_logger
 
 
 class BinanceRequestDataSpot(BinanceRequestData):

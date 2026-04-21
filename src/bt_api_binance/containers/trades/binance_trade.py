@@ -4,7 +4,11 @@ import json
 import time
 
 from bt_api_base.containers.trades.trade import TradeData
-from bt_api_base.functions.utils import from_dict_get_bool, from_dict_get_float, from_dict_get_string
+from bt_api_base.functions.utils import (
+    from_dict_get_bool,
+    from_dict_get_float,
+    from_dict_get_string,
+)
 
 
 class BinanceAggTradeData:

@@ -4,8 +4,8 @@ from bt_api_binance.containers.orders.binance_order import (
     BinanceForceOrderData,
     BinanceOrderData,
     BinanceRequestOrderData,
-    BinanceSwapWssOrderData,
     BinanceSpotWssOrderData,
+    BinanceSwapWssOrderData,
 )
 
 __all__ = [
@@ -15,4 +15,3 @@ __all__ = [
     "BinanceSwapWssOrderData",
     "BinanceSpotWssOrderData",
 ]
-

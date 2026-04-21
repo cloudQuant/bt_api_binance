@@ -1,19 +1,84 @@
-# Binance Plugin for bt_api
+---
+title: Home | bt_api_binance
+---
 
-## English
+<!-- English -->
+# bt_api_binance Documentation
 
-Welcome to the **Binance** plugin documentation for [bt_api](https://github.com/cloudQuant/bt_api_py).
+[![PyPI Version](https://img.shields.io/pypi/v/bt_api_binance.svg)](https://pypi.org/project/bt_api_binance/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bt_api_binance.svg)](https://pypi.org/project/bt_api_binance/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/cloudQuant/bt_api_binance/actions/workflows/ci.yml/badge.svg)](https://github.com/cloudQuant/bt_api_binance/actions)
+[![Docs](https://readthedocs.org/projects/bt-api-binance/badge/?version=latest)](https://bt-api-binance.readthedocs.io/)
 
-This plugin provides a unified interface for interacting with **Binance** exchange, supporting Spot, Futures, Margin, and other trading functionalities.
+## Overview
 
-### Features
+`bt_api_binance` is the **Binance exchange plugin** for the [bt_api](https://github.com/cloudQuant/bt_api_py) plugin ecosystem. It provides unified REST and WebSocket interfaces for **Spot**, **Futures** (USDT-M and COIN-M), **Margin**, **Options**, **Algo Orders**, **Grid Trading**, **Staking**, **Mining**, **VIP Loans**, **Wallet**, **Sub-Accounts**, and **Portfolio Margin**.
 
-- **Spot Trading**: Buy and sell cryptocurrencies with order book depth
-- **Futures Trading**: USDT-M and COIN-M futures contracts
-- **Margin Trading**: Cross-margin and isolated-margin support
-- **WebSocket Feeds**: Real-time ticker, orderbook, and trade data
-- **REST API**: Full trading functionality including order management
-- **Account Management**: Balance, position, and order tracking
+This package is a **runtime plugin dependency** for `bt_api` applications connecting to Binance. It depends on [bt_api_base](https://github.com/cloudQuant/bt_api_base) for core infrastructure (registry, event bus, WebSocket management, caching, rate limiting).
+
+## Key Benefits
+
+- **12+ Asset Types**: Spot, USDT-M Futures, COIN-M Futures, Margin, Options, Algo, Grid, Staking, Mining, VIP Loans, Wallet, Sub-Accounts, Portfolio Margin
+- **Dual API Modes**: Synchronous REST and asynchronous WebSocket streaming
+- **Plugin Architecture**: Integrates via `ExchangeRegistry` — auto-registers at import time
+- **Direct Client Mode**: `BinanceDirectClient` for standalone use without the full bt_api framework
+- **Unified Data Model**: All responses normalized to bt_api_base container types (Ticker, OrderBook, Bar, Order, Position, Balance...)
+- **Config-Driven**: YAML-based exchange configuration — no hardcoded endpoints
+- **HMAC-SHA256 Auth**: Full request signing for authenticated endpoints
+
+## Architecture Overview
+
+```
+bt_api_binance/
+├── client.py                  # BinanceDirectClient — standalone REST + WebSocket client
+├── plugin.py                 # register_plugin() — bt_api plugin entry point
+├── registry_registration.py   # register_binance() — feeds/exchange_data/balance_handler registration
+├── exchange_data/
+│   └── binance_exchange_data.py  # BinanceExchangeData (base) + 12 asset-type subclasses
+├── feeds/
+│   ├── spot.py              # BinanceRequestDataSpot, BinanceMarketWssDataSpot, BinanceAccountWssDataSpot
+│   ├── swap.py               # BinanceRequestDataSwap, BinanceMarketWssDataSwap, BinanceAccountWssDataSwap
+│   ├── coin_m.py             # BinanceRequestDataCoinM, BinanceMarketWssDataCoinM, BinanceAccountWssDataCoinM
+│   ├── margin.py             # Margin trading feeds
+│   ├── option.py            # Options trading feeds
+│   ├── algo.py              # TWAP/VWAP algo order feeds
+│   ├── grid.py              # Grid trading feeds
+│   ├── staking.py           # Staking/LDEX feeds
+│   ├── mining.py            # Mining API feeds
+│   ├── vip_loan.py         # VIP loan feeds
+│   ├── sub_account.py       # Sub-account management feeds
+│   ├── wallet.py            # Wallet/asset management feeds
+│   ├── portfolio.py         # Portfolio margin feeds
+│   └── (bases: request_base.py, market_wss_base.py, account_wss_base.py)
+├── containers/               # 12 data container types (orders, balances, positions, tickers...)
+├── gateway/
+│   └── adapter.py           # BinanceGatewayAdapter(PluginGatewayAdapter)
+├── errors/
+│   └── binance_translator.py  # BinanceErrorTranslator
+└── configs/
+    └── binance.yaml         # Full YAML config (URLs, paths, rate limits for all asset types)
+```
+
+## Supported Exchange Codes
+
+| Exchange Code | Asset Type | REST Base | WSS Base |
+|---|---|---|---|
+| `BINANCE___SPOT` | Spot | `https://api.binance.com` | `wss://stream.binance.com:9443/ws` |
+| `BINANCE___SWAP` | USDT-M Futures | `https://fapi.binance.com` | `wss://fstream.binance.com/ws` |
+| `BINANCE___COIN_M` | COIN-M Futures | `https://dapi.binance.com` | `wss://dstream.binance.com/ws` |
+| `BINANCE___MARGIN` | Cross/Isolated Margin | `https://api.binance.com` | `wss://stream.binance.com/ws` |
+| `BINANCE___OPTION` | Options | `https://eapi.binance.com` | `wss://nbstream.binance.com/eoptions/ws` |
+| `BINANCE___ALGO` | TWAP/VWAP | `https://api.binance.com` | — |
+| `BINANCE___GRID` | Grid Trading | `https://api.binance.com` | — |
+| `BINANCE___STAKING` | Staking/LDEX | `https://api.binance.com` | — |
+| `BINANCE___MINING` | Mining | `https://api.binance.com` | — |
+| `BINANCE___VIP_LOAN` | VIP Loans | `https://api.binance.com` | — |
+| `BINANCE___WALLET` | Wallet | `https://api.binance.com` | — |
+| `BINANCE___SUB_ACCOUNT` | Sub-Accounts | `https://api.binance.com` | — |
+| `BINANCE___PORTFOLIO` | Portfolio Margin | `https://api.binance.com` | — |
+
+## Quick Start
 
 ### Installation
 
@@ -21,80 +86,89 @@ This plugin provides a unified interface for interacting with **Binance** exchan
 pip install bt_api_binance
 ```
 
-### Quick Start
+Or from source:
+
+```bash
+git clone https://github.com/cloudQuant/bt_api_binance
+cd bt_api_binance
+pip install -e .
+```
+
+### Standalone Direct Client
 
 ```python
 from bt_api_binance import BinanceApi
 
-# Initialize with API credentials
-feed = BinanceApi(
+client = BinanceApi(
     api_key="your_api_key",
-    secret="your_secret",
-    testnet=True  # Use testnet for testing
+    secret_key="your_secret",
+    asset_type="SPOT",
+    testnet=True,
 )
 
-# Get ticker data
-ticker = feed.get_ticker("BTCUSDT")
-print(f"BTC/USDT: {ticker.last_price}")
+client.connect()
 
-# Get order book
-orderbook = feed.get_orderbook("BTCUSDT", depth=20)
-print(f"Bids: {orderbook.bids[:5]}")
+client.subscribe_symbols(["BTCUSDT", "ETHUSDT"])
 
-# Place an order
-order = feed.make_order(
-    symbol="BTCUSDT",
-    side="BUY",
-    order_type="LIMIT",
-    price=50000.0,
-    quantity=0.001
-)
-print(f"Order ID: {order.order_id}")
+while True:
+    channel, data = client.poll_output()
+    if channel == "market":
+        print(f"{data['symbol']}: price={data['price']}, bid={data['bid_price']}, ask={data['ask_price']}")
 ```
 
-### Architecture
-
-```
-bt_api_binance/
-├── src/bt_api_binance/
-│   ├── containers/      # Data models (Ticker, OrderBook, Order, etc.)
-│   ├── feeds/          # REST and WebSocket API implementations
-│   ├── gateway/        # Gateway adapter for bt_api integration
-│   ├── configs/        # Exchange-specific configurations
-│   ├── errors/         # Error code translations
-│   └── plugin.py       # Plugin registration entry point
-├── tests/              # Comprehensive test suite
-└── docs/              # Documentation
-```
-
-### Configuration
+### bt_api Plugin Integration
 
 ```python
-exchange_kwargs = {
-    "BINANCE___SPOT": {
-        "api_key": "your_api_key",
-        "secret": "your_secret",
-        "testnet": True,  # or False for production
-        "recv_window": 5000,  # Request window in milliseconds
+from bt_api_py import BtApi
+
+api = BtApi(
+    exchange_kwargs={
+        "BINANCE___SPOT": {
+            "api_key": "your_key",
+            "secret": "your_secret",
+            "testnet": True,
+        }
     }
-}
+)
+
+ticker = api.get_tick("BINANCE___SPOT", "BTCUSDT")
+balance = api.get_balance("BINANCE___SPOT")
+order = api.make_order(
+    exchange_name="BINANCE___SPOT",
+    symbol="BTCUSDT",
+    volume=0.001,
+    price=50000,
+    order_type="limit",
+)
 ```
 
-### Supported Operations
+### WebSocket Subscription
 
-| Operation | Endpoint | Status |
-|-----------|----------|--------|
-| Get Ticker | `/api/v3/ticker/24hr` | ✅ |
-| Get OrderBook | `/api/v3/depth` | ✅ |
-| Get Klines | `/api/v3/klines` | ✅ |
-| Get Balance | `/api/v3/account` | ✅ |
-| Place Order | `/api/v3/order` | ✅ |
-| Cancel Order | `/api/v3/order` | ✅ |
-| Get Open Orders | `/api/v3/openOrders` | ✅ |
-| WebSocket Ticker | `!ticker@arr` | ✅ |
-| WebSocket Depth | `<symbol>@depth` | ✅ |
+```python
+api.subscribe(
+    "BINANCE___SPOT___BTCUSDT",
+    [
+        {"topic": "ticker", "symbol": "BTCUSDT"},
+        {"topic": "depth", "symbol": "BTCUSDT", "depth": 20},
+    ],
+)
 
-### Online Resources
+data_queue = api.get_data_queue("BINANCE___SPOT")
+while True:
+    msg = data_queue.get(timeout=10)
+    print(type(msg).__name__, msg)
+```
+
+## API Reference
+
+- [Client](api/client.md) — BinanceDirectClient standalone entry point
+- [Feeds](api/feeds.md) — REST request feeds and WebSocket market/account feeds
+- [Exchange Data](api/exchange_data.md) — Exchange configuration classes
+- [Containers](api/containers.md) — Normalized data containers
+- [WebSocket](api/websocket.md) — WebSocket adapter
+- [Gateway](api/gateway.md) — Gateway adapter
+
+## Online Documentation
 
 | Resource | Link |
 |----------|------|
@@ -103,119 +177,132 @@ exchange_kwargs = {
 | GitHub Repository | https://github.com/cloudQuant/bt_api_binance |
 | Issue Tracker | https://github.com/cloudQuant/bt_api_binance/issues |
 | PyPI Package | https://pypi.org/project/bt_api_binance/ |
+| bt_api_base Docs | https://bt-api-base.readthedocs.io/ |
+| Main Project | https://github.com/cloudQuant/bt_api_py |
 
 ---
 
 ## 中文
 
-欢迎使用 **bt_api** 的 **Binance（币安）** 插件文档。
+### 概述
 
-本插件提供与 **币安** 交易所交互的统一接口，支持现货、合约、杠杆等多种交易功能。
+`bt_api_binance` 是 [bt_api](https://github.com/cloudQuant/bt_api_py) 插件生态系统的 **Binance 交易所插件**。它为**现货**、**合约**（U本位和币本位）、**杠杆**、**期权**、**算法单**、**网格交易**、**质押**、**矿池**、**VIP借贷**、**钱包**、**子账户**和**组合保证金**提供统一的 REST 和 WebSocket 接口。
 
-### 功能特点
+本包是 `bt_api` 应用连接 Binance 的**运行时插件依赖**。它依赖 [bt_api_base](https://github.com/cloudQuant/bt_api_base) 提供核心基础设施（注册表、事件总线、WebSocket 管理、缓存、限流）。
 
-- **现货交易**：买卖加密货币，查看订单簿深度
-- **合约交易**：U本位和币本位永续合约
-- **杠杆交易**：全仓和逐仓杠杆支持
-- **WebSocket 行情**：实时行情、订单簿和成交数据推送
-- **REST API**：完整的交易功能，包括订单管理
-- **账户管理**：余额、持仓和订单跟踪
+### 核心优势
 
-### 安装
-
-```bash
-pip install bt_api_binance
-```
-
-### 快速开始
-
-```python
-from bt_api_binance import BinanceApi
-
-# 使用 API 凭证初始化
-feed = BinanceApi(
-    api_key="your_api_key",
-    secret="your_secret",
-    testnet=True  # 测试时使用测试网
-)
-
-# 获取行情数据
-ticker = feed.get_ticker("BTCUSDT")
-print(f"BTC/USDT: {ticker.last_price}")
-
-# 获取订单簿
-orderbook = feed.get_orderbook("BTCUSDT", depth=20)
-print(f"买单: {orderbook.bids[:5]}")
-
-# 下单
-order = feed.make_order(
-    symbol="BTCUSDT",
-    side="BUY",
-    order_type="LIMIT",
-    price=50000.0,
-    quantity=0.001
-)
-print(f"订单ID: {order.order_id}")
-```
+- **12+ 资产类型**: 现货、U本位合约、币本位合约、杠杆、期权、算法单、网格交易、质押、矿池、VIP借贷、钱包、子账户、组合保证金
+- **双 API 模式**: 同步 REST 和异步 WebSocket 流
+- **插件架构**: 通过 `ExchangeRegistry` 集成 — 导入时自动注册
+- **独立客户端模式**: `BinanceDirectClient` 无需完整 bt_api 框架即可独立使用
+- **统一数据模型**: 所有响应规范化为 bt_api_base 容器类型（行情、订单簿、K线、订单、持仓、余额...）
+- **配置驱动**: YAML 配置文件 — 无硬编码端点
+- **HMAC-SHA256 认证**: 完整请求签名支持
 
 ### 架构
 
 ```
 bt_api_binance/
-├── src/bt_api_binance/
-│   ├── containers/      # 数据模型（行情、订单簿、订单等）
-│   ├── feeds/          # REST 和 WebSocket API 实现
-│   ├── gateway/        # bt_api 集成的网关适配器
-│   ├── configs/        # 交易所特定配置
-│   ├── errors/         # 错误码翻译
-│   └── plugin.py       # 插件注册入口
-├── tests/              # 综合测试套件
-└── docs/               # 文档
+├── client.py                  # BinanceDirectClient — 独立 REST + WebSocket 客户端
+├── plugin.py                 # register_plugin() — bt_api 插件入口
+├── registry_registration.py   # register_binance() — feeds/exchange_data/balance_handler 注册
+├── exchange_data/
+│   └── binance_exchange_data.py  # BinanceExchangeData（基类）+ 12 个资产类型子类
+├── feeds/
+│   ├── spot.py              # 现货请求、WebSocket 市场、WebSocket 账户 feeds
+│   ├── swap.py               # USDT-M 合约 feeds
+│   ├── coin_m.py            # 币本位合约 feeds
+│   ├── margin.py, option.py, algo.py, grid.py, staking.py,
+│   │   mining.py, vip_loan.py, sub_account.py, wallet.py, portfolio.py
+│   └── (基类: request_base.py, market_wss_base.py, account_wss_base.py)
+├── containers/               # 12 种数据容器类型
+├── gateway/
+│   └── adapter.py           # BinanceGatewayAdapter(PluginGatewayAdapter)
+├── errors/
+│   └── binance_translator.py  # BinanceErrorTranslator
+└── configs/
+    └── binance.yaml         # 全部资产类型的完整 YAML 配置
 ```
 
-### 配置
+### 支持的交易所代码
+
+| 交易所代码 | 资产类型 | REST 基础地址 | WSS 基础地址 |
+|---|---|---|---|
+| `BINANCE___SPOT` | 现货 | `https://api.binance.com` | `wss://stream.binance.com:9443/ws` |
+| `BINANCE___SWAP` | U本位永续 | `https://fapi.binance.com` | `wss://fstream.binance.com/ws` |
+| `BINANCE___COIN_M` | 币本位永续 | `https://dapi.binance.com` | `wss://dstream.binance.com/ws` |
+| `BINANCE___MARGIN` | 全仓/逐仓杠杆 | `https://api.binance.com` | `wss://stream.binance.com/ws` |
+| `BINANCE___OPTION` | 期权 | `https://eapi.binance.com` | `wss://nbstream.binance.com/eoptions/ws` |
+| `BINANCE___ALGO` | TWAP/VWAP | `https://api.binance.com` | — |
+| `BINANCE___GRID` | 网格交易 | `https://api.binance.com` | — |
+| `BINANCE___STAKING` | 质押理财 | `https://api.binance.com` | — |
+| `BINANCE___MINING` | 矿池 | `https://api.binance.com` | — |
+| `BINANCE___VIP_LOAN` | VIP借贷 | `https://api.binance.com` | — |
+| `BINANCE___WALLET` | 钱包 | `https://api.binance.com` | — |
+| `BINANCE___SUB_ACCOUNT` | 子账户 | `https://api.binance.com` | — |
+| `BINANCE___PORTFOLIO` | 组合保证金 | `https://api.binance.com` | — |
+
+### 快速开始
+
+```bash
+pip install bt_api_binance
+```
+
+独立客户端使用：
 
 ```python
-exchange_kwargs = {
-    "BINANCE___SPOT": {
-        "api_key": "your_api_key",
-        "secret": "your_secret",
-        "testnet": True,  # 或 False 用于生产
-        "recv_window": 5000,  # 请求窗口时间（毫秒）
-    }
-}
+from bt_api_binance import BinanceApi
+
+client = BinanceApi(
+    api_key="your_api_key",
+    secret_key="your_secret",
+    asset_type="SPOT",
+    testnet=True,
+)
+
+client.connect()
+client.subscribe_symbols(["BTCUSDT", "ETHUSDT"])
+
+while True:
+    channel, data = client.poll_output()
+    if channel == "market":
+        print(f"{data['symbol']}: price={data['price']}")
 ```
 
-### 支持的操作
+bt_api 插件集成：
 
-| 操作 | 端点 | 状态 |
-|------|------|------|
-| 获取行情 | `/api/v3/ticker/24hr` | ✅ |
-| 获取订单簿 | `/api/v3/depth` | ✅ |
-| 获取K线 | `/api/v3/klines` | ✅ |
-| 获取余额 | `/api/v3/account` | ✅ |
-| 下单 | `/api/v3/order` | ✅ |
-| 撤单 | `/api/v3/order` | ✅ |
-| 获取未完成订单 | `/api/v3/openOrders` | ✅ |
-| WebSocket 行情 | `!ticker@arr` | ✅ |
-| WebSocket 订单簿 | `<symbol>@depth` | ✅ |
+```python
+from bt_api_py import BtApi
 
-### 在线资源
+api = BtApi(exchange_kwargs={
+    "BINANCE___SPOT": {
+        "api_key": "your_key",
+        "secret": "your_secret",
+        "testnet": True,
+    }
+})
+
+ticker = api.get_tick("BINANCE___SPOT", "BTCUSDT")
+```
+
+### API 参考
+
+- [客户端](api/client.md) — BinanceDirectClient 独立入口
+- [Feeds](api/feeds.md) — REST 请求 feeds 和 WebSocket 市场/账户 feeds
+- [交易所数据](api/exchange_data.md) — 交易所配置类
+- [容器](api/containers.md) — 规范化数据容器
+- [WebSocket](api/websocket.md) — WebSocket 适配器
+- [网关](api/gateway.md) — 网关适配器
+
+### 在线文档
 
 | 资源 | 链接 |
-|------|------|
+|----------|------|
 | 英文文档 | https://bt-api-binance.readthedocs.io/ |
 | 中文文档 | https://bt-api-binance.readthedocs.io/zh/latest/ |
 | GitHub 仓库 | https://github.com/cloudQuant/bt_api_binance |
 | 问题反馈 | https://github.com/cloudQuant/bt_api_binance/issues |
 | PyPI 包 | https://pypi.org/project/bt_api_binance/ |
-
----
-
-## API Reference
-
-For detailed API documentation, please refer to the source code in `src/bt_api_binance/` or visit the online documentation.
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
+| bt_api_base 文档 | https://bt-api-base.readthedocs.io/ |
+| 主项目 | https://github.com/cloudQuant/bt_api_py |

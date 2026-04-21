@@ -5,6 +5,12 @@ import time
 from typing import Any
 
 from bt_api_base.containers.accounts.account import AccountData
+from bt_api_base.functions.utils import (
+    from_dict_get_bool,
+    from_dict_get_float,
+    from_dict_get_string,
+)
+
 from bt_api_binance.containers.balances.binance_balance import (
     BinanceSpotRequestBalanceData,
     BinanceSpotWssBalanceData,
@@ -15,7 +21,6 @@ from bt_api_binance.containers.positions.binance_position import (
     BinanceRequestPositionData,
     BinanceWssPositionData,
 )
-from bt_api_base.functions.utils import from_dict_get_bool, from_dict_get_float, from_dict_get_string
 
 
 class BinanceSpotRequestAccountData(AccountData):

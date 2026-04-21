@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from bt_api_binance.exchange_data.binance_exchange_data import (
     BinanceExchangeData,
     BinanceExchangeDataAlgo,

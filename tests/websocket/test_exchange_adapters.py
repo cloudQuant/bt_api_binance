@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from bt_api_py.websocket.exchange_adapters import ExchangeType, WebSocketAdapterFactory
+from bt_api_base.websocket.exchange_adapters import ExchangeType, WebSocketAdapterFactory
 
 from bt_api_binance.websocket.exchange_adapters import BinanceWebSocketAdapter
 

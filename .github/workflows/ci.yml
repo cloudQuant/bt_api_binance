@@ -159,7 +159,7 @@ jobs:
         run: python -m build
 
       - name: Publish to PyPI
-        run: twine upload dist/*
+        run: twine upload dist/* --skip-existing
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}

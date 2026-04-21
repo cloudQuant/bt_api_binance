@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from bt_api_binance.client import BinanceDirectClient, _normalize_asset_type
 from bt_api_base.gateway.adapters.plugin_adapter import PluginGatewayAdapter
+
+from bt_api_binance.client import BinanceDirectClient
 
 
 class BinanceGatewayAdapter(PluginGatewayAdapter):

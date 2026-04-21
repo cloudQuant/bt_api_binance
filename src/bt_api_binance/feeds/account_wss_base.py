@@ -4,12 +4,14 @@ import json
 import time
 from typing import Any
 
+from bt_api_base.feeds.my_websocket_app import MyWebsocketApp
+from bt_api_base.logging_factory import get_logger
+
 from bt_api_binance.containers.accounts.binance_account import BinanceSwapWssAccountData
 from bt_api_binance.containers.orders.binance_order import BinanceSwapWssOrderData
 from bt_api_binance.containers.trades.binance_trade import BinanceSwapWssTradeData
+
 from .request_base import BinanceRequestData
-from bt_api_base.feeds.my_websocket_app import MyWebsocketApp
-from bt_api_base.logging_factory import get_logger
 
 
 class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):

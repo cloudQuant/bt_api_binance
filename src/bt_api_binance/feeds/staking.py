@@ -12,10 +12,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from bt_api_binance.exchange_data import BinanceExchangeDataStaking
-from .request_base import BinanceRequestData
 from bt_api_base.functions.utils import update_extra_data
 from bt_api_base.logging_factory import get_logger
+
+from bt_api_binance.exchange_data import BinanceExchangeDataStaking
+
+from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataStaking(BinanceRequestData):

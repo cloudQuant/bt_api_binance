@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from bt_api_binance.containers.fundingrates.binance_funding_rate import BinanceRequestFundingRateData
+from bt_api_binance.containers.fundingrates.binance_funding_rate import (
+    BinanceRequestFundingRateData,
+)
 
 
 class TestBinanceRequestFundingRateData:

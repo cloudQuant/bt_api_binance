@@ -6,7 +6,9 @@ import random
 
 import pytest
 
-from bt_api_py.functions.calculate_numbers import (
+pytest.importorskip("bt_api_base.functions.calculate_numbers")
+
+from bt_api_base.functions.calculate_numbers import (
     allocate_value_to_arr,
     cal_sum_of_key_values,
     merge_zheng_order,

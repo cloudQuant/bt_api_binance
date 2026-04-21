@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from bt_api_base.balance_utils import simple_balance_handler as _binance_balance_handler
-from bt_api_base.registry import ExchangeRegistry
+
 from bt_api_binance.exchange_data import BinanceExchangeDataSpot, BinanceExchangeDataSwap
 from bt_api_binance.feeds.spot import (
     BinanceAccountWssDataSpot,
@@ -13,6 +15,9 @@ from bt_api_binance.feeds.swap import (
     BinanceMarketWssDataSwap,
     BinanceRequestDataSwap,
 )
+
+if TYPE_CHECKING:
+    from bt_api_base.registry import ExchangeRegistry
 
 
 def _binance_swap_subscribe_handler(data_queue, exchange_params, topics, bt_api):

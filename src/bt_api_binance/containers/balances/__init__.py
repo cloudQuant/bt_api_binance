@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from bt_api_binance.containers.balances.binance_balance import (
-    BinanceWssBalanceData,
     BinanceSpotRequestBalanceData,
+    BinanceSpotWssBalanceData,
     BinanceSwapRequestBalanceData,
     BinanceSwapWssBalanceData,
-    BinanceSpotWssBalanceData,
+    BinanceWssBalanceData,
 )
 
 __all__ = [

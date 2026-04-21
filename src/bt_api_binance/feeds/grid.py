@@ -9,13 +9,17 @@ Implements all REST API requests related to Binance grid trading, including:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from bt_api_binance.exchange_data import BinanceExchangeDataGrid
-from bt_api_base.containers.requestdatas.request_data import RequestData
-from .request_base import BinanceRequestData
 from bt_api_base.functions.utils import update_extra_data
 from bt_api_base.logging_factory import get_logger
+
+from bt_api_binance.exchange_data import BinanceExchangeDataGrid
+
+from .request_base import BinanceRequestData
+
+if TYPE_CHECKING:
+    from bt_api_base.containers.requestdatas.request_data import RequestData
 
 
 class BinanceRequestDataGrid(BinanceRequestData):

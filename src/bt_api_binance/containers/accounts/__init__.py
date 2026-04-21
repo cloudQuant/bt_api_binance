@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from bt_api_binance.containers.accounts.binance_account import (
     BinanceSpotRequestAccountData,
+    BinanceSpotWssAccountData,
     BinanceSwapRequestAccountData,
     BinanceSwapWssAccountData,
-    BinanceSpotWssAccountData,
 )
 
 __all__ = [

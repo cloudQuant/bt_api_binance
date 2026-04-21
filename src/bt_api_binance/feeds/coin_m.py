@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
+from bt_api_base.logging_factory import get_logger
+
 from bt_api_binance.exchange_data import BinanceExchangeDataCoinM
+
 from .account_wss_base import BinanceAccountWssData
 from .market_wss_base import BinanceMarketWssData
 from .request_base import BinanceRequestData
-from bt_api_base.logging_factory import get_logger
 
 
 class BinanceRequestDataCoinM(BinanceRequestData):

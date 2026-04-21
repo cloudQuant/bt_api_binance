@@ -8,19 +8,20 @@ import time
 from collections import defaultdict
 from typing import Any
 
+from bt_api_base.logging_factory import get_logger
+
+from bt_api_binance.containers.orders.binance_order import BinanceSwapWssOrderData
+from bt_api_binance.containers.tickers.binance_ticker import BinanceWssTickerData
+from bt_api_binance.containers.trades.binance_trade import BinanceSwapWssTradeData
 from bt_api_binance.exchange_data import (
     BinanceExchangeDataSpot,
     BinanceExchangeDataSwap,
 )
-from bt_api_binance.containers.orders.binance_order import BinanceSwapWssOrderData
-from bt_api_binance.containers.tickers.binance_ticker import BinanceWssTickerData
-from bt_api_binance.containers.trades.binance_trade import BinanceSwapWssTradeData
 from bt_api_binance.feeds.swap import (
     BinanceAccountWssDataSwap,
     BinanceMarketWssDataSwap,
     BinanceRequestDataSwap,
 )
-from bt_api_base.logging_factory import get_logger
 
 CHANNEL_EVENT = "event"
 CHANNEL_MARKET = "market"

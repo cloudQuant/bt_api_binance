@@ -1,5 +1,5 @@
-site_name: "Binance Documentation"
-site_description: "Binance plugin for bt_api"
+site_name: "bt_api_binance Documentation"
+site_description: "Binance exchange plugin for bt_api - Spot, Futures, Margin, Options and more"
 site_author: cloudQuant
 site_url: https://bt-api-binance.readthedocs.io/
 
@@ -25,11 +25,30 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
 
+  plugins:
+    - search
+    - materialx
+    - bilingual:
+        default_language: en
+        languages:
+          en: English
+          zh: 中文
+        navigation_depth: 3
+
 nav:
   - Home: index.md
+  - API Reference:
+    - Client: api/client.md
+    - Feeds: api/feeds.md
+    - Exchange Data: api/exchange_data.md
+    - Containers: api/containers.md
+    - WebSocket: api/websocket.md
+    - Gateway: api/gateway.md
 
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - admonition
   - tables
+  - toc:
+      permalink: true
