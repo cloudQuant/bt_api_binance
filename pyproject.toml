@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bt_api_binance"
+version = "2.0.0"
+description = "Binance exchange plugin for bt_api"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "bt_api_base>=0.15,<1.0",
+    "requests>=2.28",
+    "websocket-client>=1.5",
+    "aiohttp>=3.9",
+]
+
+[project.entry-points."bt_api.plugins"]
+binance = "bt_api_binance.plugin:register_plugin"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+bt_api_binance = ["configs/*.yaml"]
