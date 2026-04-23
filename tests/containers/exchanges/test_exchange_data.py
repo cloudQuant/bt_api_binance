@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from bt_api_base.containers.exchanges.exchange_data import ExchangeData
 
 

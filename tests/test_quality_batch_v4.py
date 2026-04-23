@@ -14,7 +14,6 @@ import asyncio
 from typing import cast
 
 import pytest
-
 from bt_api_base.connection_pool import (
     AsyncConnectionPool,
     AsyncPooledConnection,
@@ -164,7 +163,7 @@ class TestEventBusOnValidation:
     def test_none_event_type_raises(self):
         bus = EventBus()
         with pytest.raises(ValueError, match="non-empty"):
-            bus.on(cast(str, None), lambda d: d)
+            bus.on(cast("str", None), lambda d: d)
 
     def test_empty_string_event_type_raises(self):
         bus = EventBus()

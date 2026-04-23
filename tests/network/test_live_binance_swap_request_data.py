@@ -3,11 +3,12 @@ import random
 import time
 
 import pytest
+from bt_api_base.containers.requestdatas.request_data import RequestData
+from bt_api_base.functions.utils import read_account_config
 
 from bt_api_binance.containers.accounts import BinanceSwapRequestAccountData
 from bt_api_binance.containers.balances import BinanceSwapRequestBalanceData
 from bt_api_binance.containers.bars import BinanceRequestBarData
-from bt_api_binance.exchange_data import BinanceExchangeDataSwap
 from bt_api_binance.containers.fundingrates.binance_funding_rate import (
     BinanceRequestFundingRateData,
     BinanceRequestHistoryFundingRateData,
@@ -16,10 +17,9 @@ from bt_api_binance.containers.markprices.binance_mark_price import BinanceReque
 from bt_api_binance.containers.orderbooks import BinanceRequestOrderBookData
 from bt_api_binance.containers.orders.binance_order import BinanceRequestOrderData
 from bt_api_binance.containers.positions.binance_position import BinanceRequestPositionData
-from bt_api_base.containers.requestdatas.request_data import RequestData
 from bt_api_binance.containers.tickers import BinanceRequestTickerData
+from bt_api_binance.exchange_data import BinanceExchangeDataSwap
 from bt_api_binance.feeds.swap import BinanceRequestDataSwap
-from bt_api_base.functions.utils import read_account_config
 
 pytestmark = [pytest.mark.integration, pytest.mark.network]
 

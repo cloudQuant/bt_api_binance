@@ -17,11 +17,8 @@ Run with coverage:
 import queue
 
 import pytest
+from bt_api_base.registry import ExchangeRegistry
 
-# Import registration to auto-register Binance
-from bt_api_binance.exchange_data import BinanceExchangeDataSpot, BinanceExchangeDataSwap
-from bt_api_binance.feeds.spot import BinanceRequestDataSpot
-from bt_api_binance.registry_registration import register_binance
 from bt_api_binance.containers.balances import (
     BinanceSpotWssBalanceData,
 )
@@ -29,7 +26,11 @@ from bt_api_binance.containers.orders.binance_order import (
     BinanceRequestOrderData,
 )
 from bt_api_binance.containers.tickers import BinanceRequestTickerData
-from bt_api_base.registry import ExchangeRegistry
+
+# Import registration to auto-register Binance
+from bt_api_binance.exchange_data import BinanceExchangeDataSpot, BinanceExchangeDataSwap
+from bt_api_binance.feeds.spot import BinanceRequestDataSpot
+from bt_api_binance.registry_registration import register_binance
 
 register_binance(ExchangeRegistry)
 

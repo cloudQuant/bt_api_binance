@@ -1,7 +1,7 @@
+import importlib.util
 import queue
 import random
 import time
-import importlib.util
 from pathlib import Path
 
 import pytest
@@ -17,9 +17,10 @@ assert _SWAP_REQUEST_SPEC.loader is not None
 _SWAP_REQUEST_SPEC.loader.exec_module(_SWAP_REQUEST_MODULE)
 init_req_feed = _SWAP_REQUEST_MODULE.init_req_feed
 
+from bt_api_base.functions.utils import read_account_config
+
 from bt_api_binance.containers.accounts import BinanceSwapWssAccountData
 from bt_api_binance.containers.bars import BinanceWssBarData
-from bt_api_binance.exchange_data import BinanceExchangeDataSwap
 from bt_api_binance.containers.fundingrates.binance_funding_rate import BinanceWssFundingRateData
 from bt_api_binance.containers.markprices.binance_mark_price import BinanceWssMarkPriceData
 from bt_api_binance.containers.orderbooks import BinanceWssOrderBookData
@@ -29,8 +30,8 @@ from bt_api_binance.containers.orders.binance_order import (
 )
 from bt_api_binance.containers.tickers import BinanceWssTickerData
 from bt_api_binance.containers.trades.binance_trade import BinanceAggTradeData
+from bt_api_binance.exchange_data import BinanceExchangeDataSwap
 from bt_api_binance.feeds.swap import BinanceAccountWssDataSwap, BinanceMarketWssDataSwap
-from bt_api_base.functions.utils import read_account_config
 
 pytestmark = [pytest.mark.integration, pytest.mark.network]
 

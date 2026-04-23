@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
-
 from bt_api_base.containers.instrument import AssetType, Instrument
 
 
@@ -149,7 +148,7 @@ class TestInstrument:
         )
 
         with pytest.raises(dataclasses.FrozenInstanceError):
-            setattr(instrument, "internal", "ETH-USDT")
+            instrument.internal = "ETH-USDT"
 
 
 if __name__ == "__main__":

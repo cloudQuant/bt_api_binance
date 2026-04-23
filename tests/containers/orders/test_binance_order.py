@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from bt_api_binance.containers.orders.binance_order import BinanceForceOrderData
 from bt_api_base.containers.orders.order import OrderStatus
+
+from bt_api_binance.containers.orders.binance_order import BinanceForceOrderData
 
 
 class TestBinanceForceOrderData:
