@@ -30,7 +30,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["bt_api_risk", "scikit-learn"]
+test = ["scikit-learn"]
 
 [project.entry-points."bt_api.plugins"]
 binance = "bt_api_binance.plugin:register_plugin"
