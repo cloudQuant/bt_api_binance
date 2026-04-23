@@ -82,14 +82,17 @@ jobs:
         run: |
           cd bt_api_base
           pip install -e .
-          pip install -e . && pip install pytest
+
       - name: Install package
         run: |
           python -m pip install --upgrade pip
           pip install -e .
-          pip install -e . && pip install pytest
+
+      - name: Install pytest
+        run: pip install pytest
+
       - name: Run tests
-        run: python -m python -m pytest tests/ -v --tb=short -q || true
+        run: python -m pytest tests/ -v --tb=short -q
 
   build:
     name: Build
@@ -113,7 +116,7 @@ jobs:
         run: |
           cd bt_api_base
           pip install -e .
-          pip install -e . && pip install pytest
+
       - name: Install build dependencies
         run: |
           python -m pip install --upgrade pip
@@ -121,7 +124,7 @@ jobs:
 
       - name: Install package
         run: pip install -e .
-        run: pip install -e . && pip install pytest
+
       - name: Build package
         run: python -m build
 
@@ -152,7 +155,7 @@ jobs:
         run: |
           cd bt_api_base
           pip install -e .
-          pip install -e . && pip install pytest
+
       - name: Install build dependencies
         run: pip install build twine
 
