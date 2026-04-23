@@ -14,14 +14,17 @@ for path in (SRC_ROOT, REPO_ROOT):
 
 import bt_api_monitoring
 import bt_api_security
+import bt_api_risk
 
 sys.modules["bt_api_py.monitoring"] = bt_api_monitoring
 sys.modules["bt_api_py.security_compliance"] = bt_api_security
+sys.modules["bt_api_py.risk_management"] = bt_api_risk
 
 try:
     import bt_api_py
 
     bt_api_py.monitoring = bt_api_monitoring
     bt_api_py.security_compliance = bt_api_security
+    bt_api_py.risk_management = bt_api_risk
 except ImportError:
     pass

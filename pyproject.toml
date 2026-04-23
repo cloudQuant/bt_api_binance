@@ -6,7 +6,21 @@ build-backend = "setuptools.build_meta"
 name = "bt_api_binance"
 version = "2.0.1"
 description = "Binance exchange plugin for bt_api"
+license = {text = "MIT"}
 readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+]
 requires-python = ">=3.9"
 dependencies = [
     "bt_api_base>=0.15,<1.0",
@@ -14,6 +28,9 @@ dependencies = [
     "websocket-client>=1.5",
     "aiohttp>=3.9",
 ]
+
+[project.optional-dependencies]
+test = ["bt_api_risk", "scikit-learn"]
 
 [project.entry-points."bt_api.plugins"]
 binance = "bt_api_binance.plugin:register_plugin"
@@ -40,8 +57,23 @@ exclude = [
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "N", "UP", "B", "C4", "SIM", "TCH", "RUF100", "S", "PERF", "PIE790"]
-ignore = ["E501", "B008", "N802", "N803", "S101"]
+ignore = ["E501", "B008", "N802", "N803", "S101", "TC002", "TC003"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S106", "S105", "S311", "E402", "PERF401", "N806", "S108"]
+"examples/**" = ["S106", "S105", "S311", "E402", "PERF401", "N806", "S108"]
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "kline: Kline/bar data tests",
+    "orderbook: Orderbook/depth data tests",
+    "ticker: Public ticker data tests",
+    "network: Tests requiring network access",
+    "unit: Unit tests (fast, no external dependencies)",
+    "integration: Integration tests (may require external services)",
+]
