@@ -13,8 +13,8 @@ for path in (SRC_ROOT, REPO_ROOT):
         sys.path.insert(0, text)
 
 import bt_api_monitoring
-import bt_api_security
 import bt_api_risk
+import bt_api_security
 
 sys.modules["bt_api_py.monitoring"] = bt_api_monitoring
 sys.modules["bt_api_py.security_compliance"] = bt_api_security
