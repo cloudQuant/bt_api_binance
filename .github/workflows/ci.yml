@@ -89,7 +89,7 @@ jobs:
           pip install -e .
 
       - name: Run tests
-        run: python -m pytest tests/ -v --tb=short -q || true
+        run: python -m python -m pytest tests/ -v --tb=short -q || true
 
   build:
     name: Build
