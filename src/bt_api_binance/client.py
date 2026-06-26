@@ -469,6 +469,9 @@ class BinanceDirectClient:
         offset = str(payload.get("offset") or "open").lower()
         order_type_str = f"{side}-{order_type}"
         client_order_id = payload.get("client_order_id")
+        position_side = _first_value(payload, "position_side", "positionSide", "posSide")
+        reduce_only = _first_value(payload, "reduceOnly", "reduce_only")
+        time_in_force = _first_value(payload, "time_in_force", "timeInForce")
 
         result = self.feed.make_order(
             symbol=symbol,
@@ -477,6 +480,9 @@ class BinanceDirectClient:
             order_type=order_type_str,
             offset=offset,
             client_order_id=client_order_id,
+            position_side=position_side,
+            reduceOnly=reduce_only,
+            time_in_force=time_in_force or "GTC",
         )
         data = result.get_data() if hasattr(result, "get_data") else result
         if isinstance(data, list) and len(data) > 0:

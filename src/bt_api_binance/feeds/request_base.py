@@ -753,13 +753,20 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        # todo 双向账户下下单
         request_symbol = self._params.get_symbol(symbol)
         request_type = "make_order"
         path = self._params.get_rest_path(request_type)
         side, order_type = order_type.split("-")
         side = side.upper()
         time_in_force = kwargs.get("time_in_force", "GTC")
+        position_side = (
+            kwargs.get("position_side")
+            or kwargs.get("positionSide")
+            or kwargs.get("posSide")
+        )
+        reduce_only = kwargs.get("reduceOnly")
+        if reduce_only in (None, ""):
+            reduce_only = kwargs.get("reduce_only")
         params = {
             "symbol": request_symbol,
             "side": side,
@@ -770,23 +777,19 @@ class BinanceRequestData(Feed):
         }
         if self.asset_type == "SWAP":
             params["reduceOnly"] = (
-                "false" if offset == "open" else "true" if offset == "close" else None
+                str(reduce_only).lower()
+                if reduce_only not in (None, "")
+                else "false" if offset == "open" else "true" if offset == "close" else None
             )
         if client_order_id is not None:
             params["newClientOrderId"] = client_order_id
         if order_type == "market":
             params.pop("timeInForce", None)
             params.pop("price", None)
-        if "position_side" in kwargs:
-            params["positionSide"] = kwargs["position_side"]
+        if position_side not in (None, ""):
+            params["positionSide"] = str(position_side).upper()
             params.pop("reduceOnly", None)
-        elif self.asset_type == "SWAP":
-            params.pop("reduceOnly", None)
-            if side == "BUY":
-                params["positionSide"] = "LONG"
-            elif side == "SELL":
-                params["positionSide"] = "SHORT"
-        else:
+        elif self.asset_type != "SWAP":
             params.pop("reduceOnly", None)
 
         extra_data = update_extra_data(
