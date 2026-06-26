@@ -51,6 +51,224 @@ def _create_exchange_data(asset_type: str):
     return BinanceExchangeDataSwap()
 
 
+def _request_data_payload(result: Any) -> Any:
+    return result.get_data() if hasattr(result, "get_data") else result
+
+
+def _container_to_dict(item: Any) -> dict[str, Any]:
+    init_data = getattr(item, "init_data", None)
+    if callable(init_data):
+        item = init_data()
+    if hasattr(item, "get_all_data"):
+        return dict(item.get_all_data())
+    return dict(item) if isinstance(item, dict) else {"raw": str(item)}
+
+
+def _payload_rows(payload: Any) -> list[Any]:
+    if isinstance(payload, dict):
+        data = payload.get("data")
+        if isinstance(data, list):
+            return data
+        if isinstance(data, dict):
+            return [data]
+        return [payload]
+    if isinstance(payload, list):
+        return payload
+    return []
+
+
+def _normalise_order_row(item: Any) -> dict[str, Any]:
+    row = _container_to_dict(item)
+    order_id = (
+        row.get("order_id")
+        or row.get("orderId")
+        or row.get("i")
+        or row.get("id")
+    )
+    client_order_id = (
+        row.get("client_order_id")
+        or row.get("clientOrderId")
+        or row.get("origClientOrderId")
+        or row.get("c")
+    )
+    symbol = row.get("symbol") or row.get("symbol_name") or row.get("s")
+    status = row.get("status") or row.get("order_status") or row.get("X")
+    remaining = row.get("remaining")
+    if remaining in (None, ""):
+        try:
+            size = float(row.get("origQty") or row.get("size") or row.get("volume") or 0)
+            filled = float(row.get("executedQty") or row.get("filled") or 0)
+            remaining = max(size - filled, 0.0)
+        except (TypeError, ValueError):
+            remaining = None
+    if order_id not in (None, ""):
+        row["order_id"] = order_id
+        row.setdefault("external_order_id", order_id)
+    if client_order_id not in (None, ""):
+        row["client_order_id"] = client_order_id
+    if symbol not in (None, ""):
+        row["symbol"] = symbol
+        row.setdefault("data_name", symbol)
+    if status not in (None, ""):
+        row["status"] = status
+    if remaining not in (None, ""):
+        row["remaining"] = remaining
+    return row
+
+
+def _symbol_lookup_candidates(symbol: str, exchange_data: Any) -> set[str]:
+    raw = str(symbol or "").strip()
+    candidates = {
+        raw,
+        raw.upper(),
+        raw.replace("-", ""),
+        raw.replace("/", ""),
+        raw.replace("_", ""),
+    }
+    get_symbol = getattr(exchange_data, "get_symbol", None)
+    if callable(get_symbol):
+        try:
+            converted = str(get_symbol(raw) or "").strip()
+        except Exception:
+            converted = ""
+        if converted:
+            candidates.update({converted, converted.upper()})
+    return {item for item in candidates if item}
+
+
+def _first_filter_value(filters: Any, filter_type: str, *keys: str) -> Any:
+    if not isinstance(filters, list):
+        return None
+    for item in filters:
+        if not isinstance(item, dict) or item.get("filterType") != filter_type:
+            continue
+        for key in keys:
+            value = item.get(key)
+            if value not in (None, ""):
+                return value
+    return None
+
+
+def _first_value(row: dict[str, Any], *keys: str) -> Any:
+    for key in keys:
+        value = row.get(key)
+        if value not in (None, ""):
+            return value
+    return None
+
+
+def _safe_float(value: Any) -> float | None:
+    if value in (None, ""):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _normalise_commission_rate(value: Any) -> float | None:
+    rate = _safe_float(value)
+    if rate is None:
+        return None
+    if rate > 1:
+        return rate / 10000.0
+    return max(rate, 0.0)
+
+
+def _normalise_percent_rate(value: Any) -> float | None:
+    rate = _safe_float(value)
+    if rate is None:
+        return None
+    if rate > 1:
+        return rate / 100.0
+    return max(rate, 0.0)
+
+
+def _normalise_binance_fee_info(data: Any) -> dict[str, Any]:
+    if isinstance(data, dict) and isinstance(data.get("data"), list):
+        rows = data.get("data")
+    elif isinstance(data, dict):
+        rows = [data]
+    elif isinstance(data, list):
+        rows = data
+    else:
+        rows = []
+    row = next((item for item in rows if isinstance(item, dict)), None)
+    if row is None:
+        return {}
+
+    maker_rate = _normalise_commission_rate(
+        _first_value(row, "makerCommissionRate", "makerCommission")
+    )
+    taker_rate = _normalise_commission_rate(
+        _first_value(row, "takerCommissionRate", "takerCommission")
+    )
+    spec: dict[str, Any] = {"fee_source": "binance_get_fee"}
+    if maker_rate is not None:
+        spec["maker_commission_rate"] = maker_rate
+    if taker_rate is not None:
+        spec["taker_commission_rate"] = taker_rate
+        spec["commission_rate"] = taker_rate
+        spec["open_commission_rate"] = taker_rate
+    elif maker_rate is not None:
+        spec["commission_rate"] = maker_rate
+        spec["open_commission_rate"] = maker_rate
+    return spec
+
+
+def _normalise_binance_symbol_info(row: dict[str, Any], *, asset_type: str) -> dict[str, Any]:
+    filters = row.get("filters")
+    symbol = str(_first_value(row, "symbol", "symbol_name") or "").strip()
+    price_tick = _first_filter_value(filters, "PRICE_FILTER", "tickSize")
+    lot_filter = "LOT_SIZE"
+    min_qty = _first_filter_value(filters, lot_filter, "minQty")
+    max_qty = _first_filter_value(filters, lot_filter, "maxQty")
+    step_size = _first_filter_value(filters, lot_filter, "stepSize")
+    market_min_qty = _first_filter_value(filters, "MARKET_LOT_SIZE", "minQty")
+    market_max_qty = _first_filter_value(filters, "MARKET_LOT_SIZE", "maxQty")
+    market_step_size = _first_filter_value(filters, "MARKET_LOT_SIZE", "stepSize")
+    min_notional = (
+        _first_filter_value(filters, "MIN_NOTIONAL", "notional", "minNotional")
+        or _first_filter_value(filters, "NOTIONAL", "notional", "minNotional")
+    )
+    margin_rate = _normalise_percent_rate(
+        _first_value(row, "requiredMarginPercent", "maintMarginPercent")
+    )
+
+    spec = {
+        "source": "binance_exchange_info",
+        "exchange": "BINANCE",
+        "exchange_id": "BINANCE",
+        "symbol": symbol,
+        "asset_type": asset_type,
+        "base_asset": _first_value(row, "baseAsset", "base_asset"),
+        "quote_asset": _first_value(row, "quoteAsset", "quote_asset"),
+        "contract_type": _first_value(row, "contractType", "contract_type"),
+    }
+    contract_size = _first_value(row, "contractSize", "contract_multiplier")
+    if contract_size in (None, ""):
+        contract_size = 1
+    spec.update(
+        {
+            "contract_multiplier": contract_size,
+            "contract_size": contract_size,
+            "multiplier": contract_size,
+            "price_tick": price_tick or _first_value(row, "price_unit", "tick_size"),
+            "tick_size": price_tick or _first_value(row, "price_unit", "tick_size"),
+            "min_order_size": min_qty or _first_value(row, "min_qty", "minQty"),
+            "max_order_size": max_qty or _first_value(row, "max_qty", "maxQty"),
+            "order_size_step": step_size or _first_value(row, "qty_unit", "stepSize"),
+            "market_min_order_size": market_min_qty,
+            "market_max_order_size": market_max_qty,
+            "market_order_size_step": market_step_size,
+            "min_notional": min_notional or _first_value(row, "min_amount", "minNotional"),
+            "required_margin_percent": margin_rate,
+            "margin_rate": margin_rate,
+        }
+    )
+    return {key: value for key, value in spec.items() if value not in (None, "")}
+
+
 class BinanceDirectClient:
     """Direct Binance client without any gateway dependency."""
 
@@ -71,6 +289,7 @@ class BinanceDirectClient:
         self.market_stream = None
         self.account_stream = None
         self.aliases: dict[str, set[str]] = defaultdict(set)
+        self.last_price: dict[str, float] = {}
         self._latest_ticks: dict[str, dict[str, Any]] = {}
         self.running = False
         self.thread: threading.Thread | None = None
@@ -99,6 +318,8 @@ class BinanceDirectClient:
         self.market_stream = None
         self.account_stream = None
         self.aliases = defaultdict(set)
+        self.last_price.clear()
+        self._latest_ticks.clear()
         self.logger.info("BinanceDirectClient disconnected")
 
     def subscribe_symbols(self, symbols: list[str]) -> dict[str, Any]:
@@ -166,10 +387,7 @@ class BinanceDirectClient:
             result = self.feed.get_balance()
             data = result.get_data() if hasattr(result, "get_data") else result
             if isinstance(data, list) and len(data) > 0:
-                item = data[0]
-                if hasattr(item, "get_all_data"):
-                    return item.get_all_data()
-                return dict(item) if isinstance(item, dict) else {"raw": str(item)}
+                return _container_to_dict(data[0])
             if isinstance(data, dict):
                 return data
             return {"raw": str(data)}
@@ -183,17 +401,61 @@ class BinanceDirectClient:
             result = self.feed.get_position()
             data = result.get_data() if hasattr(result, "get_data") else result
             if isinstance(data, list):
-                positions = []
-                for item in data:
-                    if hasattr(item, "get_all_data"):
-                        positions.append(item.get_all_data())
-                    elif isinstance(item, dict):
-                        positions.append(item)
-                return positions
+                return [_container_to_dict(item) for item in data]
             return []
         except Exception as exc:
             self.logger.warning(f"get_positions error: {exc}")
             return []
+
+    def get_trades(self, symbol: str | None = None, limit: int = 100) -> list[dict[str, Any]]:
+        get_deals = getattr(self.feed, "get_deals", None)
+        if not callable(get_deals) or not symbol:
+            return []
+        try:
+            result = get_deals(symbol=symbol, count=limit)
+            payload = _request_data_payload(result)
+            return [_container_to_dict(item) for item in _payload_rows(payload)]
+        except Exception as exc:
+            self.logger.debug(f"get_trades error: {exc}")
+            return []
+
+    def get_symbol_info(self, symbol: str) -> dict[str, Any]:
+        get_config = getattr(self.feed, "get_config", None)
+        if not callable(get_config):
+            return {}
+        try:
+            data = _request_data_payload(get_config())
+        except Exception as exc:
+            self.logger.warning(f"get_symbol_info error: {exc}")
+            return {}
+
+        candidates = _symbol_lookup_candidates(symbol, getattr(self.feed, "_params", None))
+        rows = data.get("symbols") if isinstance(data, dict) else data
+        if isinstance(data, dict) and isinstance(data.get("symbol"), str):
+            rows = [data]
+        if not isinstance(rows, list):
+            return {}
+        for item in rows:
+            if not isinstance(item, dict):
+                continue
+            item_symbol = str(
+                item.get("symbol") or item.get("symbol_name") or item.get("pair") or ""
+            ).strip()
+            if item_symbol and item_symbol.upper() in {candidate.upper() for candidate in candidates}:
+                spec = _normalise_binance_symbol_info(item, asset_type=self.asset_type)
+                spec.update(self._query_symbol_fee(symbol))
+                return spec
+        return {}
+
+    def _query_symbol_fee(self, symbol: str) -> dict[str, Any]:
+        get_fee = getattr(self.feed, "get_fee", None)
+        if not callable(get_fee):
+            return {}
+        try:
+            return _normalise_binance_fee_info(_request_data_payload(get_fee(symbol)))
+        except Exception as exc:
+            self.logger.debug(f"get_symbol_info fee lookup failed: {exc}")
+            return {}
 
     def place_order(self, payload: dict[str, Any]) -> dict[str, Any]:
         self._ensure_account_stream()
@@ -228,8 +490,14 @@ class BinanceDirectClient:
 
     def cancel_order(self, payload: dict[str, Any]) -> dict[str, Any]:
         self._ensure_account_stream()
-        symbol = payload.get("data_name") or payload.get("symbol") or ""
-        order_id = payload.get("order_id") or payload.get("external_order_id")
+        symbol = payload.get("data_name") or payload.get("symbol") or payload.get("instrument") or ""
+        order_id = (
+            payload.get("order_id")
+            or payload.get("external_order_id")
+            or payload.get("venue_order_id")
+            or payload.get("id")
+            or payload.get("order_ref")
+        )
         client_order_id = payload.get("client_order_id")
 
         cancel_kwargs: dict[str, Any] = {}
@@ -245,6 +513,14 @@ class BinanceDirectClient:
         if isinstance(data, dict):
             return data
         return {"raw": str(data)}
+
+    def get_open_orders(self) -> list[dict[str, Any]]:
+        get_open_orders = getattr(self.feed, "get_open_orders", None)
+        if not callable(get_open_orders):
+            return []
+        result = get_open_orders()
+        payload = _request_data_payload(result)
+        return [_normalise_order_row(item) for item in _payload_rows(payload)]
 
     def poll_output(self) -> tuple[str, Any] | None:
         try:
@@ -325,6 +601,8 @@ class BinanceDirectClient:
             "open_price": open_price,
             "prev_close": prev_close,
         }
+        if merged_price > 0:
+            self.last_price[symbol] = merged_price
         tick = {
             "timestamp": float(merged_ts or 0.0),
             "symbol": symbol,
@@ -380,6 +658,12 @@ class BinanceDirectClient:
                     "price": trade.get_trade_price(),
                     "volume": trade.get_trade_volume(),
                     "side": trade.get_trade_side(),
+                    "trade_type": trade.get_trade_type(),
+                    "liquidity": trade.get_trade_type(),
+                    "trade_fee": trade.get_trade_fee(),
+                    "trade_commission": trade.get_trade_fee(),
+                    "fee": trade.get_trade_fee(),
+                    "fee_currency": trade.get_trade_fee_symbol(),
                 },
             )
         except Exception as exc:

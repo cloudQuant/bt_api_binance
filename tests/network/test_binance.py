@@ -17,8 +17,10 @@ Run with coverage:
 import queue
 
 import pytest
+from bt_api_base.logging_factory import get_logger
 from bt_api_base.registry import ExchangeRegistry
 
+from bt_api_binance.client import BinanceDirectClient
 from bt_api_binance.containers.balances import (
     BinanceSpotWssBalanceData,
 )
@@ -131,6 +133,76 @@ class TestBinanceRequestDataSpot:
         )
 
         assert params["symbol"] == "BTCUSDT"
+
+
+class TestBinanceDirectClient:
+    """Test direct client helpers without touching the network."""
+
+    def test_get_symbol_info_uses_exchange_info_filters(self):
+        class _Result:
+            def get_data(self):
+                return {
+                    "symbols": [
+                        {
+                            "symbol": "BTCUSDT",
+                            "contractType": "PERPETUAL",
+                            "baseAsset": "BTC",
+                            "quoteAsset": "USDT",
+                            "requiredMarginPercent": "5.0000",
+                            "filters": [
+                                {
+                                    "filterType": "PRICE_FILTER",
+                                    "tickSize": "0.10",
+                                    "minPrice": "0.10",
+                                    "maxPrice": "1000000",
+                                },
+                                {
+                                    "filterType": "LOT_SIZE",
+                                    "minQty": "0.001",
+                                    "maxQty": "1000",
+                                    "stepSize": "0.001",
+                                },
+                                {
+                                    "filterType": "MARKET_LOT_SIZE",
+                                    "minQty": "0.001",
+                                    "maxQty": "100",
+                                    "stepSize": "0.001",
+                                },
+                                {"filterType": "MIN_NOTIONAL", "notional": "5"},
+                            ],
+                        }
+                    ]
+                }
+
+        class _Params:
+            @staticmethod
+            def get_symbol(symbol):
+                return symbol.replace("-", "")
+
+        class _Feed:
+            _params = _Params()
+
+            @staticmethod
+            def get_config():
+                return _Result()
+
+        client = BinanceDirectClient.__new__(BinanceDirectClient)
+        client.asset_type = "SWAP"
+        client.feed = _Feed()
+        client.logger = get_logger("test")
+
+        spec = client.get_symbol_info("BTC-USDT")
+
+        assert spec["source"] == "binance_exchange_info"
+        assert spec["symbol"] == "BTCUSDT"
+        assert spec["contract_size"] == 1
+        assert spec["price_tick"] == "0.10"
+        assert spec["min_order_size"] == "0.001"
+        assert spec["max_order_size"] == "1000"
+        assert spec["order_size_step"] == "0.001"
+        assert spec["market_max_order_size"] == "100"
+        assert spec["min_notional"] == "5"
+        assert spec["margin_rate"] == 0.05
 
 
 class TestBinanceDataContainers:

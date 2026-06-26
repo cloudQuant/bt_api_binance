@@ -34,6 +34,14 @@ class BinancePositionData(PositionData):
         self.position_side = None
         self.avg_price = None
         self.mark_price = None
+        self.break_even_price = None
+        self.liquidation_price = None
+        self.position_notional = None
+        self.isolated_margin = None
+        self.isolated_wallet = None
+        self.initial_margin = None
+        self.position_initial_margin = None
+        self.open_order_initial_margin_value = None
         self.position_unrealized_pnl = None
         self.position_realized_pnl = None
         self.all_data = None
@@ -60,6 +68,21 @@ class BinancePositionData(PositionData):
                 "position_side": self.position_side,
                 "avg_price": self.avg_price,
                 "mark_price": self.mark_price,
+                "break_even_price": self.break_even_price,
+                "liquidation_price": self.liquidation_price,
+                "position_notional": self.position_notional,
+                "positionNotional": self.position_notional,
+                "notional": self.position_notional,
+                "market_value": self.position_notional,
+                "isolated_margin": self.isolated_margin,
+                "isolatedMargin": self.isolated_margin,
+                "isolated_wallet": self.isolated_wallet,
+                "isolatedWallet": self.isolated_wallet,
+                "initial_margin": self.initial_margin,
+                "position_initial_margin": self.position_initial_margin,
+                "open_order_initial_margin": self.open_order_initial_margin_value,
+                "maintenance_margin": self.maintenance_margin,
+                "maintain_margin": self.maintenance_margin,
                 "position_unrealized_pnl": self.position_unrealized_pnl,
                 "position_realized_pnl": self.position_realized_pnl,
             }
@@ -145,11 +168,11 @@ class BinancePositionData(PositionData):
 
     def get_liquidation_price(self):
         """# 清算价格"""
-        return
+        return self.liquidation_price
 
     def get_initial_margin(self):
         """# 当前所需起始保证金(基于最新标记价格)"""
-        return
+        return self.initial_margin
 
     def get_maintenance_margin(self):
         """# 维持保证金"""
@@ -157,11 +180,11 @@ class BinancePositionData(PositionData):
 
     def open_order_initial_margin(self):
         """# 当前挂单所需起始保证金(基于最新标记价格)"""
-        return
+        return self.open_order_initial_margin_value
 
     def get_position_initial_margin(self):
         """# 持仓所需起始保证金(基于最新标记价格)"""
-        return
+        return self.position_initial_margin
 
     def get_position_commission(self):
         """# 这个position交易所耗费的手续费"""
@@ -185,7 +208,11 @@ class BinanceRequestPositionData(BinancePositionData):
 
     def init_data(self):
         if not self.has_been_json_encoded:
-            self.position_data = json.loads(self.position_info)["data"]
+            payload = json.loads(self.position_info)
+            data = payload.get("data") if isinstance(payload, dict) else payload
+            if isinstance(data, list):
+                data = data[0] if data else {}
+            self.position_data = data if isinstance(data, dict) else {}
             self.has_been_json_encoded = True
         if self.has_been_init_data:
             return self
@@ -200,6 +227,13 @@ class BinanceRequestPositionData(BinancePositionData):
         self.position_side = from_dict_get_string(self.position_data, "positionSide")
         self.avg_price = from_dict_get_float(self.position_data, "entryPrice")
         self.mark_price = from_dict_get_float(self.position_data, "markPrice")
+        self.break_even_price = from_dict_get_float(self.position_data, "breakEvenPrice")
+        self.liquidation_price = from_dict_get_float(self.position_data, "liquidationPrice")
+        self.position_notional = from_dict_get_float(self.position_data, "notional")
+        self.isolated_margin = from_dict_get_float(self.position_data, "isolatedMargin")
+        self.isolated_wallet = from_dict_get_float(self.position_data, "isolatedWallet")
+        self.initial_margin = self.isolated_margin
+        self.position_initial_margin = self.isolated_margin
         self.position_unrealized_pnl = from_dict_get_float(self.position_data, "unRealizedProfit")
         self.has_been_init_data = True
         return self
@@ -210,7 +244,11 @@ class BinanceWssPositionData(BinancePositionData):
 
     def init_data(self):
         if not self.has_been_json_encoded:
-            self.position_data = json.loads(self.position_info)["data"]
+            payload = json.loads(self.position_info)
+            data = payload.get("data") if isinstance(payload, dict) else payload
+            if isinstance(data, list):
+                data = data[0] if data else {}
+            self.position_data = data if isinstance(data, dict) else {}
             self.has_been_json_encoded = True
         if self.has_been_init_data:
             return self
@@ -225,6 +263,12 @@ class BinanceWssPositionData(BinancePositionData):
         self.position_side = from_dict_get_string(self.position_data, "ps")
         self.avg_price = from_dict_get_float(self.position_data, "ep")
         self.mark_price = None
+        self.break_even_price = from_dict_get_float(self.position_data, "bep")
+        self.position_notional = from_dict_get_float(self.position_data, "notional")
+        self.isolated_margin = from_dict_get_float(self.position_data, "iw")
+        self.isolated_wallet = self.isolated_margin
+        self.initial_margin = self.isolated_margin
+        self.position_initial_margin = self.isolated_margin
         self.position_unrealized_pnl = from_dict_get_float(self.position_data, "up")
         self.position_realized_pnl = from_dict_get_float(self.position_data, "cr")
         self.has_been_init_data = True
