@@ -1,6 +1,7 @@
 """Tests for feeds/http_client.py with mocking."""
 
 from unittest.mock import MagicMock, patch
+
 import pytest
 
 
@@ -107,8 +108,8 @@ class TestHttpClient:
             mock_httpx.Client.return_value = mock_client
             mock_httpx.Limits.return_value = MagicMock()
 
-            from bt_api_py.exceptions import RequestFailedError
             from bt_api_base.feeds.http_client import HttpClient
+            from bt_api_py.exceptions import RequestFailedError
 
             client = HttpClient(venue="test")
             with pytest.raises(RequestFailedError):
@@ -122,8 +123,8 @@ class TestHttpClient:
             mock_httpx.Client.return_value = mock_client
             mock_httpx.Limits.return_value = MagicMock()
 
-            from bt_api_py.exceptions import RequestFailedError
             from bt_api_base.feeds.http_client import HttpClient
+            from bt_api_py.exceptions import RequestFailedError
 
             client = HttpClient(venue="test")
             with pytest.raises(RequestFailedError):

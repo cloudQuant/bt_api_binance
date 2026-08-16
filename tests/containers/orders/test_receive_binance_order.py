@@ -1,13 +1,14 @@
 """Module-level docstring."""
 from __future__ import annotations
 
+from bt_api_base.containers.orders.order import OrderStatus
+
 from bt_api_binance.containers.orders.binance_order import (
     BinanceForceOrderData,
     BinanceRequestOrderData,
     BinanceSpotWssOrderData,
     BinanceSwapWssOrderData,
 )
-from bt_api_base.containers.orders.order import OrderStatus
 
 
 def test_binance_force_order_data():

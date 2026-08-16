@@ -9,11 +9,11 @@ from bt_api_base.gateway.registrar import GatewayRuntimeRegistrar
 from bt_api_base.plugins.loader import PluginLoader
 from bt_api_base.plugins.protocol import PluginInfo
 from bt_api_base.registry import ExchangeRegistry
-from bt_api_py.testing import create_isolated_exchange_registry, reset_gateway_runtime_registrar
+from bt_api_base.testing import create_isolated_exchange_registry, reset_gateway_runtime_registrar
 
-from bt_api_binance.gateway.adapter import BinanceGatewayAdapter
 from bt_api_binance.feeds.spot import BinanceRequestDataSpot
 from bt_api_binance.feeds.swap import BinanceRequestDataSwap
+from bt_api_binance.gateway.adapter import BinanceGatewayAdapter
 from bt_api_binance.plugin import register_plugin
 
 
@@ -52,7 +52,7 @@ def test_register_plugin_returns_plugin_info():
 
     assert isinstance(info, PluginInfo)
     assert info.name == "bt_api_binance"
-    assert info.version == "2.0.0"
+    assert info.version == "2.0.1"
     assert info.supported_exchanges == ("BINANCE___SPOT", "BINANCE___SWAP")
     assert info.supported_asset_types == ("SPOT", "SWAP")
     assert registry.get_feed_class("BINANCE___SPOT") is BinanceRequestDataSpot
