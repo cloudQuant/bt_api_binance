@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from bt_api_base.containers.requestdatas.request_data import RequestData
@@ -5,33 +6,34 @@ from bt_api_binance.containers.orders.binance_order import BinanceRequestOrderDa
 
 
 def test_request_data() -> None:
+    """test_request_data function"""
     datas = {
-        "clientOrderId": "testOrder",  # 用户自定义的订单号
+        "clientOrderId": "testOrder",  # 
         "cumQty": "0",
-        "cumQuote": "0",  # 成交金额
-        "executedQty": "0",  # 成交量
-        "orderId": 22542179,  # 系统订单号
-        "avgPrice": "0.00000",  # 平均成交价
-        "origQty": "10",  # 原始委托数量
-        "price": "0",  # 委托价格
-        "reduceOnly": "false",  # 仅减仓
-        "side": "SELL",  # 买卖方向
-        "positionSide": "SHORT",  # 持仓方向
-        "status": "NEW",  # 订单状态
-        "stopPrice": "0",  # 触发价，对`TRAILING_STOP_MARKET`无效
-        "closePosition": "false",  # 是否条件全平仓
-        "symbol": "BTCUSDT",  # 交易对
-        "timeInForce": "GTD",  # 有效方法
-        "type": "TRAILING_STOP_MARKET",  # 订单类型
-        "origType": "TRAILING_STOP_MARKET",  # 触发前订单类型
-        "activatePrice": "9020",  # 跟踪止损激活价格, 仅`TRAILING_STOP_MARKET` 订单返回此字段
-        "priceRate": "0.3",  # 跟踪止损回调比例, 仅`TRAILING_STOP_MARKET` 订单返回此字段
-        "updateTime": 1566818724722,  # 更新时间
-        "workingType": "CONTRACT_PRICE",  # 条件价格触发类型
-        "priceProtect": "false",  # 是否开启条件单触发保护
-        "priceMatch": "NONE",  # 盘口价格下单模式
-        "selfTradePreventionMode": "NONE",  # 订单自成交保护模式
-        "goodTillDate": 1693207680000,  # 订单TIF为GTD时的自动取消时间
+        "cumQuote": "0",  # 
+        "executedQty": "0",  # 
+        "orderId": 22542179,  # 
+        "avgPrice": "0.00000",  # 
+        "origQty": "10",  # 
+        "price": "0",  # 
+        "reduceOnly": "false",  # 
+        "side": "SELL",  # 
+        "positionSide": "SHORT",  # 
+        "status": "NEW",  # 
+        "stopPrice": "0",  # ，`TRAILING_STOP_MARKET`
+        "closePosition": "false",  # 
+        "symbol": "BTCUSDT",  # 
+        "timeInForce": "GTD",  # 
+        "type": "TRAILING_STOP_MARKET",  # 
+        "origType": "TRAILING_STOP_MARKET",  # 
+        "activatePrice": "9020",  # , `TRAILING_STOP_MARKET` 
+        "priceRate": "0.3",  # , `TRAILING_STOP_MARKET` 
+        "updateTime": 1566818724722,  # 
+        "workingType": "CONTRACT_PRICE",  # 
+        "priceProtect": "false",  # 
+        "priceMatch": "NONE",  # 
+        "selfTradePreventionMode": "NONE",  # 
+        "goodTillDate": 1693207680000,  # TIFGTD
     }
 
     def _get_open_orders_normalize_function(
@@ -69,6 +71,7 @@ def test_request_data() -> None:
 
 
 def test_request_data_uses_constructor_normalize_func() -> None:
+    """test_request_data_uses_constructor_normalize_func function"""
     calls: list[tuple[object, dict[str, object]]] = []
 
     def normalize_func(
@@ -89,6 +92,7 @@ def test_request_data_uses_constructor_normalize_func() -> None:
 
 
 def test_request_data_without_normalizer_returns_raw_input() -> None:
+    """test_request_data_without_normalizer_returns_raw_input function"""
     raw_payload = {"pong": True}
     request_data = RequestData(
         raw_payload,

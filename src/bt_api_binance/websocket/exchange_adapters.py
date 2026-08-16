@@ -25,6 +25,7 @@ class BinanceWebSocketAdapter(ExchangeWebSocketAdapter):
         exchange_type: ExchangeType = ExchangeType.SPOT,
         credentials: ExchangeCredentials | None = None,
     ):
+        """__init__ method"""
         super().__init__("BINANCE", credentials)
         self.exchange_type = exchange_type
         self._listen_key: str | None = None

@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -27,8 +28,7 @@ class BinanceForceOrderData:
     ) -> None:
         """Initialize Binance force order data.
 
-        Args:
-            order_info: Order information from exchange (dict or JSON string)
+        Args: order_info: Order information from exchange (dict or JSON string)
             symbol_name: Symbol name for the order
             asset_type: Asset type (SPOT, FUTURE, etc.)
             has_been_json_encoded: Whether order_info is already JSON encoded
@@ -83,8 +83,7 @@ class BinanceForceOrderData:
     def get_all_data(self) -> dict[str, Any]:
         """Get all order data as a dictionary.
 
-        Returns:
-            Dictionary containing all order data fields
+        Returns: Dictionary containing all order data fields
 
         """
         if self.all_data is None:
@@ -118,8 +117,7 @@ class BinanceForceOrderData:
     def get_exchange_name(self) -> str:
         """Get exchange name.
 
-        Returns:
-            Exchange name (BINANCE)
+        Returns: Exchange name (BINANCE)
 
         """
         return self.exchange_name
@@ -127,8 +125,7 @@ class BinanceForceOrderData:
     def get_symbol_name(self) -> str:
         """Get symbol name.
 
-        Returns:
-            Symbol name
+        Returns: Symbol name
 
         """
         return self.symbol_name
@@ -136,8 +133,7 @@ class BinanceForceOrderData:
     def get_asset_type(self) -> str:
         """Get asset type.
 
-        Returns:
-            Asset type (SPOT, FUTURE, etc.)
+        Returns: Asset type (SPOT, FUTURE, etc.)
 
         """
         return self.asset_type
@@ -145,8 +141,7 @@ class BinanceForceOrderData:
     def get_server_time(self) -> float | None:
         """Get server timestamp.
 
-        Returns:
-            Server timestamp
+        Returns: Server timestamp
 
         """
         return self.server_time
@@ -154,8 +149,7 @@ class BinanceForceOrderData:
     def get_local_update_time(self) -> float:
         """Get local update timestamp.
 
-        Returns:
-            Local update timestamp
+        Returns: Local update timestamp
 
         """
         return self.local_update_time
@@ -163,8 +157,7 @@ class BinanceForceOrderData:
     def get_order_price(self) -> float | None:
         """Get order price.
 
-        Returns:
-            Order price
+        Returns: Order price
 
         """
         return self.order_price
@@ -172,8 +165,7 @@ class BinanceForceOrderData:
     def get_order_qty(self) -> float | None:
         """Get order quantity.
 
-        Returns:
-            Order quantity
+        Returns: Order quantity
 
         """
         return self.order_qty
@@ -181,8 +173,7 @@ class BinanceForceOrderData:
     def get_order_side(self) -> str | None:
         """Get order side.
 
-        Returns:
-            Order side (BUY/SELL)
+        Returns: Order side (BUY/SELL)
 
         """
         return self.order_side
@@ -190,8 +181,7 @@ class BinanceForceOrderData:
     def get_order_status(self) -> OrderStatus | None:
         """Get order status.
 
-        Returns:
-            Order status
+        Returns: Order status
 
         """
         return self.order_status
@@ -199,8 +189,7 @@ class BinanceForceOrderData:
     def get_order_symbol_name(self) -> str | None:
         """Get order symbol name.
 
-        Returns:
-            Order symbol name
+        Returns: Order symbol name
 
         """
         return self.order_symbol_name
@@ -208,8 +197,7 @@ class BinanceForceOrderData:
     def get_order_time_in_force(self) -> str | None:
         """Get order time in force.
 
-        Returns:
-            Order time in force type
+        Returns: Order time in force type
 
         """
         return self.order_time_in_force
@@ -217,8 +205,7 @@ class BinanceForceOrderData:
     def get_order_type(self) -> str | None:
         """Get order type.
 
-        Returns:
-            Order type
+        Returns: Order type
 
         """
         return self.order_type
@@ -226,8 +213,7 @@ class BinanceForceOrderData:
     def get_order_avg_price(self) -> float | None:
         """Get order average price.
 
-        Returns:
-            Average price
+        Returns: Average price
 
         """
         return self.order_avg_price
@@ -235,8 +221,7 @@ class BinanceForceOrderData:
     def get_trade_time(self) -> float | None:
         """Get trade time.
 
-        Returns:
-            Trade timestamp
+        Returns: Trade timestamp
 
         """
         return self.trade_time
@@ -244,8 +229,7 @@ class BinanceForceOrderData:
     def get_last_trade_volume(self) -> float | None:
         """Get last trade volume.
 
-        Returns:
-            Last trade volume
+        Returns: Last trade volume
 
         """
         return self.last_trade_volume
@@ -253,8 +237,7 @@ class BinanceForceOrderData:
     def get_total_trade_volume(self) -> float | None:
         """Get total trade volume.
 
-        Returns:
-            Total trade volume
+        Returns: Total trade volume
 
         """
         return self.total_trade_volume
@@ -275,8 +258,7 @@ class BinanceOrderData(OrderData):
     ) -> None:
         """Initialize Binance order data.
 
-        Args:
-            order_info: Order information from exchange (dict or JSON string)
+        Args: order_info: Order information from exchange (dict or JSON string)
             symbol_name: Symbol name for the order
             asset_type: Asset type (SPOT, FUTURE, etc.)
             has_been_json_encoded: Whether order_info is already JSON encoded
@@ -316,11 +298,9 @@ class BinanceOrderData(OrderData):
     def init_data(self) -> BinanceOrderData:
         """Initialize order data by parsing order_info.
 
-        Returns:
-            Self for method chaining
+        Returns: Self for method chaining
 
-        Raises:
-            NotImplementedError: This method should be overridden by subclasses
+        Raises: NotImplementedError: This method should be overridden by subclasses
 
         """
         raise NotImplementedError
@@ -328,8 +308,7 @@ class BinanceOrderData(OrderData):
     def get_all_data(self) -> dict[str, Any]:
         """Get all order data as a dictionary.
 
-        Returns:
-            Dictionary containing all order data fields
+        Returns: Dictionary containing all order data fields
 
         """
         if self.all_data is None:
@@ -372,8 +351,7 @@ class BinanceOrderData(OrderData):
     def get_exchange_name(self) -> str:
         """Get exchange name.
 
-        Returns:
-            Exchange name (BINANCE)
+        Returns: Exchange name (BINANCE)
 
         """
         return self.exchange_name
@@ -381,8 +359,7 @@ class BinanceOrderData(OrderData):
     def get_symbol_name(self) -> str:
         """Get symbol name.
 
-        Returns:
-            Symbol name
+        Returns: Symbol name
 
         """
         return self.symbol_name
@@ -390,8 +367,7 @@ class BinanceOrderData(OrderData):
     def get_asset_type(self) -> str:
         """Get asset type.
 
-        Returns:
-            Asset type (SPOT, FUTURE, etc.)
+        Returns: Asset type (SPOT, FUTURE, etc.)
 
         """
         return self.asset_type
@@ -399,8 +375,7 @@ class BinanceOrderData(OrderData):
     def get_server_time(self) -> float | None:
         """Get server timestamp.
 
-        Returns:
-            Server timestamp
+        Returns: Server timestamp
 
         """
         return self.server_time
@@ -408,8 +383,7 @@ class BinanceOrderData(OrderData):
     def get_local_update_time(self) -> float:
         """Get local update timestamp.
 
-        Returns:
-            Local update timestamp
+        Returns: Local update timestamp
 
         """
         return self.local_update_time
@@ -417,8 +391,7 @@ class BinanceOrderData(OrderData):
     def get_trade_id(self) -> float | None:
         """Get trade ID.
 
-        Returns:
-            Unique trade ID from exchange
+        Returns: Unique trade ID from exchange
 
         """
         return self.trade_id
@@ -426,8 +399,7 @@ class BinanceOrderData(OrderData):
     def get_client_order_id(self) -> str | None:
         """Get client order ID.
 
-        Returns:
-            Client custom order ID
+        Returns: Client custom order ID
 
         """
         return self.client_order_id
@@ -435,8 +407,7 @@ class BinanceOrderData(OrderData):
     def get_cum_quote(self) -> float | None:
         """Get cumulative quote amount.
 
-        Returns:
-            Cumulative quote amount
+        Returns: Cumulative quote amount
 
         """
         return self.cum_quote
@@ -444,8 +415,7 @@ class BinanceOrderData(OrderData):
     def get_executed_qty(self) -> float | None:
         """Get executed quantity.
 
-        Returns:
-            Executed quantity
+        Returns: Executed quantity
 
         """
         return self.executed_qty
@@ -453,8 +423,7 @@ class BinanceOrderData(OrderData):
     def get_order_id(self) -> str | None:
         """Get order ID.
 
-        Returns:
-            Order ID
+        Returns: Order ID
 
         """
         return self.order_id
@@ -462,8 +431,7 @@ class BinanceOrderData(OrderData):
     def get_order_size(self) -> float | None:
         """Get order size.
 
-        Returns:
-            Original order quantity
+        Returns: Original order quantity
 
         """
         return self.order_size
@@ -471,8 +439,7 @@ class BinanceOrderData(OrderData):
     def get_order_price(self) -> float | None:
         """Get order price.
 
-        Returns:
-            Order price
+        Returns: Order price
 
         """
         return self.order_price
@@ -480,8 +447,7 @@ class BinanceOrderData(OrderData):
     def get_reduce_only(self) -> bool | None:
         """Get reduce only flag.
 
-        Returns:
-            Whether this is a reduce-only order
+        Returns: Whether this is a reduce-only order
 
         """
         return self.reduce_only
@@ -489,8 +455,7 @@ class BinanceOrderData(OrderData):
     def get_order_side(self) -> str | None:
         """Get order side.
 
-        Returns:
-            Order side (BUY/SELL)
+        Returns: Order side (BUY/SELL)
 
         """
         return self.order_side
@@ -498,8 +463,7 @@ class BinanceOrderData(OrderData):
     def get_order_status(self) -> OrderStatus | None:
         """Get order status.
 
-        Returns:
-            Order status
+        Returns: Order status
 
         """
         return self.order_status
@@ -507,8 +471,7 @@ class BinanceOrderData(OrderData):
     def get_trailing_stop_price(self) -> float | None:
         """Get trailing stop price.
 
-        Returns:
-            Trailing stop price for conditional orders
+        Returns: Trailing stop price for conditional orders
 
         """
         return self.trailing_stop_price
@@ -516,8 +479,7 @@ class BinanceOrderData(OrderData):
     def get_trailing_stop_trigger_price(self) -> float | None:
         """Get trailing stop trigger price.
 
-        Returns:
-            Trailing stop activation price
+        Returns: Trailing stop activation price
 
         """
         return self.trailing_stop_trigger_price
@@ -525,8 +487,7 @@ class BinanceOrderData(OrderData):
     def get_trailing_stop_callback_rate(self) -> float | None:
         """Get trailing stop callback rate.
 
-        Returns:
-            Trailing stop callback rate
+        Returns: Trailing stop callback rate
 
         """
         return self.trailing_stop_callback_rate
@@ -534,8 +495,7 @@ class BinanceOrderData(OrderData):
     def get_order_symbol_name(self) -> str | None:
         """Get order symbol name.
 
-        Returns:
-            Order symbol name
+        Returns: Order symbol name
 
         """
         return self.order_symbol_name
@@ -543,8 +503,7 @@ class BinanceOrderData(OrderData):
     def get_order_time_in_force(self) -> str | None:
         """Get order time in force.
 
-        Returns:
-            Order time in force type
+        Returns: Order time in force type
 
         """
         return self.order_time_in_force
@@ -552,8 +511,7 @@ class BinanceOrderData(OrderData):
     def get_order_type(self) -> str | None:
         """Get order type.
 
-        Returns:
-            Order type
+        Returns: Order type
 
         """
         return self.order_type
@@ -561,8 +519,7 @@ class BinanceOrderData(OrderData):
     def get_trailing_stop_trigger_price_type(self) -> str | None:
         """Get trailing stop trigger price type.
 
-        Returns:
-            Trigger price type
+        Returns: Trigger price type
 
         """
         return self.trailing_stop_trigger_price_type
@@ -570,8 +527,7 @@ class BinanceOrderData(OrderData):
     def get_order_avg_price(self) -> float | None:
         """Get order average price.
 
-        Returns:
-            Average price
+        Returns: Average price
 
         """
         return self.order_avg_price
@@ -579,8 +535,7 @@ class BinanceOrderData(OrderData):
     def get_origin_order_type(self) -> str | None:
         """Get original order type.
 
-        Returns:
-            Original order type
+        Returns: Original order type
 
         """
         return self.origin_order_type
@@ -588,8 +543,7 @@ class BinanceOrderData(OrderData):
     def get_position_side(self) -> str | None:
         """Get position side.
 
-        Returns:
-            Position side
+        Returns: Position side
 
         """
         return self.position_side
@@ -597,8 +551,7 @@ class BinanceOrderData(OrderData):
     def get_close_position(self) -> bool | None:
         """Get close position flag.
 
-        Returns:
-            Whether this is a close position order (only for conditional orders)
+        Returns: Whether this is a close position order (only for conditional orders)
 
         """
         return self.close_position
@@ -606,8 +559,7 @@ class BinanceOrderData(OrderData):
     def get_stop_loss_price(self) -> None:
         """Get stop loss price.
 
-        Returns:
-            Stop loss price (not implemented)
+        Returns: Stop loss price (not implemented)
 
         """
         return
@@ -615,8 +567,7 @@ class BinanceOrderData(OrderData):
     def get_stop_loss_trigger_price(self) -> None:
         """Get stop loss trigger price.
 
-        Returns:
-            Stop loss trigger price (not implemented)
+        Returns: Stop loss trigger price (not implemented)
 
         """
         return
@@ -624,8 +575,7 @@ class BinanceOrderData(OrderData):
     def get_stop_loss_trigger_price_type(self) -> None:
         """Get stop loss trigger price type.
 
-        Returns:
-            Stop loss trigger price type (not implemented)
+        Returns: Stop loss trigger price type (not implemented)
 
         """
         return
@@ -633,8 +583,7 @@ class BinanceOrderData(OrderData):
     def get_take_profit_price(self) -> None:
         """Get take profit price.
 
-        Returns:
-            Take profit price (not implemented)
+        Returns: Take profit price (not implemented)
 
         """
         return
@@ -642,8 +591,7 @@ class BinanceOrderData(OrderData):
     def get_take_profit_trigger_price(self) -> None:
         """Get take profit trigger price.
 
-        Returns:
-            Take profit trigger price (not implemented)
+        Returns: Take profit trigger price (not implemented)
 
         """
         return
@@ -651,8 +599,7 @@ class BinanceOrderData(OrderData):
     def get_take_profit_trigger_price_type(self) -> None:
         """Get take profit trigger price type.
 
-        Returns:
-            Take profit trigger price type (not implemented)
+        Returns: Take profit trigger price type (not implemented)
 
         """
         return
@@ -664,8 +611,7 @@ class BinanceRequestOrderData(BinanceOrderData):
     def init_data(self) -> BinanceRequestOrderData:
         """Initialize order data from REST API response.
 
-        Returns:
-            Self for method chaining
+        Returns: Self for method chaining
 
         """
         if not self.has_been_json_encoded:
@@ -706,8 +652,7 @@ class BinanceSwapWssOrderData(BinanceOrderData):
     def init_data(self) -> BinanceSwapWssOrderData:
         """Initialize order data from WebSocket message.
 
-        Returns:
-            Self for method chaining
+        Returns: Self for method chaining
 
         """
         if not self.has_been_json_encoded:
@@ -749,8 +694,7 @@ class BinanceSpotWssOrderData(BinanceOrderData):
     def init_data(self) -> BinanceSpotWssOrderData:
         """Initialize order data from WebSocket message.
 
-        Returns:
-            Self for method chaining
+        Returns: Self for method chaining
 
         """
         if not self.has_been_json_encoded:

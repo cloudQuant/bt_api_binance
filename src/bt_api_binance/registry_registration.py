@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -59,6 +60,7 @@ def _binance_spot_subscribe_handler(data_queue, exchange_params, topics, bt_api)
 
 
 def register_binance(registry: ExchangeRegistry) -> None:
+    """register_binance function"""
     registry.register_feed("BINANCE___SWAP", BinanceRequestDataSwap)
     registry.register_exchange_data("BINANCE___SWAP", BinanceExchangeDataSwap)
     registry.register_balance_handler("BINANCE___SWAP", _binance_balance_handler)

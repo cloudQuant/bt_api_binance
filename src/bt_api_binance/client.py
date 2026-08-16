@@ -55,6 +55,7 @@ class BinanceDirectClient:
     """Direct Binance client without any gateway dependency."""
 
     def __init__(self, **kwargs: Any) -> None:
+        """__init__ method"""
         normalized = dict(kwargs)
         self.asset_type = _normalize_asset_type(normalized.get("asset_type"))
         normalized["asset_type"] = self.asset_type
@@ -83,6 +84,7 @@ class BinanceDirectClient:
         )
 
     def connect(self) -> None:
+        """connect method"""
         if self.running:
             return
         self.running = True
@@ -91,6 +93,7 @@ class BinanceDirectClient:
         self.logger.info("BinanceDirectClient connected")
 
     def disconnect(self) -> None:
+        """disconnect method"""
         self.running = False
         thread = self.thread
         if thread is not None and thread.is_alive():
@@ -102,6 +105,7 @@ class BinanceDirectClient:
         self.logger.info("BinanceDirectClient disconnected")
 
     def subscribe_symbols(self, symbols: list[str]) -> dict[str, Any]:
+        """subscribe_symbols method"""
         topics: list[dict[str, Any]] = []
         for symbol in symbols:
             topics.append({"topic": "ticker", "symbol": symbol})
@@ -161,6 +165,7 @@ class BinanceDirectClient:
             )
 
     def get_balance(self) -> dict[str, Any]:
+        """get_balance method"""
         self._ensure_account_stream()
         try:
             result = self.feed.get_balance()
@@ -178,6 +183,7 @@ class BinanceDirectClient:
             return {"error": str(exc)}
 
     def get_positions(self) -> list[dict[str, Any]]:
+        """get_positions method"""
         self._ensure_account_stream()
         try:
             result = self.feed.get_position()
@@ -196,6 +202,7 @@ class BinanceDirectClient:
             return []
 
     def place_order(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """place_order method"""
         self._ensure_account_stream()
         symbol = payload.get("data_name") or payload.get("symbol") or ""
         volume = float(payload.get("volume") or payload.get("size") or 0)
@@ -227,6 +234,7 @@ class BinanceDirectClient:
         return {"raw": str(data)}
 
     def cancel_order(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """cancel_order method"""
         self._ensure_account_stream()
         symbol = payload.get("data_name") or payload.get("symbol") or ""
         order_id = payload.get("order_id") or payload.get("external_order_id")
@@ -247,12 +255,13 @@ class BinanceDirectClient:
         return {"raw": str(data)}
 
     def poll_output(self) -> tuple[str, Any] | None:
-        try:
-            return self.output_queue.get_nowait()
+        """poll_output method"""
+        try: return self.output_queue.get_nowait()
         except queue.Empty:
             return None
 
     def emit(self, channel: str, payload: Any) -> None:
+        """emit method"""
         self.output_queue.put((channel, payload))
 
     def _run(self) -> None:

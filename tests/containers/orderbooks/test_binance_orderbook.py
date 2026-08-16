@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import pytest
@@ -11,20 +12,21 @@ from bt_api_binance.containers.orderbooks import (
 
 @pytest.mark.orderbook
 def test_binance_request_orderbook():
+    """test_binance_request_orderbook function"""
     data = {
         "lastUpdateId": 1027024,
-        "E": 1589436922972,  # 消息时间
-        "T": 1589436922959,  # 撮合引擎时间
-        "bids": [  # 买单
+        "E": 1589436922972,  # 
+        "T": 1589436922959,  # 
+        "bids": [  # 
             [
-                "4.00000000",  # 价格
-                "431.00000000",  # 数量
+                "4.00000000",  # 
+                "431.00000000",  # 
             ]
         ],
-        "asks": [  # 卖单
+        "asks": [  # 
             [
-                "4.00000200",  # 价格
-                "12.00000000",  # 数量
+                "4.00000200",  # 
+                "12.00000000",  # 
             ]
         ],
     }
@@ -42,28 +44,29 @@ def test_binance_request_orderbook():
 
 @pytest.mark.orderbook
 def test_binance_orderbook():
+    """test_binance_orderbook function"""
     data = {
-        "e": "depthUpdate",  # 事件类型
-        "E": 1571889248277,  # 事件时间
-        "T": 1571889248276,  # 交易时间
+        "e": "depthUpdate",  # 
+        "E": 1571889248277,  # 
+        "T": 1571889248276,  # 
         "s": "boCUSDT",
         "U": 390497796,
         "u": 390497878,
         "pu": 390497794,
-        "b": [  # 买方
+        "b": [  # 
             [
-                "7403.89",  # 价格
-                "0.002",  # 数量
+                "7403.89",  # 
+                "0.002",  # 
             ],
             ["7403.90", "3.906"],
             ["7404.00", "1.428"],
             ["7404.85", "5.239"],
             ["7405.43", "2.562"],
         ],
-        "a": [  # 卖方
+        "a": [  # 
             [
-                "7405.96",  # 价格
-                "3.340",  # 数量
+                "7405.96",  # 
+                "3.340",  # 
             ],
             ["7406.63", "4.525"],
             ["7407.08", "2.475"],

@@ -1,6 +1,6 @@
 """
 Tests for Binance Mining API Request Implementation
-测试 Binance 矿池 API 请求实现
+ Binance  API 
 """
 
 import queue
@@ -9,7 +9,7 @@ from bt_api_binance.feeds.mining import BinanceRequestDataMining
 
 
 def test_mining_request_init():
-    """测试 Mining Request 初始化"""
+    """ Mining Request """
     data_queue = queue.Queue()
     mining = BinanceRequestDataMining(
         data_queue, public_key="test_public_key", private_key="test_private_key"
@@ -21,7 +21,7 @@ def test_mining_request_init():
 
 
 def test_mining_request_has_methods():
-    """测试 Mining Request 有所有必需方法"""
+    """ Mining Request """
     data_queue = queue.Queue()
     mining = BinanceRequestDataMining(data_queue)
 
@@ -37,7 +37,7 @@ def test_mining_request_has_methods():
 
 
 def test_mining_request_get_mining_algo_list_params():
-    """测试 get_mining_algo_list 参数构建"""
+    """ get_mining_algo_list """
     data_queue = queue.Queue()
     mining = BinanceRequestDataMining(data_queue, public_key="test_key", private_key="test_secret")
 
@@ -49,7 +49,7 @@ def test_mining_request_get_mining_algo_list_params():
 
 
 def test_mining_request_get_mining_worker_list_params():
-    """测试 get_mining_worker_list 参数构建"""
+    """ get_mining_worker_list """
     data_queue = queue.Queue()
     mining = BinanceRequestDataMining(data_queue)
 
@@ -61,7 +61,7 @@ def test_mining_request_get_mining_worker_list_params():
 
 
 def test_mining_request_get_mining_statistics_params():
-    """测试 get_mining_statistics 参数构建"""
+    """ get_mining_statistics """
     data_queue = queue.Queue()
     mining = BinanceRequestDataMining(data_queue)
 

@@ -1,3 +1,4 @@
+"""Module documentation"""
 from __future__ import annotations
 
 import json
@@ -15,11 +16,11 @@ from .request_base import BinanceRequestData
 
 
 class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
+    """Class BinanceAccountWssData"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance account WebSocket data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments including:
                 - topics: Topics to subscribe (default: {})
                 - public_key: API public key
@@ -40,7 +41,7 @@ class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
         self.topics = kwargs.get("topics", {})
         self.public_key = kwargs.get("public_key")
         self.private_key = kwargs.get("private_key")
-        self.wss_url = kwargs.get("wss_url")  # 必须传入特定的链接
+        self.wss_url = kwargs.get("wss_url")  # 
         self.asset_type = kwargs.get("asset_type", "SWAP")
         self.exchange_name = kwargs.get("exchange_name", "BINANCE")
         self.symbol_name = kwargs.get("symbol_name")
@@ -51,19 +52,16 @@ class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
         self.wss_author()
         # ping = threading.Thread(target=self.ping)
         # ping.start()
-        # self.logger.info("初始化成功")
+        # self.logger.info("")
 
     def get_listen_key(self, max_retries: int = 3) -> dict[str, Any]:
         """Get listen key for WebSocket connection.
 
-        Args:
-            max_retries: Maximum number of retry attempts (default: 3).
+        Args: max_retries: Maximum number of retry attempts (default: 3).
 
-        Returns:
-            Dictionary containing listen key data.
+        Returns: Dictionary containing listen key data.
 
-        Raises:
-            RuntimeError: If failed to get listen key after max retries.
+        Raises: RuntimeError: If failed to get listen key after max retries.
 
         """
         path = self._params.get_rest_path("get_listen_key")
@@ -97,8 +95,7 @@ class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
     def refresh_listen_key(self) -> dict[str, Any]:
         """Refresh the listen key to keep WebSocket connection alive.
 
-        Returns:
-            Dictionary containing refresh result data.
+        Returns: Dictionary containing refresh result data.
 
         """
         params = {
@@ -154,8 +151,7 @@ class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
     def handle_data(self, content: dict[str, Any]) -> None:
         """Handle incoming WebSocket data.
 
-        Args:
-            content: Dictionary containing WebSocket message data.
+        Args: content: Dictionary containing WebSocket message data.
 
         """
         event = content.get("e")
@@ -166,7 +162,7 @@ class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
                 self.push_order(content)
             if event == "ORDER_TRADE_UPDATE" and content["o"].get("t") != 0:
                 self.push_trade(content)
-            # # 现货账户事件类型
+            # # 
             # if "executionReport" == event:
             #     self.push_order(content)
             # if "outboundAccountPosition" == event:
@@ -177,52 +173,47 @@ class BinanceAccountWssData(MyWebsocketApp, BinanceRequestData):
     def push_account(self, content: dict[str, Any]) -> None:
         """Push account data to queue.
 
-        Args:
-            content: Dictionary containing account update data.
+        Args: content: Dictionary containing account update data.
 
         """
-        # 推送account数据并添加到事件中
-        # self.logger.info("订阅到账户数据")
+        # account
+        # self.logger.info("")
         symbol = "ALL"
         account_data = BinanceSwapWssAccountData(content, symbol, self.asset_type, True)
         self.data_queue.put(account_data)
-        # self.logger.info("获取account数据成功，当前账户净值为：", account_data.get_balances()[0].get_margin())
+        # self.logger.info("account，：", account_data.get_balances()[0].get_margin())
 
     def push_order(self, content: dict[str, Any]) -> None:
         """Push order data to queue.
 
-        Args:
-            content: Dictionary containing order update data.
+        Args: content: Dictionary containing order update data.
 
         """
-        # self.logger.info("订阅到order数据")
+        # self.logger.info("order")
         symbol = content["o"]["s"]
         order_data = BinanceSwapWssOrderData(content, symbol, self.asset_type, True)
         self.data_queue.put(order_data)
-        # self.logger.info("获取order成功，当前order_status 为：", order_data.get_order_status())
+        # self.logger.info("order，order_status ：", order_data.get_order_status())
 
     def push_trade(self, content: dict[str, Any]) -> None:
         """Push trade data to queue.
 
-        Args:
-            content: Dictionary containing trade update data.
+        Args: content: Dictionary containing trade update data.
 
         """
         symbol = content["o"]["s"]
         trade_data = BinanceSwapWssTradeData(content, symbol, self.asset_type, True)
         self.data_queue.put(trade_data)
-        # self.logger.info("获取trade成功，当前trade_id 为：", trade_data.get_trade_id())
+        # self.logger.info("trade，trade_id ：", trade_data.get_trade_id())
 
     def message_rsp(self, message: str) -> None:
         """Handle incoming WebSocket message.
 
-        Args:
-            message: Raw WebSocket message string.
+        Args: message: Raw WebSocket message string.
 
         """
         rsp = json.loads(message)
         # self.logger.info("message received:", rsp)
         if "e" in rsp:
             self.handle_data(rsp)
-        else:
-            self.wss_logger.info(f"{self.logger_name}, error, {rsp}")
+        else: self.wss_logger.info(f"{self.logger_name}, error, {rsp}")

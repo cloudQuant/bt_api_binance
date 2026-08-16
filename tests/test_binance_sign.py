@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import hmac
@@ -5,10 +6,9 @@ from urllib.parse import urlencode
 
 
 def test_binance_sign():
-    """签名
+    """
 
-    Args:
-        content (TYPE): Description
+    Args: content (TYPE): Description
     """
     content = {"recvWindow": 3000, "timestamp": 1709265105581, "symbol": "OPUSDT"}
     sign_value = urlencode(content)

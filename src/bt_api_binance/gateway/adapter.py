@@ -8,4 +8,5 @@ from bt_api_binance.client import BinanceDirectClient
 
 
 class BinanceGatewayAdapter(PluginGatewayAdapter):
+    """Class BinanceGatewayAdapter"""
     direct_client_cls = BinanceDirectClient

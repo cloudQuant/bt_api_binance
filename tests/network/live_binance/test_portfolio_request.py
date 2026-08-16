@@ -1,6 +1,6 @@
 """
 Tests for Binance Portfolio Margin API Request Implementation
-测试 Binance 组合保证金 API 请求实现
+ Binance  API 
 """
 
 import queue
@@ -9,7 +9,7 @@ from bt_api_binance.feeds.portfolio import BinanceRequestDataPortfolio
 
 
 def test_portfolio_request_init():
-    """测试 Portfolio Request 初始化"""
+    """ Portfolio Request """
     data_queue = queue.Queue()
     portfolio = BinanceRequestDataPortfolio(
         data_queue, public_key="test_public_key", private_key="test_private_key"
@@ -21,7 +21,7 @@ def test_portfolio_request_init():
 
 
 def test_portfolio_request_has_methods():
-    """测试 Portfolio Request 有所有必需方法"""
+    """ Portfolio Request """
     data_queue = queue.Queue()
     portfolio = BinanceRequestDataPortfolio(data_queue)
 
@@ -37,7 +37,7 @@ def test_portfolio_request_has_methods():
 
 
 def test_portfolio_request_get_portfolio_account_params():
-    """测试 get_portfolio_account 参数构建"""
+    """ get_portfolio_account """
     data_queue = queue.Queue()
     portfolio = BinanceRequestDataPortfolio(
         data_queue, public_key="test_key", private_key="test_secret"
@@ -51,7 +51,7 @@ def test_portfolio_request_get_portfolio_account_params():
 
 
 def test_portfolio_request_get_portfolio_collateral_rate_params():
-    """测试 get_portfolio_collateral_rate 参数构建"""
+    """ get_portfolio_collateral_rate """
     data_queue = queue.Queue()
     portfolio = BinanceRequestDataPortfolio(data_queue)
 
@@ -63,7 +63,7 @@ def test_portfolio_request_get_portfolio_collateral_rate_params():
 
 
 def test_portfolio_request_portfolio_transfer_params():
-    """测试 portfolio_transfer 参数构建"""
+    """ portfolio_transfer """
     data_queue = queue.Queue()
     portfolio = BinanceRequestDataPortfolio(data_queue)
 

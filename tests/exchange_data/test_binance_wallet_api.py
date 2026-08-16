@@ -1,6 +1,6 @@
 """
 Tests for Binance Wallet API
-测试 Binance 钱包 API 接口
+ Binance  API 
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from bt_api_binance.exchange_data import (
 
 
 def test_binance_wallet_api_init():
-    """测试 Binance Wallet API 初始化"""
+    """ Binance Wallet API """
     wallet = BinanceExchangeDataWallet()
     assert wallet.exchange_name == "binance_wallet"
     assert wallet.rest_url == "https://api.binance.com"
@@ -25,16 +25,16 @@ def test_binance_wallet_api_init():
 
 
 def test_binance_wallet_rest_paths():
-    """测试 Binance Wallet REST 路径"""
+    """ Binance Wallet REST """
     wallet = BinanceExchangeDataWallet()
 
-    # 测试资产查询接口
+    # 
     assert wallet.get_rest_path("get_wallet_balance") == "GET /sapi/v1/asset/wallet/balance"
     assert wallet.get_rest_path("get_asset_detail") == "GET /sapi/v1/asset/assetDetail"
     assert wallet.get_rest_path("get_asset_ledger") == "GET /sapi/v1/asset/ledger"
     assert wallet.get_rest_path("get_asset_dividend") == "GET /sapi/v1/asset/assetDividend"
 
-    # 测试资产划转接口
+    # 
     assert wallet.get_rest_path("asset_transfer") == "POST /sapi/v1/asset/transfer"
     assert wallet.get_rest_path("get_asset_transfer") == "GET /sapi/v1/asset/transfer"
     assert (
@@ -51,41 +51,41 @@ def test_binance_wallet_rest_paths():
         == "POST /sapi/v1/asset/transfer-to-isolated-margin"
     )
 
-    # 测试充值接口
+    # 
     assert wallet.get_rest_path("get_deposit_address") == "GET /sapi/v1/capital/deposit/address"
     assert wallet.get_rest_path("get_deposit_history") == "GET /sapi/v1/capital/deposit/hisrec"
 
-    # 测试提现接口
+    # 
     assert wallet.get_rest_path("withdraw") == "POST /sapi/v1/capital/withdraw/apply"
     assert wallet.get_rest_path("get_withdraw_history") == "GET /sapi/v1/capital/withdraw/history"
     assert wallet.get_rest_path("get_withdraw_address") == "GET /sapi/v1/capital/withdraw/address"
 
-    # 测试小额资产转换接口
+    # 
     assert wallet.get_rest_path("get_dust") == "GET /sapi/v1/asset/dust"
     assert wallet.get_rest_path("dust_transfer") == "POST /sapi/v1/asset/dust/btc"
 
 
 def test_binance_wallet_symbol_conversion():
-    """测试 Wallet symbol 转换"""
+    """ Wallet symbol """
     wallet = BinanceExchangeDataWallet()
-    # get_symbol 只替换 '-'
+    # get_symbol  '-'
     assert wallet.get_symbol("BTC-USDT") == "BTCUSDT"
     assert wallet.get_symbol("ETH-USDT") == "ETHUSDT"
-    assert wallet.get_symbol("BTC/USDT") == "BTC/USDT"  # / 不会被替换
+    assert wallet.get_symbol("BTC/USDT") == "BTC/USDT"  # / 
 
 
 def test_binance_sub_account_api_init():
-    """测试 Binance Sub-account API 初始化"""
+    """ Binance Sub-account API """
     sub_account = BinanceExchangeDataSubAccount()
     assert sub_account.exchange_name == "binance_sub_account"
     assert sub_account.rest_url == "https://api.binance.com"
 
 
 def test_binance_sub_account_rest_paths():
-    """测试 Binance Sub-account REST 路径"""
+    """ Binance Sub-account REST """
     sub_account = BinanceExchangeDataSubAccount()
 
-    # 测试子账户管理接口
+    # 
     assert sub_account.get_rest_path("get_sub_account_list") == "GET /sapi/v1/sub-account/list"
     assert sub_account.get_rest_path("get_sub_account_status") == "GET /sapi/v1/sub-account/status"
     assert (
@@ -93,7 +93,7 @@ def test_binance_sub_account_rest_paths():
         == "GET /sapi/v1/sub-account/spotSummary"
     )
 
-    # 测试子账户资金划转接口
+    # 
     assert (
         sub_account.get_rest_path("sub_transfer_to_main")
         == "POST /sapi/v1/sub-account/transfer/sub-to-main"
@@ -115,7 +115,7 @@ def test_binance_sub_account_rest_paths():
         == "GET /sapi/v1/sub-account/universal-transfer"
     )
 
-    # 测试子账户资产查询接口
+    # 
     assert sub_account.get_rest_path("get_sub_account_assets") == "GET /sapi/v1/sub-account/assets"
     assert (
         sub_account.get_rest_path("get_sub_account_margin_account")
@@ -130,7 +130,7 @@ def test_binance_sub_account_rest_paths():
         == "GET /sapi/v1/sub-account/futuresAccount"
     )
 
-    # 测试子账户 API Key 管理接口
+    #  API Key 
     assert sub_account.get_rest_path("create_sub_api_key") == "POST /sapi/v1/sub-account/apiKey"
     assert sub_account.get_rest_path("get_sub_api_key") == "GET /sapi/v1/sub-account/apiKey"
     assert sub_account.get_rest_path("delete_sub_api_key") == "DELETE /sapi/v1/sub-account/apiKey"
@@ -145,17 +145,17 @@ def test_binance_sub_account_rest_paths():
 
 
 def test_binance_portfolio_api_init():
-    """测试 Binance Portfolio Margin API 初始化"""
+    """ Binance Portfolio Margin API """
     portfolio = BinanceExchangeDataPortfolio()
     assert portfolio.exchange_name == "binance_portfolio"
     assert portfolio.rest_url == "https://api.binance.com"
 
 
 def test_binance_portfolio_rest_paths():
-    """测试 Binance Portfolio Margin REST 路径"""
+    """ Binance Portfolio Margin REST """
     portfolio = BinanceExchangeDataPortfolio()
 
-    # 测试组合保证金接口
+    # 
     assert portfolio.get_rest_path("get_portfolio_account") == "GET /sapi/v1/portfolio/account"
     assert (
         portfolio.get_rest_path("get_portfolio_collateral_rate")
@@ -165,17 +165,17 @@ def test_binance_portfolio_rest_paths():
 
 
 def test_binance_grid_api_init():
-    """测试 Binance Grid Trading API 初始化"""
+    """ Binance Grid Trading API """
     grid = BinanceExchangeDataGrid()
     assert grid.exchange_name == "binance_grid"
     assert grid.rest_url == "https://api.binance.com"
 
 
 def test_binance_grid_rest_paths():
-    """测试 Binance Grid Trading REST 路径"""
+    """ Binance Grid Trading REST """
     grid = BinanceExchangeDataGrid()
 
-    # 测试合约网格交易接口
+    # 
     assert grid.get_rest_path("futures_grid_new_order") == "POST /sapi/v1/futures/fortune/order"
     assert (
         grid.get_rest_path("futures_grid_cancel_order") == "DELETE /sapi/v1/futures/fortune/order"
@@ -188,17 +188,17 @@ def test_binance_grid_rest_paths():
 
 
 def test_binance_staking_api_init():
-    """测试 Binance Staking API 初始化"""
+    """ Binance Staking API """
     staking = BinanceExchangeDataStaking()
     assert staking.exchange_name == "binance_staking"
     assert staking.rest_url == "https://api.binance.com"
 
 
 def test_binance_staking_rest_paths():
-    """测试 Binance Staking REST 路径"""
+    """ Binance Staking REST """
     staking = BinanceExchangeDataStaking()
 
-    # 测试 Staking 产品接口
+    #  Staking 
     assert staking.get_rest_path("get_staking_products") == "GET /sapi/v1/staking/productList"
     assert staking.get_rest_path("staking_purchase") == "POST /sapi/v1/staking/purchase"
     assert staking.get_rest_path("staking_redeem") == "POST /sapi/v1/staking/redeem"
@@ -207,17 +207,17 @@ def test_binance_staking_rest_paths():
 
 
 def test_binance_mining_api_init():
-    """测试 Binance Mining API 初始化"""
+    """ Binance Mining API """
     mining = BinanceExchangeDataMining()
     assert mining.exchange_name == "binance_mining"
     assert mining.rest_url == "https://api.binance.com"
 
 
 def test_binance_mining_rest_paths():
-    """测试 Binance Mining REST 路径"""
+    """ Binance Mining REST """
     mining = BinanceExchangeDataMining()
 
-    # 测试矿池接口
+    # 
     assert mining.get_rest_path("get_mining_algo_list") == "GET /sapi/v1/mining/pub/algoList"
     assert mining.get_rest_path("get_mining_worker_list") == "GET /sapi/v1/mining/worker/list"
     assert (
@@ -227,17 +227,17 @@ def test_binance_mining_rest_paths():
 
 
 def test_binance_vip_loan_api_init():
-    """测试 Binance VIP Loan API 初始化"""
+    """ Binance VIP Loan API """
     vip_loan = BinanceExchangeDataVipLoan()
     assert vip_loan.exchange_name == "binance_vip_loan"
     assert vip_loan.rest_url == "https://api.binance.com"
 
 
 def test_binance_vip_loan_rest_paths():
-    """测试 Binance VIP Loan REST 路径"""
+    """ Binance VIP Loan REST """
     vip_loan = BinanceExchangeDataVipLoan()
 
-    # 测试 VIP Loan 接口
+    #  VIP Loan 
     assert (
         vip_loan.get_rest_path("get_vip_loan_ongoing_orders") == "GET /sapi/v1/loan/ongoing/order"
     )
@@ -250,18 +250,18 @@ def test_binance_vip_loan_rest_paths():
 
 
 def test_binance_wallet_api_paths_count():
-    """测试 Wallet API 接口数量"""
+    """ Wallet API """
     wallet = BinanceExchangeDataWallet()
-    # 确保所有路径都正确配置
-    assert len(wallet.rest_paths) > 10  # 至少有10个接口
-    # 检查关键接口存在
+    # 
+    assert len(wallet.rest_paths) > 10  # 10
+    # 
     key_paths = ["get_wallet_balance", "asset_transfer", "withdraw", "get_deposit_address"]
     for key in key_paths:
         assert key in wallet.rest_paths
 
 
 def test_binance_sub_account_api_paths_count():
-    """测试 Sub-account API 接口数量"""
+    """ Sub-account API """
     sub_account = BinanceExchangeDataSubAccount()
     assert len(sub_account.rest_paths) > 10
     key_paths = ["get_sub_account_list", "sub_transfer_to_main", "get_sub_account_assets"]
@@ -270,7 +270,7 @@ def test_binance_sub_account_api_paths_count():
 
 
 def test_all_new_classes_have_legal_currency():
-    """测试所有新类都有 legal_currency 配置"""
+    """ legal_currency """
     classes = [
         BinanceExchangeDataWallet,
         BinanceExchangeDataSubAccount,
@@ -289,7 +289,7 @@ def test_all_new_classes_have_legal_currency():
 
 
 def test_all_new_classes_have_wss_paths():
-    """测试所有新类都有 wss_paths 配置（即使是空字典）"""
+    """ wss_paths （）"""
     classes = [
         BinanceExchangeDataWallet,
         BinanceExchangeDataSubAccount,

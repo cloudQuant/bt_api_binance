@@ -1,6 +1,6 @@
 """
 Tests for Binance WebSocket API - New implementations
-测试 Binance WebSocket API 新增实现
+ Binance WebSocket API 
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ from bt_api_binance.exchange_data import (
 
 @pytest.mark.kline
 def test_spot_wss_kline_timezone():
-    """测试 Spot WebSocket kline_timezone 路径"""
+    """ Spot WebSocket kline_timezone """
     spot = BinanceExchangeDataSpot()
     assert "kline_timezone" in spot.wss_paths
     assert spot.wss_paths["kline_timezone"]["params"] == ["<symbol>@kline_<period>@+08:00"]
@@ -23,7 +23,7 @@ def test_spot_wss_kline_timezone():
 
 
 def test_spot_wss_liquidation_order():
-    """测试 Spot WebSocket liquidation_order 路径"""
+    """ Spot WebSocket liquidation_order """
     spot = BinanceExchangeDataSpot()
     assert "liquidation_order" in spot.wss_paths
     assert spot.wss_paths["liquidation_order"]["params"] == ["<symbol>@forceOrder"]
@@ -32,7 +32,7 @@ def test_spot_wss_liquidation_order():
 
 
 def test_swap_wss_liquidation_order():
-    """测试 Swap WebSocket liquidation_order 路径"""
+    """ Swap WebSocket liquidation_order """
     swap = BinanceExchangeDataSwap()
     assert "liquidation_order" in swap.wss_paths
     assert swap.wss_paths["liquidation_order"]["params"] == ["<symbol>@forceOrder"]
@@ -42,14 +42,14 @@ def test_swap_wss_liquidation_order():
 
 
 def test_swap_all_liquidation_order_stream():
-    """测试合约全部强平订单流"""
+    """"""
     swap = BinanceExchangeDataSwap()
     assert "all_force_order" in swap.wss_paths
     assert swap.wss_paths["all_force_order"]["params"] == ["!forceOrder@arr"]
 
 
 def test_wss_paths_count():
-    """测试 WebSocket 路径数量"""
+    """ WebSocket """
     spot = BinanceExchangeDataSpot()
     swap = BinanceExchangeDataSwap()
 

@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import Any
@@ -17,8 +18,7 @@ class BinanceRequestDataCoinM(BinanceRequestData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance COIN-M request data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments including:
                 - asset_type: Asset type (default: "COIN_M")
                 - logger_name: Logger name (default: "binance_coin_m_feed.log")
@@ -38,8 +38,7 @@ class BinanceMarketWssDataCoinM(BinanceMarketWssData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance COIN-M market WebSocket data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments including:
                 - asset_type: Asset type (default: "COIN_M")
 
@@ -55,8 +54,7 @@ class BinanceAccountWssDataCoinM(BinanceAccountWssData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance COIN-M account WebSocket data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments.
 
         """

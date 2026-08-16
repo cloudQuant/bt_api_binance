@@ -1,6 +1,6 @@
 """
 Tests for Binance Sub-account API Request Implementation
-测试 Binance 子账户管理 API 请求实现
+ Binance  API 
 """
 
 import queue
@@ -9,7 +9,7 @@ from bt_api_binance.feeds.sub_account import BinanceRequestDataSubAccount
 
 
 def test_sub_account_request_init():
-    """测试 Sub-account Request 初始化"""
+    """ Sub-account Request """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(
         data_queue, public_key="test_public_key", private_key="test_private_key"
@@ -21,7 +21,7 @@ def test_sub_account_request_init():
 
 
 def test_sub_account_request_has_list_methods():
-    """测试 Sub-account Request 有子账户列表方法"""
+    """ Sub-account Request """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
     assert hasattr(sub_account, "get_sub_account_list")
@@ -31,7 +31,7 @@ def test_sub_account_request_has_list_methods():
 
 
 def test_sub_account_request_has_transfer_methods():
-    """测试 Sub-account Request 有划转方法"""
+    """ Sub-account Request """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
     assert hasattr(sub_account, "sub_transfer_to_main")
@@ -41,7 +41,7 @@ def test_sub_account_request_has_transfer_methods():
 
 
 def test_sub_account_request_has_asset_methods():
-    """测试 Sub-account Request 有资产查询方法"""
+    """ Sub-account Request """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
     assert hasattr(sub_account, "get_sub_account_assets")
@@ -51,7 +51,7 @@ def test_sub_account_request_has_asset_methods():
 
 
 def test_sub_account_request_has_api_key_methods():
-    """测试 Sub-account Request 有 API Key 管理方法"""
+    """ Sub-account Request  API Key """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
     assert hasattr(sub_account, "create_sub_api_key")
@@ -62,7 +62,7 @@ def test_sub_account_request_has_api_key_methods():
 
 
 def test_sub_account_request_get_sub_account_list_params():
-    """测试 get_sub_account_list 参数构建"""
+    """ get_sub_account_list """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(
         data_queue, public_key="test_key", private_key="test_secret"
@@ -76,7 +76,7 @@ def test_sub_account_request_get_sub_account_list_params():
 
 
 def test_sub_account_request_sub_transfer_to_main_params():
-    """测试 sub_transfer_to_main 参数构建"""
+    """ sub_transfer_to_main """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
 
@@ -91,7 +91,7 @@ def test_sub_account_request_sub_transfer_to_main_params():
 
 
 def test_sub_account_request_main_transfer_to_sub_params():
-    """测试 main_transfer_to_sub 参数构建"""
+    """ main_transfer_to_sub """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
 
@@ -106,7 +106,7 @@ def test_sub_account_request_main_transfer_to_sub_params():
 
 
 def test_sub_account_request_get_sub_account_assets_params():
-    """测试 get_sub_account_assets 参数构建"""
+    """ get_sub_account_assets """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
 
@@ -117,7 +117,7 @@ def test_sub_account_request_get_sub_account_assets_params():
 
 
 def test_sub_account_request_delete_sub_api_key_params():
-    """测试 delete_sub_api_key 参数构建"""
+    """ delete_sub_api_key """
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
 
@@ -131,27 +131,27 @@ def test_sub_account_request_delete_sub_api_key_params():
 
 
 def test_sub_account_request_all_public_methods():
-    """测试所有公开方法是否存在"""
+    """"""
     data_queue = queue.Queue()
     sub_account = BinanceRequestDataSubAccount(data_queue)
 
     public_methods = [
-        # 子账户管理
+        # 
         "get_sub_account_list",
         "get_sub_account_status",
         "get_sub_account_spot_summary",
-        # 子账户资金划转
+        # 
         "sub_transfer_to_main",
         "main_transfer_to_sub",
         "sub_transfer_to_sub",
         "get_sub_transfer_history",
         "get_sub_account_universal_transfer",
-        # 子账户资产查询
+        # 
         "get_sub_account_assets",
         "get_sub_account_margin_account",
         "get_sub_account_margin_summary",
         "get_sub_account_futures_account",
-        # 子账户 API Key 管理
+        #  API Key 
         "create_sub_api_key",
         "get_sub_api_key",
         "delete_sub_api_key",

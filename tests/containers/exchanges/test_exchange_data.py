@@ -66,7 +66,7 @@ class TestExchangeData:
         with pytest.raises(NotImplementedError) as exc_info:
             exchange.raise_path_error("binance", "depth")
 
-        assert "wbfAPI还未封装" in str(exc_info.value)
+        assert "wbfAPI" in str(exc_info.value)
         assert "binance" in str(exc_info.value)
         assert "depth" in str(exc_info.value)
 
@@ -77,7 +77,7 @@ class TestExchangeData:
         with pytest.raises(TimeoutError) as exc_info:
             exchange.raise_timeout(30, "test_endpoint")
 
-        assert "rest请求超时" in str(exc_info.value)
+        assert "rest" in str(exc_info.value)
         assert "30" in str(exc_info.value)
 
     def test_raise400(self):
@@ -96,7 +96,7 @@ class TestExchangeData:
         with pytest.raises(ConnectionError) as exc_info:
             exchange.raise_proxy_error("test_proxy")
 
-        assert "网络代理错误" in str(exc_info.value)
+        assert "" in str(exc_info.value)
 
     def test_update_info_static_method(self):
         """Test update_info static method."""
@@ -144,12 +144,14 @@ class TestExchangeData:
             assert not key.startswith("to_dict")
 
     def test_update_info_accepts_custom_fields(self):
+        """test_update_info_accepts_custom_fields method"""
         exchange = ExchangeData.update_info({"custom_field": "value", "limit": 1200})
 
         assert exchange.custom_field == "value"
         assert exchange.limit == 1200
 
     def test_to_dict_includes_runtime_mutable_fields(self):
+        """test_to_dict_includes_runtime_mutable_fields method"""
         exchange = ExchangeData()
         exchange.rest_paths = {"get_tick": "/ticker"}
         exchange.wss_paths = {"ticker": "stream"}

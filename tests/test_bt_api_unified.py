@@ -1,4 +1,4 @@
-"""验证 BtApi 统一接口的基本正确性（不需要真实API密钥）"""
+""" BtApi （API）"""
 
 from __future__ import annotations
 
@@ -12,17 +12,19 @@ from bt_api_py.exceptions import ExchangeNotFoundError, InvalidOrderError, Subsc
 
 class _ValidationFeed:
     def make_order(self, *args, **kwargs):
+        """make_order method"""
         return {"ok": True, "args": args, "kwargs": kwargs}
 
 
 class TestBtApiUnifiedInterface:
-    """测试 BtApi 统一接口方法是否存在且向后兼容"""
+    """ BtApi """
 
     def setup_method(self):
+        """setup_method method"""
         self.bt = BtApi(None, debug=False)
 
     def test_old_methods_exist(self):
-        """原有接口应保持不变"""
+        """"""
         old_methods = [
             "get_request_api",
             "get_async_request_api",
@@ -45,7 +47,7 @@ class TestBtApiUnifiedInterface:
             assert hasattr(self.bt, m), f"backward-compat method {m} missing"
 
     def test_unified_sync_methods_exist(self):
-        """统一同步接口方法应存在"""
+        """"""
         sync_methods = [
             "get_tick",
             "get_depth",
@@ -64,7 +66,7 @@ class TestBtApiUnifiedInterface:
             assert callable(getattr(self.bt, m))
 
     def test_unified_async_methods_exist(self):
-        """统一异步接口方法应存在"""
+        """"""
         async_methods = [
             "async_get_tick",
             "async_get_depth",
@@ -83,7 +85,7 @@ class TestBtApiUnifiedInterface:
             assert callable(getattr(self.bt, m))
 
     def test_batch_methods_exist(self):
-        """批量操作方法应存在"""
+        """"""
         batch_methods = [
             "get_all_ticks",
             "get_all_balances",
@@ -95,12 +97,12 @@ class TestBtApiUnifiedInterface:
             assert callable(getattr(self.bt, m))
 
     def test_get_feed_raises_on_invalid_exchange(self):
-        """访问不存在的交易所应抛出 ExchangeNotFoundError"""
+        """ ExchangeNotFoundError"""
         with pytest.raises(ExchangeNotFoundError):
             self.bt._get_feed("INVALID___EXCHANGE")
 
     def test_unified_method_raises_on_invalid_exchange(self):
-        """统一接口方法对不存在的交易所应抛出 ExchangeNotFoundError"""
+        """ ExchangeNotFoundError"""
         with pytest.raises(ExchangeNotFoundError):
             self.bt.get_tick("INVALID___EXCHANGE", "BTC-USDT")
 
@@ -111,7 +113,7 @@ class TestBtApiUnifiedInterface:
             self.bt.get_balance("INVALID___EXCHANGE")
 
     def test_batch_methods_return_empty_when_no_exchanges(self):
-        """无交易所时批量操作应返回空字典"""
+        """"""
         assert self.bt.get_all_ticks("BTC-USDT") == {}
         assert self.bt.get_all_balances() == {}
         assert self.bt.get_all_positions() == {}
@@ -129,20 +131,22 @@ class TestBtApiUnifiedInterface:
     def test_make_order_rejects_invalid_parameters(
         self, volume: float, price: float, order_type: str, error_match: str
     ):
+        """test_make_order_rejects_invalid_parameters method"""
         self.bt.exchange_feeds["TEST_VALIDATION___SPOT"] = _ValidationFeed()
         with pytest.raises(InvalidOrderError, match=error_match):
             self.bt.make_order("TEST_VALIDATION___SPOT", "BTC-USDT", volume, price, order_type)
 
     def test_subscribe_rejects_invalid_dataname_format(self):
+        """test_subscribe_rejects_invalid_dataname_format method"""
         with pytest.raises(SubscribeError, match="dataname"):
             self.bt.subscribe("BINANCE_SPOT_BTCUSDT", [{"topic": "kline"}])
 
 
 class TestKlinePeriodDeltas:
-    """测试 K 线周期时间映射的正确性"""
+    """ K """
 
     def test_kline_period_deltas_correctness(self):
-        """验证 K 线周期时间映射正确"""
+        """ K """
         expected = {
             "1m": timedelta(minutes=1),
             "3m": timedelta(minutes=3),
@@ -160,7 +164,7 @@ class TestKlinePeriodDeltas:
             )
 
     def test_kline_period_delta_minutes_not_hours(self):
-        """确保分钟周期不会被错误映射为小时"""
+        """"""
         assert KLINE_PERIOD_DELTAS["1m"] == timedelta(minutes=1), (
             "1m should be 1 minute, not 1 hour"
         )

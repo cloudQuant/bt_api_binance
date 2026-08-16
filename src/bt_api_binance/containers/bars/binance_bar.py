@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -21,14 +22,12 @@ class BinanceRequestBarData(BarData):
         """
         Initialize Binance bar data from REST API.
 
-        Args:
-            bar_info: Bar information (JSON string or dict).
+        Args: bar_info: Bar information (JSON string or dict).
             symbol_name: Symbol name.
             asset_type: Asset type.
             has_been_json_encoded: Whether data has been JSON encoded.
 
-        Returns:
-            None
+        Returns: None
         """
         super().__init__(bar_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
@@ -56,8 +55,7 @@ class BinanceRequestBarData(BarData):
         """
         Initialize data from bar_info.
 
-        Returns:
-            Self instance for chaining.
+        Returns: Self instance for chaining.
         """
         if not self.has_been_json_encoded:
             self.bar_data = json.loads(self.bar_info)
@@ -84,8 +82,7 @@ class BinanceRequestBarData(BarData):
         """
         Get all bar data as dictionary.
 
-        Returns:
-            Dictionary containing all bar data.
+        Returns: Dictionary containing all bar data.
         """
         if not self.has_been_init_data:
             self.init_data()
@@ -124,8 +121,7 @@ class BinanceRequestBarData(BarData):
         """
         Get event type.
 
-        Returns:
-            Event type string.
+        Returns: Event type string.
         """
         return self.event
 
@@ -133,8 +129,7 @@ class BinanceRequestBarData(BarData):
         """
         Get exchange name.
 
-        Returns:
-            Exchange name string.
+        Returns: Exchange name string.
         """
         return self.exchange_name
 
@@ -142,8 +137,7 @@ class BinanceRequestBarData(BarData):
         """
         Get symbol name.
 
-        Returns:
-            Symbol name string.
+        Returns: Symbol name string.
         """
         return self.symbol_name
 
@@ -151,8 +145,7 @@ class BinanceRequestBarData(BarData):
         """
         Get asset type.
 
-        Returns:
-            Asset type string.
+        Returns: Asset type string.
         """
         return self.asset_type
 
@@ -160,8 +153,7 @@ class BinanceRequestBarData(BarData):
         """
         Get server timestamp.
 
-        Returns:
-            Server timestamp or None.
+        Returns: Server timestamp or None.
         """
         return self.server_time
 
@@ -169,8 +161,7 @@ class BinanceRequestBarData(BarData):
         """
         Get local update timestamp.
 
-        Returns:
-            Local update timestamp.
+        Returns: Local update timestamp.
         """
         return self.local_update_time
 
@@ -178,8 +169,7 @@ class BinanceRequestBarData(BarData):
         """
         Get open time.
 
-        Returns:
-            Open time timestamp or None.
+        Returns: Open time timestamp or None.
         """
         return self.open_time
 
@@ -187,8 +177,7 @@ class BinanceRequestBarData(BarData):
         """
         Get open price.
 
-        Returns:
-            Open price or None.
+        Returns: Open price or None.
         """
         return self.open_price
 
@@ -196,8 +185,7 @@ class BinanceRequestBarData(BarData):
         """
         Get high price.
 
-        Returns:
-            High price or None.
+        Returns: High price or None.
         """
         return self.high_price
 
@@ -205,8 +193,7 @@ class BinanceRequestBarData(BarData):
         """
         Get low price.
 
-        Returns:
-            Low price or None.
+        Returns: Low price or None.
         """
         return self.low_price
 
@@ -214,8 +201,7 @@ class BinanceRequestBarData(BarData):
         """
         Get close price.
 
-        Returns:
-            Close price or None.
+        Returns: Close price or None.
         """
         return self.close_price
 
@@ -223,8 +209,7 @@ class BinanceRequestBarData(BarData):
         """
         Get volume.
 
-        Returns:
-            Volume or None.
+        Returns: Volume or None.
         """
         return self.volume
 
@@ -232,8 +217,7 @@ class BinanceRequestBarData(BarData):
         """
         Get amount (quote asset volume).
 
-        Returns:
-            Amount or None.
+        Returns: Amount or None.
         """
         return self.amount
 
@@ -241,8 +225,7 @@ class BinanceRequestBarData(BarData):
         """
         Get close time.
 
-        Returns:
-            Close time timestamp or None.
+        Returns: Close time timestamp or None.
         """
         return self.close_time
 
@@ -250,8 +233,7 @@ class BinanceRequestBarData(BarData):
         """
         Get quote asset volume.
 
-        Returns:
-            Always None for this implementation.
+        Returns: Always None for this implementation.
         """
         return
 
@@ -259,8 +241,7 @@ class BinanceRequestBarData(BarData):
         """
         Get base asset volume.
 
-        Returns:
-            Always None for this implementation.
+        Returns: Always None for this implementation.
         """
         return
 
@@ -268,8 +249,7 @@ class BinanceRequestBarData(BarData):
         """
         Get number of trades.
 
-        Returns:
-            Number of trades or None.
+        Returns: Number of trades or None.
         """
         return self.num_trades
 
@@ -277,8 +257,7 @@ class BinanceRequestBarData(BarData):
         """
         Get taker buy base asset volume.
 
-        Returns:
-            Taker buy base asset volume or None.
+        Returns: Taker buy base asset volume or None.
         """
         return self.taker_buy_base_asset_volume
 
@@ -286,8 +265,7 @@ class BinanceRequestBarData(BarData):
         """
         Get taker buy quote asset volume.
 
-        Returns:
-            Taker buy quote asset volume or None.
+        Returns: Taker buy quote asset volume or None.
         """
         return self.taker_buy_quote_asset_volume
 
@@ -295,8 +273,7 @@ class BinanceRequestBarData(BarData):
         """
         Get bar status.
 
-        Returns:
-            True if bar is complete, False otherwise.
+        Returns: True if bar is complete, False otherwise.
         """
         return self.bar_status
 
@@ -314,14 +291,12 @@ class BinanceWssBarData(BarData):
         """
         Initialize Binance bar data from WebSocket.
 
-        Args:
-            bar_info: Bar information (JSON string or dict).
+        Args: bar_info: Bar information (JSON string or dict).
             symbol_name: Symbol name.
             asset_type: Asset type.
             has_been_json_encoded: Whether data has been JSON encoded.
 
-        Returns:
-            None
+        Returns: None
         """
         super().__init__(bar_info)
         self.exchange_name = "BINANCE"
@@ -350,8 +325,7 @@ class BinanceWssBarData(BarData):
         """
         Initialize data from bar_info.
 
-        Returns:
-            Self instance for chaining.
+        Returns: Self instance for chaining.
         """
         if not self.has_been_json_encoded:
             self.bar_info = json.loads(self.bar_info)
@@ -379,8 +353,7 @@ class BinanceWssBarData(BarData):
         """
         Get all bar data as dictionary.
 
-        Returns:
-            Dictionary containing all bar data.
+        Returns: Dictionary containing all bar data.
         """
         if self.all_data is None:
             self.all_data = {
@@ -417,8 +390,7 @@ class BinanceWssBarData(BarData):
         """
         Get event type.
 
-        Returns:
-            Event type string.
+        Returns: Event type string.
         """
         return self.event
 
@@ -426,8 +398,7 @@ class BinanceWssBarData(BarData):
         """
         Get exchange name.
 
-        Returns:
-            Exchange name string.
+        Returns: Exchange name string.
         """
         return self.exchange_name
 
@@ -435,8 +406,7 @@ class BinanceWssBarData(BarData):
         """
         Get symbol name.
 
-        Returns:
-            Symbol name string.
+        Returns: Symbol name string.
         """
         return self.symbol_name
 
@@ -444,8 +414,7 @@ class BinanceWssBarData(BarData):
         """
         Get asset type.
 
-        Returns:
-            Asset type string.
+        Returns: Asset type string.
         """
         return self.asset_type
 
@@ -453,8 +422,7 @@ class BinanceWssBarData(BarData):
         """
         Get server timestamp.
 
-        Returns:
-            Server timestamp or None.
+        Returns: Server timestamp or None.
         """
         return self.server_time
 
@@ -462,8 +430,7 @@ class BinanceWssBarData(BarData):
         """
         Get local update timestamp.
 
-        Returns:
-            Local update timestamp.
+        Returns: Local update timestamp.
         """
         return self.local_update_time
 
@@ -471,8 +438,7 @@ class BinanceWssBarData(BarData):
         """
         Get open time.
 
-        Returns:
-            Open time timestamp or None.
+        Returns: Open time timestamp or None.
         """
         return self.open_time
 
@@ -480,8 +446,7 @@ class BinanceWssBarData(BarData):
         """
         Get open price.
 
-        Returns:
-            Open price or None.
+        Returns: Open price or None.
         """
         return self.open_price
 
@@ -489,8 +454,7 @@ class BinanceWssBarData(BarData):
         """
         Get high price.
 
-        Returns:
-            High price or None.
+        Returns: High price or None.
         """
         return self.high_price
 
@@ -498,8 +462,7 @@ class BinanceWssBarData(BarData):
         """
         Get low price.
 
-        Returns:
-            Low price or None.
+        Returns: Low price or None.
         """
         return self.low_price
 
@@ -507,8 +470,7 @@ class BinanceWssBarData(BarData):
         """
         Get close price.
 
-        Returns:
-            Close price or None.
+        Returns: Close price or None.
         """
         return self.close_price
 
@@ -516,8 +478,7 @@ class BinanceWssBarData(BarData):
         """
         Get volume.
 
-        Returns:
-            Volume or None.
+        Returns: Volume or None.
         """
         return self.volume
 
@@ -525,8 +486,7 @@ class BinanceWssBarData(BarData):
         """
         Get amount (quote asset volume).
 
-        Returns:
-            Amount or None.
+        Returns: Amount or None.
         """
         return self.amount
 
@@ -534,8 +494,7 @@ class BinanceWssBarData(BarData):
         """
         Get close time.
 
-        Returns:
-            Close time timestamp or None.
+        Returns: Close time timestamp or None.
         """
         return self.close_time
 
@@ -543,8 +502,7 @@ class BinanceWssBarData(BarData):
         """
         Get quote asset volume.
 
-        Returns:
-            Always None for this implementation.
+        Returns: Always None for this implementation.
         """
         return
 
@@ -552,8 +510,7 @@ class BinanceWssBarData(BarData):
         """
         Get base asset volume.
 
-        Returns:
-            Always None for this implementation.
+        Returns: Always None for this implementation.
         """
         return
 
@@ -561,8 +518,7 @@ class BinanceWssBarData(BarData):
         """
         Get number of trades.
 
-        Returns:
-            Number of trades or None.
+        Returns: Number of trades or None.
         """
         return self.num_trades
 
@@ -570,8 +526,7 @@ class BinanceWssBarData(BarData):
         """
         Get taker buy base asset volume.
 
-        Returns:
-            Taker buy base asset volume or None.
+        Returns: Taker buy base asset volume or None.
         """
         return self.taker_buy_base_asset_volume
 
@@ -579,8 +534,7 @@ class BinanceWssBarData(BarData):
         """
         Get taker buy quote asset volume.
 
-        Returns:
-            Taker buy quote asset volume or None.
+        Returns: Taker buy quote asset volume or None.
         """
         return self.taker_buy_quote_asset_volume
 
@@ -588,7 +542,6 @@ class BinanceWssBarData(BarData):
         """
         Get bar status.
 
-        Returns:
-            True if bar is complete, False otherwise.
+        Returns: True if bar is complete, False otherwise.
         """
         return self.bar_status

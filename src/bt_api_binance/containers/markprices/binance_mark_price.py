@@ -1,4 +1,4 @@
-"""标记价格类，用于确定标记价格的属性和方法."""
+"""，."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 
 class BinanceMarkPrice(MarkPriceData):
+    """Class BinanceMarkPrice"""
     def __init__(
         self,
         mark_price_info: Any,
@@ -21,6 +22,7 @@ class BinanceMarkPrice(MarkPriceData):
         asset_type: Any,
         has_been_json_encoded: Any = False,
     ) -> None:
+        """__init__ method"""
         super().__init__(mark_price_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
@@ -36,9 +38,11 @@ class BinanceMarkPrice(MarkPriceData):
         self.has_been_init_data = False
 
     def init_data(self) -> Self:
+        """init_data method"""
         raise NotImplementedError
 
     def get_all_data(self) -> dict[str, Any]:
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -62,25 +66,32 @@ class BinanceMarkPrice(MarkPriceData):
         return self.__str__()
 
     def get_exchange_name(self) -> str:
+        """get_exchange_name method"""
         return str(self.exchange_name)
 
     def get_server_time(self) -> float:
+        """get_server_time method"""
         st = self.server_time
         return float(st) if st is not None else 0.0  # type: ignore[arg-type]
 
     def get_local_update_time(self) -> float:
+        """get_local_update_time method"""
         return float(self.local_update_time)
 
     def get_symbol_name(self) -> str:
+        """get_symbol_name method"""
         return str(self.symbol_name)
 
     def get_mark_price_symbol_name(self) -> str:
+        """get_mark_price_symbol_name method"""
         return str(self.mark_price_symbol_name) if self.mark_price_symbol_name else ""
 
     def get_asset_type(self) -> str:
+        """get_asset_type method"""
         return str(self.asset_type)
 
     def get_mark_price(self) -> float | None:
+        """get_mark_price method"""
         return self.mark_price
 
     def get_index_price(self) -> float | None:
@@ -97,9 +108,10 @@ class BinanceMarkPrice(MarkPriceData):
 
 
 class BinanceRequestMarkPriceData(BinanceMarkPrice):
-    """保存标记价格信息."""
+    """."""
 
     def init_data(self) -> Self:
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.mark_price_data = json.loads(self.mark_price_info)
             self.has_been_json_encoded = True
@@ -116,9 +128,10 @@ class BinanceRequestMarkPriceData(BinanceMarkPrice):
 
 
 class BinanceWssMarkPriceData(BinanceMarkPrice):
-    """保存标记价格信息."""
+    """."""
 
     def init_data(self) -> Self:
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.mark_price_data = json.loads(self.mark_price_info)
             self.has_been_json_encoded = True

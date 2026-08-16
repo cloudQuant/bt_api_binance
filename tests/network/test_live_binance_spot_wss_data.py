@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 import queue
 import random
 import time
@@ -24,6 +25,7 @@ pytestmark = [pytest.mark.integration, pytest.mark.network]
 
 
 def generate_kwargs(exchange=BinanceExchangeDataSpot):
+    """generate_kwargs function"""
     data = read_account_config()
     kwargs = {
         "public_key": data["binance"]["public_key"],
@@ -36,6 +38,7 @@ def generate_kwargs(exchange=BinanceExchangeDataSpot):
 
 
 def init_req_feed():
+    """init_req_feed function"""
     data_queue = queue.Queue()
     kwargs = generate_kwargs()
     live_binance_spot_feed = BinanceRequestDataSpot(data_queue, **kwargs)
@@ -45,6 +48,7 @@ def init_req_feed():
 @pytest.mark.timeout(60)
 @pytest.mark.auth_account
 def test_binance_wss_data_feed():
+    """test_binance_wss_data_feed function"""
     data_queue = queue.Queue()
     data = read_account_config()
     kwargs = {
@@ -95,6 +99,7 @@ def test_binance_wss_data_feed():
 
 @pytest.mark.auth_order
 def test_get_binance_account_data_feed():
+    """test_get_binance_account_data_feed function"""
     data_queue = queue.Queue()
     data = read_account_config()
     kwargs = {
@@ -115,7 +120,7 @@ def test_get_binance_account_data_feed():
     time.sleep(3)
     # receive_binance_position_data = False
     receive_binance_order_data = False
-    # 下单撤单测试订单功能
+    # 
     live_binance_spot_feed = init_req_feed()
     price_data = live_binance_spot_feed.get_tick("OP-USDT")
     price_data = price_data.get_data()[0].init_data()
@@ -137,11 +142,11 @@ def test_get_binance_account_data_feed():
 
     print(buy_data.get_data()[0].init_data())
     # data = live_binance_spot_feed.query_order("OP-USDT", client_order_id=sell_client_order_id)
-    # print("下单数据", data.get_data())
+    # print("", data.get_data())
     cancel_buy_data = live_binance_spot_feed.cancel_order(
         "OP-USDT", client_order_id=buy_client_order_id
     )
-    print("撤单数据", cancel_buy_data.get_data()[0].init_data())
+    print("", cancel_buy_data.get_data()[0].init_data())
 
     time.sleep(5)
     count = 1

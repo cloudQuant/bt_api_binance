@@ -1,6 +1,6 @@
 """
 Tests for Binance Margin WebSocket API
-测试 Binance 杠杆 WebSocket API
+ Binance  WebSocket API
 """
 
 import queue
@@ -17,7 +17,7 @@ from bt_api_binance.feeds.spot import BinanceAccountWssDataSpot
 
 
 def init_margin_wss():
-    """初始化 Margin WSS 实例 (mock wss_author 避免网络调用)"""
+    """ Margin WSS  (mock wss_author )"""
     data_queue = queue.Queue()
     kwargs = {
         "exchange_data": BinanceExchangeDataMargin(),
@@ -31,17 +31,17 @@ def init_margin_wss():
 
 
 def test_margin_account_wss_has_handle_data():
-    """测试 Margin Account WSS 有 handle_data 方法"""
+    """ Margin Account WSS  handle_data """
     margin_wss, _ = init_margin_wss()
     assert hasattr(margin_wss, "handle_data")
     assert callable(margin_wss.handle_data)
 
 
 def test_margin_account_wss_handle_data_execution_report():
-    """测试处理 executionReport 事件"""
+    """ executionReport """
     margin_wss, data_queue = init_margin_wss()
 
-    # 模拟 executionReport 事件 (非成交)
+    #  executionReport  ()
     content = {
         "e": "executionReport",
         "E": 123456789,
@@ -52,7 +52,7 @@ def test_margin_account_wss_handle_data_execution_report():
         "f": "GTC",
         "q": "1.00000000",
         "p": "50000.00000000",
-        "x": "NEW",  # 非 TRADE 事件
+        "x": "NEW",  #  TRADE 
         "X": "NEW",
         "r": "NONE",
         "i": 12345678,
@@ -75,7 +75,7 @@ def test_margin_account_wss_handle_data_execution_report():
 
     margin_wss.handle_data(content)
 
-    # 应该接收到订单数据
+    # 
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssOrderData)
@@ -84,10 +84,10 @@ def test_margin_account_wss_handle_data_execution_report():
 
 
 def test_margin_account_wss_handle_data_outbound_account_position():
-    """测试处理 outboundAccountPosition 事件"""
+    """ outboundAccountPosition """
     margin_wss, data_queue = init_margin_wss()
 
-    # 模拟 outboundAccountPosition 事件
+    #  outboundAccountPosition 
     content = {
         "e": "outboundAccountPosition",
         "E": 123456789,
@@ -100,7 +100,7 @@ def test_margin_account_wss_handle_data_outbound_account_position():
 
     margin_wss.handle_data(content)
 
-    # 应该接收到账户数据
+    # 
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssAccountData)
@@ -109,10 +109,10 @@ def test_margin_account_wss_handle_data_outbound_account_position():
 
 
 def test_margin_account_wss_handle_data_execution_report_trade():
-    """测试处理 executionReport 成交事件"""
+    """ executionReport """
     margin_wss, data_queue = init_margin_wss()
 
-    # 模拟 executionReport 成交事件
+    #  executionReport 
     content = {
         "e": "executionReport",
         "E": 123456789,
@@ -123,7 +123,7 @@ def test_margin_account_wss_handle_data_execution_report_trade():
         "f": "GTC",
         "q": "1.00000000",
         "p": "50000.00000000",
-        "x": "TRADE",  # 成交事件
+        "x": "TRADE",  # 
         "X": "FILLED",
         "r": "NONE",
         "i": 12345678,
@@ -146,7 +146,7 @@ def test_margin_account_wss_handle_data_execution_report_trade():
 
     margin_wss.handle_data(content)
 
-    # 应该接收到成交数据
+    # 
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssTradeData)
@@ -155,10 +155,10 @@ def test_margin_account_wss_handle_data_execution_report_trade():
 
 
 def test_margin_account_wss_handle_data_balance_update():
-    """测试处理 balanceUpdate 事件"""
+    """ balanceUpdate """
     margin_wss, data_queue = init_margin_wss()
 
-    # 模拟 balanceUpdate 事件 (分红等)
+    #  balanceUpdate  ()
     content = {
         "e": "balanceUpdate",
         "E": 1573200697114,
@@ -169,7 +169,7 @@ def test_margin_account_wss_handle_data_balance_update():
 
     margin_wss.handle_data(content)
 
-    # 应该接收到余额更新数据
+    # 
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssAccountData)
@@ -178,7 +178,7 @@ def test_margin_account_wss_handle_data_balance_update():
 
 
 def test_margin_account_wss_has_push_methods():
-    """测试 Margin Account WSS 有 push 方法"""
+    """ Margin Account WSS  push """
     margin_wss, _ = init_margin_wss()
 
     assert hasattr(margin_wss, "push_account")
@@ -192,7 +192,7 @@ def test_margin_account_wss_has_push_methods():
 
 
 def test_spot_account_wss_has_push_balance():
-    """测试 Spot Account WSS 有 push_balance 方法"""
+    """ Spot Account WSS  push_balance """
     data_queue = queue.Queue()
     kwargs = {"exchange_data": BinanceExchangeDataSpot()}
     # Mock wss_author to avoid actual network calls
@@ -205,7 +205,7 @@ def test_spot_account_wss_has_push_balance():
 
 
 def test_spot_account_wss_handle_balance_update():
-    """测试 Spot 处理 balanceUpdate 事件"""
+    """ Spot  balanceUpdate """
     data_queue = queue.Queue()
     kwargs = {"exchange_data": BinanceExchangeDataSpot()}
     # Mock wss_author to avoid actual network calls
@@ -213,7 +213,7 @@ def test_spot_account_wss_handle_balance_update():
         spot_wss = BinanceAccountWssDataSpot(data_queue, **kwargs)
         spot_wss.listen_key = "test_listen_key"
 
-    # 模拟 balanceUpdate 事件
+    #  balanceUpdate 
     content = {
         "e": "balanceUpdate",
         "E": 1573200697114,
@@ -224,7 +224,7 @@ def test_spot_account_wss_handle_balance_update():
 
     spot_wss.handle_data(content)
 
-    # 应该接收到余额更新数据
+    # 
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssAccountData)

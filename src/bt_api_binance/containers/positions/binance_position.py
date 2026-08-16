@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -12,14 +13,15 @@ from bt_api_base.functions.utils import (
 
 
 class BinancePositionData(PositionData):
-    """保存持仓信息"""
+    """"""
 
     def __init__(self, position_info, symbol_name, asset_type, has_been_json_encoded):
+        """__init__ method"""
         super().__init__(position_info, has_been_json_encoded)
         self.position_commission = None
         self.maintenance_margin = None
         self.exchange_name = "BINANCE"
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.symbol_name = symbol_name
         self.asset_type = asset_type
         self.position_data = position_info if has_been_json_encoded else None
@@ -40,9 +42,11 @@ class BinancePositionData(PositionData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         raise NotImplementedError
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -73,117 +77,119 @@ class BinancePositionData(PositionData):
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_symbol_name(self):
+        """get_symbol_name method"""
         return self.symbol_name
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return self.server_time
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_account_id(self):
-        """# 账户id"""
+        """# id"""
         return
 
     def get_position_id(self):
-        """# 持仓id"""
+        """# id"""
         return
 
     def get_is_isolated(self):
-        """# 是否是逐仓模式"""
+        """# """
         return self.is_isolated
 
     def get_margin_type(self):
-        """# 保证金类型"""
+        """# """
         return self.margin_type
 
     def get_is_auto_add_margin(self):
-        """# 是否可以自动增加保证金"""
+        """# """
         return self.is_auto_add_margin
 
     def get_leverage(self):
-        """# 杠杆倍率"""
+        """# """
         return self.leverage
 
     def get_max_notional_value(self):
-        """# 当前杠杆下用户可用的最大名义价值"""
+        """# """
         return self.max_notional_value
 
     def get_position_symbol_name(self):
-        """# 仓位的品种名称"""
+        """# """
         return self.position_symbol_name
 
     def get_position_volume(self):
-        """# 持仓数量"""
+        """# """
         return self.position_volume
 
     def get_position_side(self):
-        """# 持仓方向"""
+        """# """
         return self.position_side
 
     def get_trade_num(self):
-        """# trade的个数"""
+        """# trade"""
         return
 
     def get_avg_price(self):
-        """# 持仓成本价"""
+        """# """
         return self.avg_price
 
     def get_mark_price(self):
-        """# 标记价格"""
+        """# """
         return self.mark_price
 
     def get_liquidation_price(self):
-        """# 清算价格"""
+        """# """
         return
 
     def get_initial_margin(self):
-        """# 当前所需起始保证金(基于最新标记价格)"""
+        """# ()"""
         return
 
     def get_maintenance_margin(self):
-        """# 维持保证金"""
+        """# """
         return self.maintenance_margin
 
     def open_order_initial_margin(self):
-        """# 当前挂单所需起始保证金(基于最新标记价格)"""
+        """# ()"""
         return
 
     def get_position_initial_margin(self):
-        """# 持仓所需起始保证金(基于最新标记价格)"""
+        """# ()"""
         return
 
     def get_position_commission(self):
-        """# 这个position交易所耗费的手续费"""
+        """# position"""
         return self.position_commission
 
     def get_position_realized_pnl(self):
-        """# 已经实现的利润"""
+        """# """
         return self.position_realized_pnl
 
     def get_position_unrealized_pnl(self):
-        """# 持仓未实现盈亏"""
+        """# """
         return self.position_unrealized_pnl
 
     def get_position_funding_value(self):
-        """# 总的资金费率"""
+        """# """
         return
 
 
 class BinanceRequestPositionData(BinancePositionData):
-    """保存持仓信息"""
+    """"""
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.position_data = json.loads(self.position_info)["data"]
             self.has_been_json_encoded = True
@@ -206,9 +212,10 @@ class BinanceRequestPositionData(BinancePositionData):
 
 
 class BinanceWssPositionData(BinancePositionData):
-    """保存持仓信息"""
+    """"""
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.position_data = json.loads(self.position_info)["data"]
             self.has_been_json_encoded = True

@@ -1,9 +1,9 @@
-"""Binance Mining API - 矿池接口请求类.
+"""Binance Mining API - .
 
-实现 Binance 矿池相关的所有 REST API 请求，包括：
-- 矿工算法列表查询
-- 矿工列表查询
-- 矿工收益统计查询
+ Binance  REST API ，：
+- 
+- 
+- 
 """
 
 from __future__ import annotations
@@ -19,12 +19,13 @@ from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataMining(BinanceRequestData):
-    """Binance Mining API 请求类.
+    """Binance Mining API .
 
-    处理所有矿池相关的请求。
+    。
     """
 
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         kwargs.setdefault("exchange_data", BinanceExchangeDataMining())
         kwargs.setdefault("exchange_name", "binance_mining")
         super().__init__(data_queue, **kwargs)
@@ -34,17 +35,15 @@ class BinanceRequestDataMining(BinanceRequestData):
         self.request_logger = get_logger("binance_mining_feed")
         self.async_logger = get_logger("binance_mining_feed")
 
-    # ==================== 矿池接口 ====================
+    # ====================  ====================
 
     def _get_mining_algo_list(self, extra_data=None, **kwargs):
-        """查询矿工算法列表.
+        """.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_mining_algo_list"
@@ -63,10 +62,9 @@ class BinanceRequestDataMining(BinanceRequestData):
         return path, params, extra_data
 
     def get_mining_algo_list(self, extra_data=None, **kwargs):
-        """查询矿工算法列表.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_mining_algo_list(extra_data=extra_data, **kwargs)
@@ -74,16 +72,14 @@ class BinanceRequestDataMining(BinanceRequestData):
         return data
 
     def _get_mining_worker_list(self, algo, user_name, extra_data=None, **kwargs):
-        """查询矿工列表.
+        """.
 
-        Args:
-            algo: 算法类型 (如: sha256)
-            user_name: 矿工账号
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: algo:  (: sha256)
+            user_name: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_mining_worker_list"
@@ -105,10 +101,9 @@ class BinanceRequestDataMining(BinanceRequestData):
         return path, params, extra_data
 
     def get_mining_worker_list(self, algo, user_name, extra_data=None, **kwargs):
-        """查询矿工列表.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_mining_worker_list(
@@ -118,16 +113,14 @@ class BinanceRequestDataMining(BinanceRequestData):
         return data
 
     def _get_mining_statistics(self, algo, user_name, extra_data=None, **kwargs):
-        """查询矿工收益统计.
+        """.
 
-        Args:
-            algo: 算法类型 (如: sha256)
-            user_name: 矿工账号
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: algo:  (: sha256)
+            user_name: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_mining_statistics"
@@ -149,10 +142,9 @@ class BinanceRequestDataMining(BinanceRequestData):
         return path, params, extra_data
 
     def get_mining_statistics(self, algo, user_name, extra_data=None, **kwargs):
-        """查询矿工收益统计.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_mining_statistics(

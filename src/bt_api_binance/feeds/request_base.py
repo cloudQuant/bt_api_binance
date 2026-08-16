@@ -1,3 +1,4 @@
+"""Module documentation"""
 from __future__ import annotations
 
 import hmac
@@ -55,15 +56,16 @@ from bt_api_binance.exchange_data import (
 # session = requests.Session()
 # session.keep_alive = False
 # adapter = requests.adapters.HTTPAdapter(
-#     max_retries=5, # 最大重试次数
-#     pool_connections=100, # 连接池大小
-#     pool_maxsize=100, # 连接池最大空闲连接数
-#     pool_block=True, # 连接池是否阻塞)
+#     max_retries=5, # 
+#     pool_connections=100, # 
+#     pool_maxsize=100, # 
+#     pool_block=True, # )
 # session.mount('http://', adapter)
 # session.mount('https://', adapter)
 
 
 class BinanceRequestData(Feed):
+    """Class BinanceRequestData"""
     @classmethod
     def _capabilities(cls) -> set[Capability]:
         return {
@@ -92,6 +94,7 @@ class BinanceRequestData(Feed):
         }
 
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.data_queue = data_queue
         self.public_key = kwargs.get("public_key") or kwargs.get("api_key")
@@ -106,7 +109,7 @@ class BinanceRequestData(Feed):
         self.async_logger = get_logger("binance_swap_feed")
         self._error_translator = BinanceErrorTranslator()
         self._rate_limiter = kwargs.get("rate_limiter", self._create_default_rate_limiter())
-        # self.start_loop()  # 在开始订阅数据的时候启动
+        # self.start_loop()  # 
 
     @staticmethod
     def _create_default_rate_limiter():
@@ -130,7 +133,7 @@ class BinanceRequestData(Feed):
         return RateLimiter(rules)
 
     def translate_error(self, raw_response):
-        """将原始 Binance API 响应翻译为 UnifiedError（如有错误），否则返回 None."""
+        """ Binance API  UnifiedError（）， None."""
         if isinstance(raw_response, dict):
             code = raw_response.get("code")
             if code is not None and int(code) < 0:
@@ -138,10 +141,10 @@ class BinanceRequestData(Feed):
         return None
 
     def push_data_to_queue(self, data):
+        """push_data_to_queue method"""
         if self.data_queue is not None:
             self.data_queue.put(data)
-        else:
-            raise QueueNotInitializedError("data_queue not initialized")
+        else: raise QueueNotInitializedError("data_queue not initialized")
 
     # noinspection PyMethodMayBeStatic
     # def signature(self, timestamp, method, request_path, secret_key, body=None):
@@ -155,10 +158,9 @@ class BinanceRequestData(Feed):
     #     return base64.b64encode(d).decode()
 
     def sign(self, content):
-        """签名.
+        """.
 
-        Args:
-            content (TYPE): Description
+        Args: content (TYPE): Description
 
         """
         pk = self.private_key or ""
@@ -172,8 +174,7 @@ class BinanceRequestData(Feed):
     # noinspection PyMethodMayBeStatic
     def request(self, path, params=None, body=None, extra_data=None, timeout=10, is_sign=True):
         """Http request function
-        Args:
-            path (TYPE): request url
+        Args: path (TYPE): request url
             params (dict, optional): in url
             body (dict, optional): in request body
             extra_data(dict,None): extra_data, generate by user
@@ -248,7 +249,7 @@ class BinanceRequestData(Feed):
                     BinanceSpotRequestAccountData(input_data, symbol_name, asset_type, True)
                 ]
             else:
-                data_list = [
+                    data_list = [
                     BinanceSwapRequestAccountData(input_data, symbol_name, asset_type, True)
                 ]
             data = data_list
@@ -257,6 +258,7 @@ class BinanceRequestData(Feed):
         return data, status
 
     def get_account(self, symbol=None, extra_data=None, **kwargs):
+        """get_account method"""
         path, params, extra_data = self._get_account(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -308,6 +310,7 @@ class BinanceRequestData(Feed):
         return data, status
 
     def get_balance(self, symbol=None, extra_data=None, **kwargs):
+        """get_balance method"""
         path, params, extra_data = self._get_balance(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -407,6 +410,7 @@ class BinanceRequestData(Feed):
         return data, status
 
     def get_tick(self, symbol, extra_data=None, **kwargs):
+        """get_tick method"""
         path, params, extra_data = self._get_tick(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
@@ -454,6 +458,7 @@ class BinanceRequestData(Feed):
         return data, status
 
     def get_depth(self, symbol: Any, count: Any = 20, extra_data: Any = None, **kwargs: Any) -> Any:
+        """get_depth method"""
         path, params, extra_data = self._get_depth(symbol, count, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
@@ -532,6 +537,7 @@ class BinanceRequestData(Feed):
         extra_data: Any = None,
         **kwargs: Any,
     ) -> Any:
+        """get_kline method"""
         path, params, extra_data = self._get_kline(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -583,6 +589,7 @@ class BinanceRequestData(Feed):
         return data, status
 
     def get_funding_rate(self, symbol, extra_data=None, **kwargs):
+        """get_funding_rate method"""
         path, params, extra_data = self._get_funding_rate(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data)
         return data
@@ -612,16 +619,14 @@ class BinanceRequestData(Feed):
             params.update({"startTime": start_time})
         elif isinstance(start_time, int):
             params.update({"startTime": start_time})
-        else:
-            pass
+        else: pass
         if isinstance(end_time, str):
             end_time = int(datetime2timestamp(end_time) * 1000)
             # print("end_time = ", end_time)
             params.update({"endTime": end_time})
         elif isinstance(start_time, int):
             params.update({"endTime": end_time})
-        else:
-            pass
+        else: pass
 
         path = self._params.get_rest_path(request_type)
         extra_data = update_extra_data(
@@ -658,6 +663,7 @@ class BinanceRequestData(Feed):
     def get_history_funding_rate(
         self, symbol, start_time=None, end_time=None, count=1000, extra_data=None, **kwargs
     ):
+        """get_history_funding_rate method"""
         path, params, extra_data = self._get_history_funding_rate(
             symbol, start_time, end_time, count, extra_data, **kwargs
         )
@@ -708,17 +714,20 @@ class BinanceRequestData(Feed):
         return data, status
 
     def get_mark_price(self, symbol, extra_data=None, **kwargs):
+        """get_mark_price method"""
         path, params, extra_data = self._get_mark_price(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data)
         return data
 
     def set_mode(self):
+        """set_mode method"""
         params = {"posMode": "long_short_mode"}
         path = self._params.get_rest_path("set_mode")
         data = self.request(path, body=params)
         return data
 
     def get_config(self, extra_data=None):
+        """get_config method"""
         params: dict[str, Any] = {}
         path = self._params.get_rest_path("get_config")
         extra_data = update_extra_data(
@@ -735,6 +744,7 @@ class BinanceRequestData(Feed):
         return data
 
     def set_lever(self, symbol):
+        """set_lever method"""
         symbol = self._params.get_symbol(symbol)
         params = {"symbol": symbol, "lever": 10, "mgnMode": "cross"}
         path = self._params.get_rest_path("set_lever")
@@ -753,7 +763,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        # todo 双向账户下下单
+        # todo 
         request_symbol = self._params.get_symbol(symbol)
         request_type = "make_order"
         path = self._params.get_rest_path(request_type)
@@ -830,6 +840,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """make_order method"""
         path, params, extra_data = self._make_order(
             symbol, vol, price, order_type, offset, post_only, client_order_id, extra_data, **kwargs
         )
@@ -906,11 +917,13 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def get_server_time(self, extra_data=None, **kwargs):
+        """get_server_time method"""
         path, params, extra_data = self._get_server_time(extra_data=extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
 
     def async_get_server_time(self, extra_data=None, **kwargs):
+        """async_get_server_time method"""
         path, params, extra_data = self._get_server_time(extra_data, **kwargs)
         self.submit(
             self.async_request(path, extra_data=extra_data, is_sign=False),
@@ -918,6 +931,7 @@ class BinanceRequestData(Feed):
         )
 
     def cancel_order(self, symbol, order_id=None, extra_data=None, **kwargs):
+        """cancel_order method"""
         path, params, extra_data = self._cancel_order(symbol, order_id, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -965,6 +979,7 @@ class BinanceRequestData(Feed):
 
     # noinspection PyBroadException
     def query_order(self, symbol, order_id=None, extra_data=None, **kwargs):
+        """query_order method"""
         path, params, extra_data = self._query_order(symbol, order_id, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -1013,6 +1028,7 @@ class BinanceRequestData(Feed):
 
     # noinspection PyBroadException
     def get_open_orders(self, symbol=None, extra_data=None, **kwargs):
+        """get_open_orders method"""
         path, params, extra_data = self._get_open_orders(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -1021,11 +1037,11 @@ class BinanceRequestData(Feed):
         self, symbol=None, count=100, start_time="", end_time="", extra_data=None, **kwargs
     ):
         """Get history trade records from okx
-        :param symbol: 交易对, btc/usdt
-        :param count: 分页数量, 默认100, 最大100
-        :param start_time: 筛选开始时间戳, 毫秒
-        :param end_time: 筛选结束时间戳, 毫秒
-        :param extra_data: 策略请求数据的时候添加的额外数据
+        :param symbol: , btc/usdt
+        :param count: , 100, 100
+        :param start_time: , 
+        :param end_time: , 
+        :param extra_data: 
         :return:
         """
         # params = {'instType': instType, 'uly': uly, 'symbol': symbol,
@@ -1076,6 +1092,7 @@ class BinanceRequestData(Feed):
     def get_deals(
         self, symbol=None, count=100, start_time="", end_time="", extra_data=None, **kwargs
     ):
+        """get_deals method"""
         path, params, extra_data = self._get_deals(
             symbol, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1083,6 +1100,7 @@ class BinanceRequestData(Feed):
         return data
 
     def get_clear_price(self, symbol, extra_data=None, **kwargs):
+        """get_clear_price method"""
         pass
 
     # ===== New market data methods =====
@@ -1138,6 +1156,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """get_agg_trades method"""
         path, params, extra_data = self._get_agg_trades(
             symbol, from_id, start_time, end_time, count, extra_data, **kwargs
         )
@@ -1164,6 +1183,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def get_open_interest(self, symbol, extra_data=None, **kwargs):
+        """get_open_interest method"""
         path, params, extra_data = self._get_open_interest(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
@@ -1220,6 +1240,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """get_continuous_kline method"""
         path, params, extra_data = self._get_continuous_kline(
             pair, period, contract_type, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1261,6 +1282,7 @@ class BinanceRequestData(Feed):
     def get_index_price_kline(
         self, pair, period, count=100, start_time=None, end_time=None, extra_data=None, **kwargs
     ):
+        """get_index_price_kline method"""
         path, params, extra_data = self._get_index_price_kline(
             pair, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1303,6 +1325,7 @@ class BinanceRequestData(Feed):
     def get_mark_price_kline(
         self, symbol, period, count=100, start_time=None, end_time=None, extra_data=None, **kwargs
     ):
+        """get_mark_price_kline method"""
         path, params, extra_data = self._get_mark_price_kline(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1328,6 +1351,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def get_funding_info(self, extra_data=None, **kwargs):
+        """get_funding_info method"""
         path, params, extra_data = self._get_funding_info(extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
@@ -1382,6 +1406,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """get_long_short_ratio method"""
         path, params, extra_data = self._get_long_short_ratio(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1438,6 +1463,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """get_taker_buy_sell_volume method"""
         path, params, extra_data = self._get_taker_buy_sell_volume(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1494,6 +1520,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """get_all_orders method"""
         path, params, extra_data = self._get_all_orders(
             symbol, order_id, start_time, end_time, count, extra_data, **kwargs
         )
@@ -1550,6 +1577,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """modify_order method"""
         path, params, extra_data = self._modify_order(
             symbol, order_id, orig_client_order_id, side, quantity, price, extra_data, **kwargs
         )
@@ -1584,6 +1612,7 @@ class BinanceRequestData(Feed):
     def cancel_orders(
         self, symbol, order_id_list=None, client_order_id_list=None, extra_data=None, **kwargs
     ):
+        """cancel_orders method"""
         path, params, extra_data = self._cancel_orders(
             symbol, order_id_list, client_order_id_list, extra_data, **kwargs
         )
@@ -1610,6 +1639,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def cancel_all_orders(self, symbol, extra_data=None, **kwargs):
+        """cancel_all_orders method"""
         path, params, extra_data = self._cancel_all_orders(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -1637,6 +1667,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def get_leverage_bracket(self, symbol=None, extra_data=None, **kwargs):
+        """get_leverage_bracket method"""
         path, params, extra_data = self._get_leverage_bracket(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -1660,6 +1691,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def get_position_mode(self, extra_data=None, **kwargs):
+        """get_position_mode method"""
         path, params, extra_data = self._get_position_mode(extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -1713,6 +1745,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """get_income method"""
         path, params, extra_data = self._get_income(
             symbol, income_type, start_time, end_time, count, extra_data, **kwargs
         )
@@ -1742,6 +1775,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def change_leverage(self, symbol, leverage, extra_data=None, **kwargs):
+        """change_leverage method"""
         path, params, extra_data = self._change_leverage(symbol, leverage, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
@@ -1769,6 +1803,7 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def change_margin_type(self, symbol, margin_type, extra_data=None, **kwargs):
+        """change_margin_type method"""
         path, params, extra_data = self._change_margin_type(
             symbol, margin_type, extra_data, **kwargs
         )
@@ -1795,11 +1830,12 @@ class BinanceRequestData(Feed):
         return path, params, extra_data
 
     def get_fee(self, symbol, extra_data=None, **kwargs):
+        """get_fee method"""
         path, params, extra_data = self._get_fee(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 期货高级数据接口 ====================
+    # ====================  ====================
 
     def _get_top_long_short_account_ratio(
         self,
@@ -1811,19 +1847,17 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        """获取大户多空比 (账户).
+        """ ().
 
-        Args:
-            symbol: 交易对
-            period: 时间周期 (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
-            count: 数量限制 (1-500)
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            period:  (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
+            count:  (1-500)
+            start_time: 
+            end_time: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_top_long_short_account_ratio"
@@ -1866,7 +1900,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        """获取大户多空比 (账户)."""
+        """ ()."""
         path, params, extra_data = self._get_top_long_short_account_ratio(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1883,19 +1917,17 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        """获取大户多空比 (持仓).
+        """ ().
 
-        Args:
-            symbol: 交易对
-            period: 时间周期 (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
-            count: 数量限制 (1-500)
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            period:  (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
+            count:  (1-500)
+            start_time: 
+            end_time: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_top_long_short_position_ratio"
@@ -1938,7 +1970,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        """获取大户多空比 (持仓)."""
+        """ ()."""
         path, params, extra_data = self._get_top_long_short_position_ratio(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -1955,19 +1987,17 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        """获取持仓量历史.
+        """.
 
-        Args:
-            symbol: 交易对
-            period: 时间周期 (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
-            count: 数量限制 (1-500)
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            period:  (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
+            count:  (1-500)
+            start_time: 
+            end_time: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_open_interest_hist"
@@ -2010,7 +2040,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
-        """获取持仓量历史."""
+        """."""
         path, params, extra_data = self._get_open_interest_hist(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2023,18 +2053,16 @@ class BinanceRequestData(Feed):
     def _get_force_orders(
         self, symbol=None, start_time=None, end_time=None, limit=None, extra_data=None, **kwargs
     ):
-        """获取用户强平订单.
+        """.
 
-        Args:
-            symbol: 交易对 (可选)
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            limit: 数量限制 (1-100)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:  ()
+            start_time: 
+            end_time: 
+            limit:  (1-100)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_force_orders"
@@ -2070,7 +2098,7 @@ class BinanceRequestData(Feed):
     def get_force_orders(
         self, symbol=None, start_time=None, end_time=None, limit=None, extra_data=None, **kwargs
     ):
-        """获取用户强平订单."""
+        """."""
         path, params, extra_data = self._get_force_orders(
             symbol, start_time, end_time, limit, extra_data, **kwargs
         )
@@ -2084,8 +2112,7 @@ class BinanceRequestData(Feed):
         self, path, params=None, body=None, extra_data=None, timeout=10, is_sign=False
     ):
         """Http request function
-        Args:
-            path (TYPE): request url
+        Args: path (TYPE): request url
             params (dict, optional): in url
             body (dict, optional): in request body
             timeout (int, optional): request timeout(s)
@@ -2122,6 +2149,7 @@ class BinanceRequestData(Feed):
 
     # noinspection PyBroadException
     def async_get_account(self, symbol=None, extra_data=None, **kwargs):
+        """async_get_account method"""
         path, params, extra_data = self._get_account(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, extra_data=extra_data, is_sign=True),
@@ -2129,6 +2157,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_balance(self, symbol=None, extra_data=None, **kwargs):
+        """async_get_balance method"""
         path, params, extra_data = self._get_balance(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2136,6 +2165,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_sub_account(self, extra_data=None):
+        """async_sub_account method"""
         path = self._params.get_rest_path("sub_account")
         params = {"subAcct": "xxx"}
         self.submit(
@@ -2170,6 +2200,7 @@ class BinanceRequestData(Feed):
             self.async_logger.warning(f"async_callback::{e}\n{traceback.format_exc()}")
 
     def async_get_tick(self, symbol, extra_data=None, **kwargs):
+        """async_get_tick method"""
         path, params, extra_data = self._get_tick(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=False),
@@ -2177,6 +2208,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_depth(self, symbol, size=20, extra_data=None, **kwargs):
+        """async_get_depth method"""
         path, params, extra_data = self._get_depth(symbol, size, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=False),
@@ -2187,6 +2219,7 @@ class BinanceRequestData(Feed):
     def async_get_kline(
         self, symbol, period, count=100, start_time=None, end_time=None, extra_data=None, **kwargs
     ):
+        """async_get_kline method"""
         path, params, extra_data = self._get_kline(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2196,6 +2229,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_funding_rate(self, symbol, extra_data=None, **kwargs):
+        """async_get_funding_rate method"""
         path, params, extra_data = self._get_funding_rate(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data),
@@ -2203,6 +2237,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_mark_price(self, symbol, extra_data=None, **kwargs):
+        """async_get_mark_price method"""
         path, params, extra_data = self._get_mark_price(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data),
@@ -2210,6 +2245,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_config(self, extra_data=None):
+        """async_get_config method"""
         params = {
             # "posMode":"long_short_mode"
         }
@@ -2222,6 +2258,7 @@ class BinanceRequestData(Feed):
         # data = self.request(path, body=params)
 
     def async_set_lever(self, symbol, extra_data=None):
+        """async_set_lever method"""
         symbol = self._params.get_symbol(symbol)
         params = {"symbol": symbol, "lever": 10, "mgnMode": "cross"}
         data_type = "set_lever"
@@ -2244,6 +2281,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_make_order method"""
         path, params, extra_data = self._make_order(
             symbol, vol, price, order_type, offset, post_only, client_order_id, extra_data, **kwargs
         )
@@ -2253,6 +2291,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_cancel_order(self, symbol, order_id=None, extra_data=None, **kwargs):
+        """async_cancel_order method"""
         path, params, extra_data = self._cancel_order(symbol, order_id, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2260,6 +2299,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_query_order(self, symbol, order_id=None, extra_data=None, **kwargs):
+        """async_query_order method"""
         path, params, extra_data = self._query_order(symbol, order_id, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2268,6 +2308,7 @@ class BinanceRequestData(Feed):
 
     # noinspection PyBroadException
     def async_get_open_orders(self, symbol=None, extra_data=None, **kwargs):
+        """async_get_open_orders method"""
         path, params, extra_data = self._get_open_orders(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2277,6 +2318,7 @@ class BinanceRequestData(Feed):
     def async_get_deals(
         self, symbol=None, count=100, start_time="", end_time="", extra_data=None, **kwargs
     ):
+        """async_get_deals method"""
         path, params, extra_data = self._get_deals(
             symbol, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2286,6 +2328,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_clear_price(self, symbol, extra_data=None, **kwargs):
+        """async_get_clear_price method"""
         data_type = "get_clear_price"
         path = self._params.get_rest_path(data_type)
         params = {"symbol": self._params.get_symbol(symbol)}
@@ -2306,6 +2349,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_get_agg_trades method"""
         path, params, extra_data = self._get_agg_trades(
             symbol, from_id, start_time, end_time, count, extra_data, **kwargs
         )
@@ -2315,6 +2359,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_open_interest(self, symbol, extra_data=None, **kwargs):
+        """async_get_open_interest method"""
         path, params, extra_data = self._get_open_interest(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=False),
@@ -2332,6 +2377,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_get_continuous_kline method"""
         path, params, extra_data = self._get_continuous_kline(
             pair, period, contract_type, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2343,6 +2389,7 @@ class BinanceRequestData(Feed):
     def async_get_index_price_kline(
         self, pair, period, count=100, start_time=None, end_time=None, extra_data=None, **kwargs
     ):
+        """async_get_index_price_kline method"""
         path, params, extra_data = self._get_index_price_kline(
             pair, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2354,6 +2401,7 @@ class BinanceRequestData(Feed):
     def async_get_mark_price_kline(
         self, symbol, period, count=100, start_time=None, end_time=None, extra_data=None, **kwargs
     ):
+        """async_get_mark_price_kline method"""
         path, params, extra_data = self._get_mark_price_kline(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2363,6 +2411,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_funding_info(self, extra_data=None, **kwargs):
+        """async_get_funding_info method"""
         path, params, extra_data = self._get_funding_info(extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=False),
@@ -2379,6 +2428,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_get_long_short_ratio method"""
         path, params, extra_data = self._get_long_short_ratio(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2397,6 +2447,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_get_taker_buy_sell_volume method"""
         path, params, extra_data = self._get_taker_buy_sell_volume(
             symbol, period, count, start_time, end_time, extra_data, **kwargs
         )
@@ -2417,6 +2468,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_get_all_orders method"""
         path, params, extra_data = self._get_all_orders(
             symbol, order_id, start_time, end_time, count, extra_data, **kwargs
         )
@@ -2436,6 +2488,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_modify_order method"""
         path, params, extra_data = self._modify_order(
             symbol, order_id, orig_client_order_id, side, quantity, price, extra_data, **kwargs
         )
@@ -2447,6 +2500,7 @@ class BinanceRequestData(Feed):
     def async_cancel_orders(
         self, symbol, order_id_list=None, client_order_id_list=None, extra_data=None, **kwargs
     ):
+        """async_cancel_orders method"""
         path, params, extra_data = self._cancel_orders(
             symbol, order_id_list, client_order_id_list, extra_data, **kwargs
         )
@@ -2456,6 +2510,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_cancel_all_orders(self, symbol, extra_data=None, **kwargs):
+        """async_cancel_all_orders method"""
         path, params, extra_data = self._cancel_all_orders(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2465,6 +2520,7 @@ class BinanceRequestData(Feed):
     # ===== Async methods for new account endpoints =====
 
     def async_get_leverage_bracket(self, symbol=None, extra_data=None, **kwargs):
+        """async_get_leverage_bracket method"""
         path, params, extra_data = self._get_leverage_bracket(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2472,6 +2528,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_position_mode(self, extra_data=None, **kwargs):
+        """async_get_position_mode method"""
         path, params, extra_data = self._get_position_mode(extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2488,6 +2545,7 @@ class BinanceRequestData(Feed):
         extra_data=None,
         **kwargs,
     ):
+        """async_get_income method"""
         path, params, extra_data = self._get_income(
             symbol, income_type, start_time, end_time, count, extra_data, **kwargs
         )
@@ -2497,6 +2555,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_change_leverage(self, symbol, leverage, extra_data=None, **kwargs):
+        """async_change_leverage method"""
         path, params, extra_data = self._change_leverage(symbol, leverage, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
@@ -2504,6 +2563,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_change_margin_type(self, symbol, margin_type, extra_data=None, **kwargs):
+        """async_change_margin_type method"""
         path, params, extra_data = self._change_margin_type(
             symbol, margin_type, extra_data, **kwargs
         )
@@ -2513,6 +2573,7 @@ class BinanceRequestData(Feed):
         )
 
     def async_get_fee(self, symbol, extra_data=None, **kwargs):
+        """async_get_fee method"""
         path, params, extra_data = self._get_fee(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),

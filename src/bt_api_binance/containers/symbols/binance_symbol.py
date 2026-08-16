@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -8,10 +9,12 @@ from bt_api_base.functions.utils import from_dict_get_float, from_dict_get_int, 
 
 
 class BinanceSwapSymbolData(SymbolData):
+    """Class BinanceSwapSymbolData"""
     def __init__(self, symbol_info, has_been_json_encoded):
+        """__init__ method"""
         super().__init__(symbol_info, has_been_json_encoded)
         self.event = "BinanceSymbolEvent"
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.exchange_name = "BINANCE"
         self.symbol_name = None
         self.asset_type = None
@@ -41,6 +44,7 @@ class BinanceSwapSymbolData(SymbolData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.symbol_info = json.loads(self.symbol_info)
             self.symbol_data = self.symbol_info["symbols"]
@@ -74,12 +78,15 @@ class BinanceSwapSymbolData(SymbolData):
         self.has_been_init_data = True
 
     def get_symbol_name(self):
+        """get_symbol_name method"""
         return self.symbol_name
 
     def get_asset_type(self):
+        """get_asset_type method"""
         return self.asset_type
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -111,63 +118,83 @@ class BinanceSwapSymbolData(SymbolData):
         return self.all_data
 
     def get_maintain_margin_percent(self):
+        """get_maintain_margin_percent method"""
         return self.maintain_margin_percent
 
     def get_required_margin_percent(self):
+        """get_required_margin_percent method"""
         return self.required_margin_percent
 
     def get_base_asset(self):
+        """get_base_asset method"""
         return self.base_asset
 
     def get_quote_asset(self):
+        """get_quote_asset method"""
         return self.quote_asset
 
     def get_contract_multiplier(self):
+        """get_contract_multiplier method"""
         return self.contract_multiplier
 
     def get_price_unit(self):
+        """get_price_unit method"""
         return self.price_unit
 
     def get_price_digital(self):
+        """get_price_digital method"""
         return self.price_digital
 
     def get_max_price(self):
+        """get_max_price method"""
         return self.max_price
 
     def get_min_price(self):
+        """get_min_price method"""
         return self.min_price
 
     def get_min_amount(self):
+        """get_min_amount method"""
         return self.min_amount
 
     def get_qty_unit(self):
+        """get_qty_unit method"""
         return self.qty_unit
 
     def get_qty_digital(self):
+        """get_qty_digital method"""
         return self.qty_digital
 
     def get_min_qty(self):
+        """get_min_qty method"""
         return self.min_qty
 
     def get_max_qty(self):
+        """get_max_qty method"""
         return self.max_qty
 
     def get_base_asset_digital(self):
+        """get_base_asset_digital method"""
         return self.base_asset_digital
 
     def get_quote_asset_digital(self):
+        """get_quote_asset_digital method"""
         return self.quote_asset_digital
 
     def get_order_types(self):
+        """get_order_types method"""
         return self.order_types
 
     def get_time_in_force(self):
+        """get_time_in_force method"""
         return self.time_in_force
 
     def get_fee_digital(self):
+        """get_fee_digital method"""
         return self.fee_digital
 
     def get_fee_currency(self):
+        """get_fee_currency method"""
         return self.fee_currency
 
     def __str__(self):
@@ -179,10 +206,12 @@ class BinanceSwapSymbolData(SymbolData):
 
 
 class BinanceSpotSymbolData(SymbolData):
+    """Class BinanceSpotSymbolData"""
     def __init__(self, symbol_info, has_been_json_encoded):
+        """__init__ method"""
         super().__init__(symbol_info, has_been_json_encoded)
         self.event = "BinanceSymbolEvent"
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.exchange_name = "BINANCE"
         self.symbol_name = None
         self.asset_type = "SPOT"
@@ -212,6 +241,7 @@ class BinanceSpotSymbolData(SymbolData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.symbol_info = json.loads(self.symbol_info)
             self.symbol_data = self.symbol_info["symbols"]
@@ -238,12 +268,15 @@ class BinanceSpotSymbolData(SymbolData):
         self.has_been_init_data = True
 
     def get_symbol_name(self):
+        """get_symbol_name method"""
         return self.symbol_name
 
     def get_asset_type(self):
+        """get_asset_type method"""
         return self.asset_type
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -269,63 +302,83 @@ class BinanceSpotSymbolData(SymbolData):
         return self.all_data
 
     def get_maintain_margin_percent(self):
+        """get_maintain_margin_percent method"""
         return self.maintain_margin_percent
 
     def get_required_margin_percent(self):
+        """get_required_margin_percent method"""
         return self.required_margin_percent
 
     def get_base_asset(self):
+        """get_base_asset method"""
         return self.base_asset
 
     def get_quote_asset(self):
+        """get_quote_asset method"""
         return self.quote_asset
 
     def get_contract_multiplier(self):
+        """get_contract_multiplier method"""
         return self.contract_multiplier
 
     def get_price_unit(self):
+        """get_price_unit method"""
         return self.price_unit
 
     def get_price_digital(self):
+        """get_price_digital method"""
         return self.price_digital
 
     def get_max_price(self):
+        """get_max_price method"""
         return self.max_price
 
     def get_min_price(self):
+        """get_min_price method"""
         return self.min_price
 
     def get_min_amount(self):
+        """get_min_amount method"""
         return self.min_amount
 
     def get_qty_unit(self):
+        """get_qty_unit method"""
         return self.qty_unit
 
     def get_qty_digital(self):
+        """get_qty_digital method"""
         return self.qty_digital
 
     def get_min_qty(self):
+        """get_min_qty method"""
         return self.min_qty
 
     def get_max_qty(self):
+        """get_max_qty method"""
         return self.max_qty
 
     def get_base_asset_digital(self):
+        """get_base_asset_digital method"""
         return self.base_asset_digital
 
     def get_quote_asset_digital(self):
+        """get_quote_asset_digital method"""
         return self.quote_asset_digital
 
     def get_order_types(self):
+        """get_order_types method"""
         return self.order_types
 
     def get_time_in_force(self):
+        """get_time_in_force method"""
         return self.time_in_force
 
     def get_fee_digital(self):
+        """get_fee_digital method"""
         return self.fee_digital
 
     def get_fee_currency(self):
+        """get_fee_currency method"""
         return self.fee_currency
 
     def __str__(self):

@@ -1,3 +1,4 @@
+"""Module documentation"""
 from __future__ import annotations
 
 import json
@@ -10,7 +11,7 @@ from bt_api_base.logging_factory import get_logger
 
 logger = get_logger("binance_exchange_data")
 
-# ── 配置加载缓存 ──────────────────────────────────────────────
+# ──  ──────────────────────────────────────────────
 _binance_config = None
 _binance_config_loaded = False
 
@@ -23,7 +24,7 @@ def _resolve_binance_config_path() -> Path:
 
 
 def _get_binance_config() -> Any | None:
-    """延迟加载并缓存 Binance YAML 配置."""
+    """ Binance YAML ."""
     global _binance_config, _binance_config_loaded
     if _binance_config_loaded:
         return _binance_config
@@ -47,6 +48,7 @@ class BinanceExchangeData(ExchangeData):
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self.exchange_name = "binance"
         self.rest_url = ""
@@ -83,12 +85,10 @@ class BinanceExchangeData(ExchangeData):
         ]
 
     def _load_from_config(self, asset_type) -> bool:
-        """从 YAML 配置文件加载交易所参数.
+        """ YAML .
 
-        Args:
-            asset_type: 资产类型 key, 如 'swap', 'spot', 'coin_m' 等
-        Returns:
-            bool: 是否加载成功
+        Args: asset_type:  key,  'swap', 'spot', 'coin_m'
+        Returns: bool:
 
         """
         config = _get_binance_config()
@@ -108,11 +108,11 @@ class BinanceExchangeData(ExchangeData):
             self.wss_url = config.base_urls.wss.get(asset_type, self.wss_url)
             self.acct_wss_url = config.base_urls.acct_wss.get(asset_type, self.acct_wss_url)
 
-        # rest_paths (直接使用, 格式一致)
+        # rest_paths (, )
         if asset_cfg.rest_paths:
             self.rest_paths = dict(asset_cfg.rest_paths)
 
-        # wss_paths: YAML 模板字符串 → {'params': [template], 'method': 'SUBSCRIBE', 'id': 1}
+        # wss_paths: YAML  → {'params': [template], 'method': 'SUBSCRIBE', 'id': 1}
         if asset_cfg.wss_paths:
             converted = {}
             for key, value in asset_cfg.wss_paths.items():
@@ -125,13 +125,13 @@ class BinanceExchangeData(ExchangeData):
                     converted[key] = value
             self.wss_paths = converted
 
-        # kline_periods (asset-level 优先, 否则用 exchange-level)
+        # kline_periods (asset-level ,  exchange-level)
         kp = asset_cfg.kline_periods or (config.kline_periods if config.kline_periods else None)
         if kp:
             self.kline_periods = dict(kp)
             self.reverse_kline_periods = {v: k for k, v in self.kline_periods.items()}
 
-        # legal_currency (asset-level 优先, 否则用 exchange-level)
+        # legal_currency (asset-level ,  exchange-level)
         lc = asset_cfg.legal_currency or (config.legal_currency if config.legal_currency else None)
         if lc:
             self.legal_currency = list(lc)
@@ -140,9 +140,11 @@ class BinanceExchangeData(ExchangeData):
 
     # noinspection PyMethodMayBeStatic
     def get_symbol(self, symbol: str) -> str:
+        """get_symbol method"""
         return symbol.replace("-", "")
 
     def account_wss_symbol(self, symbol: str) -> str:
+        """account_wss_symbol method"""
         for lc in self.legal_currency:
             if lc in symbol:
                 symbol = f"{symbol.split(lc)[0]}/{lc}".lower()
@@ -151,9 +153,11 @@ class BinanceExchangeData(ExchangeData):
 
     # noinspection PyMethodMayBeStatic
     def get_period(self, key: str) -> str:
+        """get_period method"""
         return key
 
     def get_rest_path(self, key: str, **kwargs) -> str:
+        """get_rest_path method"""
         if key not in self.rest_paths or self.rest_paths[key] == "":
             self.raise_path_error(self.exchange_name, key)
         return self.rest_paths[key]
@@ -192,6 +196,7 @@ class BinanceExchangeDataSwap(BinanceExchangeData):
     """Binance USDT-M Futures (fapi)."""
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("swap")
 
@@ -206,16 +211,21 @@ class BinanceExchangeDataSwap(BinanceExchangeData):
 
 
 class BinanceExchangeDataSpot(BinanceExchangeData):
+    """Class BinanceExchangeDataSpot"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("spot")
 
     def get_symbol(self, symbol: str) -> str:
+        """get_symbol method"""
         return symbol.replace("-", "")
 
     def account_wss_symbol(self, symbol: str) -> str:
+        """account_wss_symbol method"""
         for lc in self.legal_currency:
-            if lc in symbol[-4:]:
+            if lc in symbol[-4:
+                ]:
                 symbol = f"{symbol.split(lc)[0]}/{lc}".lower()
         return symbol
 
@@ -247,101 +257,116 @@ class BinanceExchangeDataSpot(BinanceExchangeData):
 
 
 class BinanceExchangeDataCoinM(BinanceExchangeData):
+    """Class BinanceExchangeDataCoinM"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("coin_m")
 
 
 class BinanceExchangeDataOption(BinanceExchangeData):
+    """Class BinanceExchangeDataOption"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("option")
 
 
 class BinanceExchangeDataMargin(BinanceExchangeData):
+    """Class BinanceExchangeDataMargin"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("margin")
 
 
 class BinanceExchangeDataAlgo(BinanceExchangeData):
+    """Class BinanceExchangeDataAlgo"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("algo")
 
 
 class BinanceExchangeDataWallet(BinanceExchangeData):
-    """Binance Wallet API - 资产钱包接口.
+    """Binance Wallet API - .
 
-    负责处理资产查询、划转、充值、提现等钱包相关功能。
+    、、、。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("wallet")
 
 
 class BinanceExchangeDataSubAccount(BinanceExchangeData):
-    """Binance Sub-account API - 子账户管理接口.
+    """Binance Sub-account API - .
 
-    负责处理子账户管理、资产划转、API Key管理等子账户相关功能。
+    、、API Key。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("sub_account")
 
 
 class BinanceExchangeDataPortfolio(BinanceExchangeData):
-    """Binance Portfolio Margin API - 组合保证金接口.
+    """Binance Portfolio Margin API - .
 
-    负责处理组合保证金(PM)账户相关功能。
+    (PM)。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("portfolio")
 
 
 class BinanceExchangeDataGrid(BinanceExchangeData):
-    """Binance Grid Trading API - 网格交易接口.
+    """Binance Grid Trading API - .
 
-    负责处理合约网格交易相关功能。
+    。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("grid")
 
 
 class BinanceExchangeDataStaking(BinanceExchangeData):
-    """Binance Staking API - 质押理财接口.
+    """Binance Staking API - .
 
-    负责处理质押、理财等投资产品相关功能。
+    、。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("staking")
 
 
 class BinanceExchangeDataMining(BinanceExchangeData):
-    """Binance Mining API - 矿池接口.
+    """Binance Mining API - .
 
-    负责处理矿池相关功能。
+    。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("mining")
 
 
 class BinanceExchangeDataVipLoan(BinanceExchangeData):
-    """Binance VIP Loan API - VIP借贷接口.
+    """Binance VIP Loan API - VIP.
 
-    负责处理VIP借贷相关功能。
+    VIP。
     """
 
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self._load_from_config("vip_loan")

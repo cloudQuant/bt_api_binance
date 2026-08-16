@@ -1,4 +1,5 @@
 # Base classes
+"""Module-level docstring."""
 from __future__ import annotations
 
 from .account_wss_base import BinanceAccountWssData

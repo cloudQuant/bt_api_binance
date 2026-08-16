@@ -1,5 +1,5 @@
 """
-Binance API 错误翻译器
+Binance API 
 """
 
 from __future__ import annotations
@@ -8,6 +8,7 @@ from bt_api_base.error import ErrorTranslator, UnifiedErrorCode
 
 
 class BinanceErrorTranslator(ErrorTranslator):
+    """Class BinanceErrorTranslator"""
     ERROR_MAP = {
         -1000: (UnifiedErrorCode.INTERNAL_ERROR, "Unknown error"),
         -1001: (UnifiedErrorCode.INTERNAL_ERROR, "Disconnected"),

@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from bt_api_binance.containers.orders.binance_order import (
@@ -10,6 +11,7 @@ from bt_api_base.containers.orders.order import OrderStatus
 
 
 def test_binance_force_order_data():
+    """test_binance_force_order_data function"""
     data = {
         "e": "forceOrder",
         "E": 1568014460893,
@@ -44,6 +46,7 @@ def test_binance_force_order_data():
 
 
 def test_binance_spot_wss_order():
+    """test_binance_spot_wss_order function"""
     data = {
         "e": "executionReport",
         "E": 1709103527340,
@@ -100,51 +103,52 @@ def test_binance_spot_wss_order():
 
 
 def test_binance_wss_order():
+    """test_binance_wss_order function"""
     data = {
-        "e": "ORDER_TRADE_UPDATE",  # 事件类型
-        "E": 1568879465651,  # 事件时间
-        "T": 1568879465650,  # 撮合时间
+        "e": "ORDER_TRADE_UPDATE",  # 
+        "E": 1568879465651,  # 
+        "T": 1568879465650,  # 
         "o": {
-            "s": "BTCUSDT",  # 交易对
-            "c": "TEST",  # 客户端自定订单ID
-            # 特殊的自定义订单ID:
-            # "autoclose-"开头的字符串: 系统强平订单
-            # "adl_autoclose": ADL自动减仓订单
-            # "settlement_autoclose-": 下架或交割的结算订单
-            "S": "SELL",  # 订单方向
-            "o": "TRAILING_STOP_MARKET",  # 订单类型
-            "f": "GTC",  # 有效方式
-            "q": "0.001",  # 订单原始数量
-            "p": "0",  # 订单原始价格
-            "ap": "0",  # 订单平均价格
-            "sp": "7103.04",  # 条件订单触发价格，对追踪止损单无效
-            "x": "NEW",  # 本次事件的具体执行类型
-            "X": "NEW",  # 订单的当前状态
-            "i": 8886774,  # 订单ID
-            "l": "0",  # 订单末次成交量
-            "z": "0",  # 订单累计已成交量
-            "L": "0",  # 订单末次成交价格
-            "N": "USDT",  # 手续费资产类型
-            "n": "0",  # 手续费数量
-            "T": 1568879465650,  # 成交时间
-            "t": 0,  # 成交ID
-            "b": "0",  # 买单净值
-            "a": "9.91",  # 卖单净值
-            "m": False,  # 该成交是作为挂单成交吗？
-            "R": False,  # 是否是只减仓单
-            "wt": "CONTRACT_PRICE",  # 触发价类型
-            "ot": "TRAILING_STOP_MARKET",  # 原始订单类型
-            "ps": "LONG",  # 持仓方向
-            "cp": False,  # 是否为触发平仓单; 仅在条件订单情况下会推送此字段
-            "AP": "7476.89",  # 追踪止损激活价格, 仅在追踪止损单时会推送此字段
-            "cr": "5.0",  # 追踪止损回调比例, 仅在追踪止损单时会推送此字段
-            "pP": False,  # 是否开启条件单触发保护
-            "si": 0,  # 忽略
-            "ss": 0,  # 忽略
-            "rp": "0",  # 该交易实现盈亏
-            "V": "EXPIRE_TAKER",  # 自成交防止模式
-            "pm": "OPPONENT",  # 价格匹配模式
-            "gtd": 0,  # TIF为GTD的订单自动取消时间
+            "s": "BTCUSDT",  # 
+            "c": "TEST",  # ID
+            # ID:
+            # "autoclose-": 
+            # "adl_autoclose": ADL
+            # "settlement_autoclose-": 
+            "S": "SELL",  # 
+            "o": "TRAILING_STOP_MARKET",  # 
+            "f": "GTC",  # 
+            "q": "0.001",  # 
+            "p": "0",  # 
+            "ap": "0",  # 
+            "sp": "7103.04",  # ，
+            "x": "NEW",  # 
+            "X": "NEW",  # 
+            "i": 8886774,  # ID
+            "l": "0",  # 
+            "z": "0",  # 
+            "L": "0",  # 
+            "N": "USDT",  # 
+            "n": "0",  # 
+            "T": 1568879465650,  # 
+            "t": 0,  # ID
+            "b": "0",  # 
+            "a": "9.91",  # 
+            "m": False,  # ？
+            "R": False,  # 
+            "wt": "CONTRACT_PRICE",  # 
+            "ot": "TRAILING_STOP_MARKET",  # 
+            "ps": "LONG",  # 
+            "cp": False,  # ; 
+            "AP": "7476.89",  # , 
+            "cr": "5.0",  # , 
+            "pP": False,  # 
+            "si": 0,  # 
+            "ss": 0,  # 
+            "rp": "0",  # 
+            "V": "EXPIRE_TAKER",  # 
+            "pm": "OPPONENT",  # 
+            "gtd": 0,  # TIFGTD
         },
     }
     bo = BinanceSwapWssOrderData(data, "BTC-USDT", "PERPETUAL", True)
@@ -174,33 +178,34 @@ def test_binance_wss_order():
 
 
 def test_binance_req_order():
+    """test_binance_req_order function"""
     data = {
-        "clientOrderId": "testOrder",  # 用户自定义的订单号
+        "clientOrderId": "testOrder",  # 
         "cumQty": "0",
-        "cumQuote": "0",  # 成交金额
-        "executedQty": "0",  # 成交量
-        "orderId": 22542179,  # 系统订单号
-        "avgPrice": "0.00000",  # 平均成交价
-        "origQty": "10",  # 原始委托数量
-        "price": "0",  # 委托价格
-        "reduceOnly": "false",  # 仅减仓
-        "side": "SELL",  # 买卖方向
-        "positionSide": "SHORT",  # 持仓方向
-        "status": "NEW",  # 订单状态
-        "stopPrice": "0",  # 触发价，对`TRAILING_STOP_MARKET`无效
-        "closePosition": "false",  # 是否条件全平仓
-        "symbol": "BTCUSDT",  # 交易对
-        "timeInForce": "GTD",  # 有效方法
-        "type": "TRAILING_STOP_MARKET",  # 订单类型
-        "origType": "TRAILING_STOP_MARKET",  # 触发前订单类型
-        "activatePrice": "9020",  # 跟踪止损激活价格, 仅`TRAILING_STOP_MARKET` 订单返回此字段
-        "priceRate": "0.3",  # 跟踪止损回调比例, 仅`TRAILING_STOP_MARKET` 订单返回此字段
-        "updateTime": 1566818724722,  # 更新时间
-        "workingType": "CONTRACT_PRICE",  # 条件价格触发类型
-        "priceProtect": "false",  # 是否开启条件单触发保护
-        "priceMatch": "NONE",  # 盘口价格下单模式
-        "selfTradePreventionMode": "NONE",  # 订单自成交保护模式
-        "goodTillDate": 1693207680000,  # 订单TIF为GTD时的自动取消时间
+        "cumQuote": "0",  # 
+        "executedQty": "0",  # 
+        "orderId": 22542179,  # 
+        "avgPrice": "0.00000",  # 
+        "origQty": "10",  # 
+        "price": "0",  # 
+        "reduceOnly": "false",  # 
+        "side": "SELL",  # 
+        "positionSide": "SHORT",  # 
+        "status": "NEW",  # 
+        "stopPrice": "0",  # ，`TRAILING_STOP_MARKET`
+        "closePosition": "false",  # 
+        "symbol": "BTCUSDT",  # 
+        "timeInForce": "GTD",  # 
+        "type": "TRAILING_STOP_MARKET",  # 
+        "origType": "TRAILING_STOP_MARKET",  # 
+        "activatePrice": "9020",  # , `TRAILING_STOP_MARKET` 
+        "priceRate": "0.3",  # , `TRAILING_STOP_MARKET` 
+        "updateTime": 1566818724722,  # 
+        "workingType": "CONTRACT_PRICE",  # 
+        "priceProtect": "false",  # 
+        "priceMatch": "NONE",  # 
+        "selfTradePreventionMode": "NONE",  # 
+        "goodTillDate": 1693207680000,  # TIFGTD
     }
     bo = BinanceRequestOrderData(data, "BTC-USDT", "PERPETUAL", True)
     bo.init_data()

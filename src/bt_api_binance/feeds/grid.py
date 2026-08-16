@@ -31,8 +31,7 @@ class BinanceRequestDataGrid(BinanceRequestData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance grid request data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments including:
                 - exchange_data: Exchange data instance
                 - exchange_name: Exchange name (default: "binance_grid")
@@ -62,8 +61,7 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> tuple[str, dict[str, Any], dict[str, Any]]:
         """Build request parameters for creating a futures grid order.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             upper_price: Upper price limit of the grid.
             lower_price: Lower price limit of the grid.
             grid_quantity: Number of grid levels.
@@ -72,8 +70,7 @@ class BinanceRequestDataGrid(BinanceRequestData):
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            Tuple containing (path, params, extra_data).
+        Returns: Tuple containing (path, params, extra_data).
 
         """
         request_type = "futures_grid_new_order"
@@ -113,8 +110,7 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> RequestData:
         """Create a new futures grid order.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             upper_price: Upper price limit of the grid.
             lower_price: Lower price limit of the grid.
             grid_quantity: Number of grid levels.
@@ -123,8 +119,7 @@ class BinanceRequestDataGrid(BinanceRequestData):
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            RequestData containing the order creation result.
+        Returns: RequestData containing the order creation result.
 
         """
         path, params, extra_data = self._futures_grid_new_order(
@@ -150,15 +145,13 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> tuple[str, dict[str, Any], dict[str, Any]]:
         """Build request parameters for cancelling a futures grid order.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             order_id: Grid order ID to cancel.
             client_order_id: Client order ID to cancel.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            Tuple containing (path, params, extra_data).
+        Returns: Tuple containing (path, params, extra_data).
 
         """
         request_type = "futures_grid_cancel_order"
@@ -193,15 +186,13 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> RequestData:
         """Cancel a futures grid order.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             order_id: Grid order ID to cancel.
             client_order_id: Client order ID to cancel.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            RequestData containing the cancellation result.
+        Returns: RequestData containing the cancellation result.
 
         """
         path, params, extra_data = self._futures_grid_cancel_order(
@@ -224,15 +215,13 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> tuple[str, dict[str, Any], dict[str, Any]]:
         """Build request parameters for querying futures grid orders.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             order_id: Grid order ID to query.
             status: Grid order status to filter.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            Tuple containing (path, params, extra_data).
+        Returns: Tuple containing (path, params, extra_data).
 
         """
         request_type = "get_futures_grid_orders"
@@ -267,15 +256,13 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> RequestData:
         """Query futures grid orders.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             order_id: Grid order ID to query.
             status: Grid order status to filter.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            RequestData containing the query result.
+        Returns: RequestData containing the query result.
 
         """
         path, params, extra_data = self._get_futures_grid_orders(
@@ -292,13 +279,11 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> tuple[str, dict[str, Any], dict[str, Any]]:
         """Build request parameters for querying futures grid position.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            Tuple containing (path, params, extra_data).
+        Returns: Tuple containing (path, params, extra_data).
 
         """
         request_type = "get_futures_grid_position"
@@ -327,13 +312,11 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> RequestData:
         """Query futures grid position.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            RequestData containing the position query result.
+        Returns: RequestData containing the position query result.
 
         """
         path, params, extra_data = self._get_futures_grid_position(
@@ -353,16 +336,14 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> tuple[str, dict[str, Any], dict[str, Any]]:
         """Build request parameters for querying futures grid income.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             start_time: Start timestamp in milliseconds.
             end_time: End timestamp in milliseconds.
             limit: Number of results to return.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            Tuple containing (path, params, extra_data).
+        Returns: Tuple containing (path, params, extra_data).
 
         """
         request_type = "get_futures_grid_income"
@@ -400,16 +381,14 @@ class BinanceRequestDataGrid(BinanceRequestData):
     ) -> RequestData:
         """Query futures grid income.
 
-        Args:
-            symbol: Trading pair symbol.
+        Args: symbol: Trading pair symbol.
             start_time: Start timestamp in milliseconds.
             end_time: End timestamp in milliseconds.
             limit: Number of results to return.
             extra_data: Additional data for the request.
             **kwargs: Additional keyword arguments.
 
-        Returns:
-            RequestData containing the income query result.
+        Returns: RequestData containing the income query result.
 
         """
         path, params, extra_data = self._get_futures_grid_income(

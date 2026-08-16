@@ -1,4 +1,5 @@
 # import json
+"""Module-level docstring."""
 from __future__ import annotations
 
 from bt_api_binance.containers.accounts import (
@@ -15,6 +16,7 @@ from bt_api_binance.containers.positions.binance_position import (
 
 
 def test_binance_swap_wss_account():
+    """test_binance_swap_wss_account function"""
     data = {
         "e": "outboundAccountPosition",
         "E": 1709103527220,
@@ -31,6 +33,7 @@ def test_binance_swap_wss_account():
 
 
 def test_binance_spot_request_account():
+    """test_binance_spot_request_account function"""
     data = {
         "makerCommission": 10,
         "takerCommission": 10,
@@ -634,33 +637,34 @@ def test_binance_spot_request_account():
 
 
 def test_binance_wss_account():
+    """test_binance_wss_account function"""
     data = {
-        "e": "ACCOUNT_UPDATE",  # 事件类型
-        "E": 1564745798939,  # 事件时间
-        "T": 1564745798938,  # 撮合时间
-        # 账户更新事件
+        "e": "ACCOUNT_UPDATE",  # 
+        "E": 1564745798939,  # 
+        "T": 1564745798938,  # 
+        # 
         "a": {
-            "m": "ORDER",  # 事件推出原因
-            "B": [  # 余额信息
+            "m": "ORDER",  # 
+            "B": [  # 
                 {
-                    "a": "USDT",  # 资产名称
-                    "wb": "122624.12345678",  # 钱包余额
-                    "cw": "100.12345678",  # 除去逐仓仓位保证金的钱包余额
-                    "bc": "50.12345678",  # 除去盈亏与交易手续费以外的钱包余额改变量
+                    "a": "USDT",  # 
+                    "wb": "122624.12345678",  # 
+                    "cw": "100.12345678",  # 
+                    "bc": "50.12345678",  # 
                 },
                 {"a": "BUSD", "wb": "1.00000000", "cw": "0.00000000", "bc": "-49.12345678"},
             ],
             "P": [
                 {
-                    "s": "BTCUSDT",  # 交易对
-                    "pa": "0",  # 仓位
-                    "ep": "0.00000",  # 入仓价格
-                    "bep": "0",  # 盈亏平衡价
-                    "cr": "200",  # (费前)累计实现损益
-                    "up": "0",  # 持仓未实现盈亏
-                    "mt": "isolated",  # 保证金模式
-                    "iw": "0.00000000",  # 若为逐仓，仓位保证金
-                    "ps": "BOTH",  # 持仓方向
+                    "s": "BTCUSDT",  # 
+                    "pa": "0",  # 
+                    "ep": "0.00000",  # 
+                    "bep": "0",  # 
+                    "cr": "200",  # ()
+                    "up": "0",  # 
+                    "mt": "isolated",  # 
+                    "iw": "0.00000000",  # ，
+                    "ps": "BOTH",  # 
                 },
                 {
                     "s": "BTCUSDT",
@@ -723,77 +727,78 @@ def test_binance_wss_account():
 
 
 def test_binance_req_single_asset_account():
+    """test_binance_req_single_asset_account function"""
     data = {
-        "feeTier": 0,  # 手续费等级
-        "canTrade": "true",  # 是否可以交易
-        "canDeposit": "true",  # 是否可以入金
-        "canWithdraw": "true",  # 是否可以出金
-        "updateTime": 0,  # 保留字段，请忽略
+        "feeTier": 0,  # 
+        "canTrade": "true",  # 
+        "canDeposit": "true",  # 
+        "canWithdraw": "true",  # 
+        "updateTime": 0,  # ，
         "multiAssetsMargin": "false",
         "tradeGroupId": -1,
-        "totalInitialMargin": "0.00000000",  # 当前所需起始保证金总额(存在逐仓请忽略), 仅计算usdt资产
-        "totalMaintMargin": "0.00000000",  # 维持保证金总额, 仅计算usdt资产
-        "totalWalletBalance": "23.72469206",  # 账户总余额, 仅计算usdt资产
-        "totalUnrealizedProfit": "0.00000000",  # 持仓未实现盈亏总额, 仅计算usdt资产
-        "totalMarginBalance": "23.72469206",  # 保证金总余额, 仅计算usdt资产
-        "totalPositionInitialMargin": "0.00000000",  # 持仓所需起始保证金(基于最新标记价格), 仅计算usdt资产
-        "totalOpenOrderInitialMargin": "0.00000000",  # 当前挂单所需起始保证金(基于最新标记价格), 仅计算usdt资产
-        "totalCrossWalletBalance": "23.72469206",  # 全仓账户余额, 仅计算usdt资产
-        "totalCrossUnPnl": "0.00000000",  # 全仓持仓未实现盈亏总额, 仅计算usdt资产
-        "availableBalance": "23.72469206",  # 可用余额, 仅计算usdt资产
-        "maxWithdrawAmount": "23.72469206",  # 最大可转出余额, 仅计算usdt资产
+        "totalInitialMargin": "0.00000000",  # (), usdt
+        "totalMaintMargin": "0.00000000",  # , usdt
+        "totalWalletBalance": "23.72469206",  # , usdt
+        "totalUnrealizedProfit": "0.00000000",  # , usdt
+        "totalMarginBalance": "23.72469206",  # , usdt
+        "totalPositionInitialMargin": "0.00000000",  # (), usdt
+        "totalOpenOrderInitialMargin": "0.00000000",  # (), usdt
+        "totalCrossWalletBalance": "23.72469206",  # , usdt
+        "totalCrossUnPnl": "0.00000000",  # , usdt
+        "availableBalance": "23.72469206",  # , usdt
+        "maxWithdrawAmount": "23.72469206",  # , usdt
         "assets": [
             {
-                "asset": "USDT",  # 资产
-                "walletBalance": "23.72469206",  # 余额
-                "unrealizedProfit": "0.00000000",  # 未实现盈亏
-                "marginBalance": "23.72469206",  # 保证金余额
-                "maintMargin": "0.00000000",  # 维持保证金
-                "initialMargin": "0.00000000",  # 当前所需起始保证金
-                "positionInitialMargin": "0.00000000",  # 持仓所需起始保证金(基于最新标记价格)
-                "openOrderInitialMargin": "0.00000000",  # 当前挂单所需起始保证金(基于最新标记价格)
-                "crossWalletBalance": "23.72469206",  # 全仓账户余额
-                "crossUnPnl": "0.00000000",  # 全仓持仓未实现盈亏
-                "availableBalance": "126.72469206",  # 可用余额
-                "maxWithdrawAmount": "23.72469206",  # 最大可转出余额
-                "marginAvailable": "true",  # 是否可用作联合保证金
-                "updateTime": 1625474304765,  # 更新时间
+                "asset": "USDT",  # 
+                "walletBalance": "23.72469206",  # 
+                "unrealizedProfit": "0.00000000",  # 
+                "marginBalance": "23.72469206",  # 
+                "maintMargin": "0.00000000",  # 
+                "initialMargin": "0.00000000",  # 
+                "positionInitialMargin": "0.00000000",  # ()
+                "openOrderInitialMargin": "0.00000000",  # ()
+                "crossWalletBalance": "23.72469206",  # 
+                "crossUnPnl": "0.00000000",  # 
+                "availableBalance": "126.72469206",  # 
+                "maxWithdrawAmount": "23.72469206",  # 
+                "marginAvailable": "true",  # 
+                "updateTime": 1625474304765,  # 
             },
             {
-                "asset": "BUSD",  # 资产
-                "walletBalance": "103.12345678",  # 余额
-                "unrealizedProfit": "0.00000000",  # 未实现盈亏
-                "marginBalance": "103.12345678",  # 保证金余额
-                "maintMargin": "0.00000000",  # 维持保证金
-                "initialMargin": "0.00000000",  # 当前所需起始保证金
-                "positionInitialMargin": "0.00000000",  # 持仓所需起始保证金(基于最新标记价格)
-                "openOrderInitialMargin": "0.00000000",  # 当前挂单所需起始保证金(基于最新标记价格)
-                "crossWalletBalance": "103.12345678",  # 全仓账户余额
-                "crossUnPnl": "0.00000000",  # 全仓持仓未实现盈亏
-                "availableBalance": "126.72469206",  # 可用余额
-                "maxWithdrawAmount": "103.12345678",  # 最大可转出余额
-                "marginAvailable": "true",  # 否可用作联合保证金
-                "updateTime": 0,  # 更新时间
+                "asset": "BUSD",  # 
+                "walletBalance": "103.12345678",  # 
+                "unrealizedProfit": "0.00000000",  # 
+                "marginBalance": "103.12345678",  # 
+                "maintMargin": "0.00000000",  # 
+                "initialMargin": "0.00000000",  # 
+                "positionInitialMargin": "0.00000000",  # ()
+                "openOrderInitialMargin": "0.00000000",  # ()
+                "crossWalletBalance": "103.12345678",  # 
+                "crossUnPnl": "0.00000000",  # 
+                "availableBalance": "126.72469206",  # 
+                "maxWithdrawAmount": "103.12345678",  # 
+                "marginAvailable": "true",  # 
+                "updateTime": 0,  # 
             },
         ],
-        "positions": [  # 头寸，将返回所有市场symbol。
-            # 根据用户持仓模式展示持仓方向，即单向模式下只返回BOTH持仓情况，双向模式下只返回 LONG 和 SHORT 持仓情况
+        "positions": [  # ，symbol。
+            # ，BOTH， LONG  SHORT 
             {
-                "symbol": "BTCUSDT",  # 交易对
-                "initialMargin": "0",  # 当前所需起始保证金(基于最新标记价格)
-                "maintMargin": "0",  # 维持保证金
-                "unrealizedProfit": "0.00000000",  # 持仓未实现盈亏
-                "positionInitialMargin": "0",  # 持仓所需起始保证金(基于最新标记价格)
-                "openOrderInitialMargin": "0",  # 当前挂单所需起始保证金(基于最新标记价格)
-                "leverage": "100",  # 杠杆倍率
-                "isolated": "true",  # 是否是逐仓模式
-                "entryPrice": "0.00000",  # 持仓成本价
-                "maxNotional": "250000",  # 当前杠杆下用户可用的最大名义价值
-                "bidNotional": "0",  # 买单净值，忽略
-                "askNotional": "0",  # 卖单净值，忽略
-                "positionSide": "BOTH",  # 持仓方向
-                "positionAmt": "0",  # 持仓数量
-                "updateTime": 0,  # 更新时间
+                "symbol": "BTCUSDT",  # 
+                "initialMargin": "0",  # ()
+                "maintMargin": "0",  # 
+                "unrealizedProfit": "0.00000000",  # 
+                "positionInitialMargin": "0",  # ()
+                "openOrderInitialMargin": "0",  # ()
+                "leverage": "100",  # 
+                "isolated": "true",  # 
+                "entryPrice": "0.00000",  # 
+                "maxNotional": "250000",  # 
+                "bidNotional": "0",  # ，
+                "askNotional": "0",  # ，
+                "positionSide": "BOTH",  # 
+                "positionAmt": "0",  # 
+                "updateTime": 0,  # 
             }
         ],
     }
@@ -823,78 +828,79 @@ def test_binance_req_single_asset_account():
 
 
 def test_binance_req_multi_asset_account():
+    """test_binance_req_multi_asset_account function"""
     data = {
-        "feeTier": 0,  # 手续费等级
-        "canTrade": "true",  # 是否可以交易
-        "canDeposit": "true",  # 是否可以入金
-        "canWithdraw": "true",  # 是否可以出金
-        "updateTime": 0,  # 保留字段，请忽略
+        "feeTier": 0,  # 
+        "canTrade": "true",  # 
+        "canDeposit": "true",  # 
+        "canWithdraw": "true",  # 
+        "updateTime": 0,  # ，
         "multiAssetsMargin": "true",
         "tradeGroupId": -1,
-        "totalInitialMargin": "0.00000000",  # 以USD计价的所需起始保证金总额
-        "totalMaintMargin": "0.00000000",  # 以USD计价的维持保证金总额
-        "totalWalletBalance": "126.72469206",  # 以USD计价的账户总余额
-        "totalUnrealizedProfit": "0.00000000",  # 以USD计价的持仓未实现盈亏总额
-        "totalMarginBalance": "126.72469206",  # 以USD计价的保证金总余额
-        "totalPositionInitialMargin": "0.00000000",  # 以USD计价的持仓所需起始保证金(基于最新标记价格)
-        "totalOpenOrderInitialMargin": "0.00000000",  # 以USD计价的当前挂单所需起始保证金(基于最新标记价格)
-        "totalCrossWalletBalance": "126.72469206",  # 以USD计价的全仓账户余额
-        "totalCrossUnPnl": "0.00000000",  # 以USD计价的全仓持仓未实现盈亏总额
-        "availableBalance": "126.72469206",  # 以USD计价的可用余额
-        "maxWithdrawAmount": "126.72469206",  # 以USD计价的最大可转出余额
+        "totalInitialMargin": "0.00000000",  # USD
+        "totalMaintMargin": "0.00000000",  # USD
+        "totalWalletBalance": "126.72469206",  # USD
+        "totalUnrealizedProfit": "0.00000000",  # USD
+        "totalMarginBalance": "126.72469206",  # USD
+        "totalPositionInitialMargin": "0.00000000",  # USD()
+        "totalOpenOrderInitialMargin": "0.00000000",  # USD()
+        "totalCrossWalletBalance": "126.72469206",  # USD
+        "totalCrossUnPnl": "0.00000000",  # USD
+        "availableBalance": "126.72469206",  # USD
+        "maxWithdrawAmount": "126.72469206",  # USD
         "assets": [
             {
-                "asset": "USDT",  # 资产
-                "walletBalance": "23.72469206",  # 余额
-                "unrealizedProfit": "0.00000000",  # 未实现盈亏
-                "marginBalance": "23.72469206",  # 保证金余额
-                "maintMargin": "0.00000000",  # 维持保证金
-                "initialMargin": "0.00000000",  # 当前所需起始保证金
-                "positionInitialMargin": "0.00000000",  # 持仓所需起始保证金(基于最新标记价格)
-                "openOrderInitialMargin": "0.00000000",  # 当前挂单所需起始保证金(基于最新标记价格)
-                "crossWalletBalance": "23.72469206",  # 全仓账户余额
-                "crossUnPnl": "0.00000000",  # 全仓持仓未实现盈亏
-                "availableBalance": "23.72469206",  # 可用余额
-                "maxWithdrawAmount": "23.72469206",  # 最大可转出余额
-                "marginAvailable": "true",  # 是否可用作联合保证金
-                "updateTime": 1625474304765,  # 更新时间
+                "asset": "USDT",  # 
+                "walletBalance": "23.72469206",  # 
+                "unrealizedProfit": "0.00000000",  # 
+                "marginBalance": "23.72469206",  # 
+                "maintMargin": "0.00000000",  # 
+                "initialMargin": "0.00000000",  # 
+                "positionInitialMargin": "0.00000000",  # ()
+                "openOrderInitialMargin": "0.00000000",  # ()
+                "crossWalletBalance": "23.72469206",  # 
+                "crossUnPnl": "0.00000000",  # 
+                "availableBalance": "23.72469206",  # 
+                "maxWithdrawAmount": "23.72469206",  # 
+                "marginAvailable": "true",  # 
+                "updateTime": 1625474304765,  # 
             },
             {
-                "asset": "BUSD",  # 资产
-                "walletBalance": "103.12345678",  # 余额
-                "unrealizedProfit": "0.00000000",  # 未实现盈亏
-                "marginBalance": "103.12345678",  # 保证金余额
-                "maintMargin": "0.00000000",  # 维持保证金
-                "initialMargin": "0.00000000",  # 当前所需起始保证金
-                "positionInitialMargin": "0.00000000",  # 持仓所需起始保证金(基于最新标记价格)
-                "openOrderInitialMargin": "0.00000000",  # 当前挂单所需起始保证金(基于最新标记价格)
-                "crossWalletBalance": "103.12345678",  # 全仓账户余额
-                "crossUnPnl": "0.00000000",  # 全仓持仓未实现盈亏
-                "availableBalance": "103.12345678",  # 可用余额
-                "maxWithdrawAmount": "103.12345678",  # 最大可转出余额
-                "marginAvailable": "true",  # 否可用作联合保证金
-                "updateTime": 0,  # 更新时间
+                "asset": "BUSD",  # 
+                "walletBalance": "103.12345678",  # 
+                "unrealizedProfit": "0.00000000",  # 
+                "marginBalance": "103.12345678",  # 
+                "maintMargin": "0.00000000",  # 
+                "initialMargin": "0.00000000",  # 
+                "positionInitialMargin": "0.00000000",  # ()
+                "openOrderInitialMargin": "0.00000000",  # ()
+                "crossWalletBalance": "103.12345678",  # 
+                "crossUnPnl": "0.00000000",  # 
+                "availableBalance": "103.12345678",  # 
+                "maxWithdrawAmount": "103.12345678",  # 
+                "marginAvailable": "true",  # 
+                "updateTime": 0,  # 
             },
         ],
-        "positions": [  # 头寸，将返回所有市场symbol。
-            # 根据用户持仓模式展示持仓方向，即单向模式下只返回BOTH持仓情况，双向模式下只返回 LONG 和 SHORT 持仓情况
+        "positions": [  # ，symbol。
+            # ，BOTH， LONG  SHORT 
             {
-                "symbol": "BTCUSDT",  # 交易对
-                "initialMargin": "0",  # 当前所需起始保证金(基于最新标记价格)
-                "maintMargin": "0",  # 维持保证金
-                "unrealizedProfit": "0.00000000",  # 持仓未实现盈亏
-                "positionInitialMargin": "0",  # 持仓所需起始保证金(基于最新标记价格)
-                "openOrderInitialMargin": "0",  # 当前挂单所需起始保证金(基于最新标记价格)
-                "leverage": "100",  # 杠杆倍率
-                "isolated": "true",  # 是否是逐仓模式
-                "entryPrice": "0.00000",  # 持仓成本价
-                "breakEvenPrice": "0.0",  # 持仓成本价
-                "maxNotional": "250000",  # 当前杠杆下用户可用的最大名义价值
-                "bidNotional": "0",  # 买单净值，忽略
-                "askNotional": "0",  # 买单净值，忽略
-                "positionSide": "BOTH",  # 持仓方向
-                "positionAmt": "0",  # 持仓数量
-                "updateTime": 0,  # 更新时间
+                "symbol": "BTCUSDT",  # 
+                "initialMargin": "0",  # ()
+                "maintMargin": "0",  # 
+                "unrealizedProfit": "0.00000000",  # 
+                "positionInitialMargin": "0",  # ()
+                "openOrderInitialMargin": "0",  # ()
+                "leverage": "100",  # 
+                "isolated": "true",  # 
+                "entryPrice": "0.00000",  # 
+                "breakEvenPrice": "0.0",  # 
+                "maxNotional": "250000",  # 
+                "bidNotional": "0",  # ，
+                "askNotional": "0",  # ，
+                "positionSide": "BOTH",  # 
+                "positionAmt": "0",  # 
+                "updateTime": 0,  # 
             }
         ],
     }

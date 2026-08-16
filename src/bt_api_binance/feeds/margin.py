@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import Any
@@ -16,7 +17,9 @@ from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataMargin(BinanceRequestData):
+    """Class BinanceRequestDataMargin"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "MARGIN")
         self.logger_name = kwargs.get("logger_name", "binance_margin_feed.log")
@@ -24,17 +27,15 @@ class BinanceRequestDataMargin(BinanceRequestData):
         self.request_logger = get_logger("binance_margin_feed")
         self.async_logger = get_logger("binance_margin_feed")
 
-    # ==================== 保证金数据接口 ====================
+    # ====================  ====================
 
     def _get_cross_margin_data(self, extra_data=None, **kwargs):
-        """查询全仓保证金数据.
+        """.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_cross_margin_data"
@@ -53,10 +54,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def get_cross_margin_data(self, extra_data=None, **kwargs):
-        """查询全仓保证金数据.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_cross_margin_data(extra_data=extra_data, **kwargs)
@@ -64,15 +64,13 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return data
 
     def _get_isolated_margin_data(self, symbols=None, extra_data=None, **kwargs):
-        """查询逐仓保证金数据.
+        """.
 
-        Args:
-            symbols: 交易对列表 (逗号分隔)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbols:  ()
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_isolated_margin_data"
@@ -93,10 +91,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def get_isolated_margin_data(self, symbols=None, extra_data=None, **kwargs):
-        """查询逐仓保证金数据.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_isolated_margin_data(
@@ -108,18 +105,16 @@ class BinanceRequestDataMargin(BinanceRequestData):
     def _get_capital_flow(
         self, asset=None, start_time=None, end_time=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询资金流水.
+        """.
 
-        Args:
-            asset: 资产名称
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            limit: 数量限制
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            start_time: 
+            end_time: 
+            limit: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_capital_flow"
@@ -148,10 +143,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
     def get_capital_flow(
         self, asset=None, start_time=None, end_time=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询资金流水.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_capital_flow(
@@ -165,17 +159,15 @@ class BinanceRequestDataMargin(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== BNB抵扣接口 ====================
+    # ==================== BNB ====================
 
     def _get_bnb_burn(self, extra_data=None, **kwargs):
-        """获取BNB抵扣状态.
+        """BNB.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_bnb_burn"
@@ -194,10 +186,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def get_bnb_burn(self, extra_data=None, **kwargs):
-        """获取BNB抵扣状态.
+        """BNB.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_bnb_burn(extra_data=extra_data, **kwargs)
@@ -205,14 +196,12 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return data
 
     def _toggle_bnb_burn(self, extra_data=None, **kwargs):
-        """开关BNB抵扣.
+        """BNB.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "toggle_bnb_burn"
@@ -231,28 +220,25 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def toggle_bnb_burn(self, extra_data=None, **kwargs):
-        """开关BNB抵扣.
+        """BNB.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._toggle_bnb_burn(extra_data=extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 杠杆清算接口 ====================
+    # ====================  ====================
 
     def _manual_liquidation(self, symbol=None, extra_data=None, **kwargs):
-        """手动清算.
+        """.
 
-        Args:
-            symbol: 交易对
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "manual_liquidation"
@@ -274,10 +260,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def manual_liquidation(self, symbol=None, extra_data=None, **kwargs):
-        """手动清算.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._manual_liquidation(
@@ -287,15 +272,13 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return data
 
     def _exchange_small_liability(self, asset_names=None, extra_data=None, **kwargs):
-        """小额负债兑换.
+        """.
 
-        Args:
-            asset_names: 资产名称列表 (逗号分隔的字符串)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset_names:  ()
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "exchange_small_liability"
@@ -316,10 +299,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def exchange_small_liability(self, asset_names=None, extra_data=None, **kwargs):
-        """小额负债兑换.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._exchange_small_liability(
@@ -331,18 +313,16 @@ class BinanceRequestDataMargin(BinanceRequestData):
     def _get_small_liability_history(
         self, asset=None, start_time=None, end_time=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询小额负债兑换历史.
+        """.
 
-        Args:
-            asset: 资产名称
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            limit: 数量限制
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            start_time: 
+            end_time: 
+            limit: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_small_liability_history"
@@ -371,10 +351,9 @@ class BinanceRequestDataMargin(BinanceRequestData):
     def get_small_liability_history(
         self, asset=None, start_time=None, end_time=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询小额负债兑换历史.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_small_liability_history(
@@ -389,15 +368,13 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return data
 
     def _set_max_leverage(self, max_leverage, extra_data=None, **kwargs):
-        """设置最大杠杆.
+        """.
 
-        Args:
-            max_leverage: 最大杠杆倍数 (1-125)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: max_leverage:  (1-125)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "set_max_leverage"
@@ -418,13 +395,11 @@ class BinanceRequestDataMargin(BinanceRequestData):
         return path, params, extra_data
 
     def set_max_leverage(self, max_leverage, extra_data=None, **kwargs):
-        """设置最大杠杆.
+        """.
 
-        Args:
-            max_leverage: 最大杠杆倍数 (1-125)
+        Args: max_leverage:  (1-125)
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._set_max_leverage(
@@ -435,62 +410,66 @@ class BinanceRequestDataMargin(BinanceRequestData):
 
 
 class BinanceMarketWssDataMargin(BinanceMarketWssData):
+    """Class BinanceMarketWssDataMargin"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "MARGIN")
         self._params = BinanceExchangeDataMargin()
 
 
 class BinanceAccountWssDataMargin(BinanceAccountWssData):
+    """Class BinanceAccountWssDataMargin"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self._params = BinanceExchangeDataMargin()
 
     def handle_data(self, content):
-        """处理杠杆账户 WebSocket 数据.
+        """ WebSocket .
 
-        杠杆账户使用与现货相同的事件结构:
-        - executionReport: 订单执行报告
-        - outboundAccountPosition: 账户余额变动
-        - balanceUpdate: 余额更新 (如分红)
+        :
+        - executionReport: 
+        - outboundAccountPosition: 
+        - balanceUpdate:  ()
         """
         event = content.get("e", None)
         if event is not None:
-            # 订单执行报告 (非成交事件)
+            #  ()
             if event == "executionReport" and content.get("x", None) != "TRADE":
                 self.push_order(content)
-            # 账户余额变动
+            # 
             if event == "outboundAccountPosition":
                 self.push_account(content)
-            # 成交事件
+            # 
             if event == "executionReport" and content.get("x", None) == "TRADE":
                 self.push_trade(content)
-            # 余额更新 (分红等)
+            #  ()
             if event == "balanceUpdate":
                 self.push_balance(content)
 
     def push_account(self, content):
-        """推送账户数据."""
+        """."""
         symbol = "ALL"
         account_data = BinanceSpotWssAccountData(content, symbol, self.asset_type, True)
         self.data_queue.put(account_data)
 
     def push_order(self, content):
-        """推送订单数据."""
+        """."""
         symbol = content["s"]
         order_data = BinanceSpotWssOrderData(content, symbol, self.asset_type, True)
         self.data_queue.put(order_data)
 
     def push_trade(self, content):
-        """推送成交数据."""
+        """."""
         symbol = content["s"]
         trade_data = BinanceSpotWssTradeData(content, symbol, self.asset_type, True)
         self.data_queue.put(trade_data)
 
     def push_balance(self, content):
-        """推送余额更新数据 (分红等)."""
-        # balanceUpdate 事件包含: {e: "balanceUpdate", E: 1573200697114, s: "BTC", u: "15896533547050558808", B: "500.00000000"}
-        # 可以使用 Spot 的账户数据容器，或者创建专门的余额更新容器
+        """ ()."""
+        # balanceUpdate : {e: "balanceUpdate", E: 1573200697114, s: "BTC", u: "15896533547050558808", B: "500.00000000"}
+        #  Spot ，
         symbol = content.get("s", "ALL")
         balance_data = BinanceSpotWssAccountData(content, symbol, self.asset_type, True)
         self.data_queue.put(balance_data)

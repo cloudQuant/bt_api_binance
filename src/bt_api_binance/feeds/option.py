@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import Any
@@ -17,8 +18,7 @@ class BinanceRequestDataOption(BinanceRequestData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance options request data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments including:
                 - asset_type: Asset type (default: "OPTION")
                 - logger_name: Logger name (default: "binance_option_feed.log")
@@ -38,8 +38,7 @@ class BinanceMarketWssDataOption(BinanceMarketWssData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance options market WebSocket data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments including:
                 - asset_type: Asset type (default: "OPTION")
 
@@ -55,8 +54,7 @@ class BinanceAccountWssDataOption(BinanceAccountWssData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """Initialize Binance options account WebSocket data handler.
 
-        Args:
-            data_queue: Queue for storing data.
+        Args: data_queue: Queue for storing data.
             **kwargs: Additional keyword arguments.
 
         """

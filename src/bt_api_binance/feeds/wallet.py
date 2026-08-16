@@ -1,11 +1,11 @@
-"""Binance Wallet API - 钱包接口请求类.
+"""Binance Wallet API - .
 
-实现 Binance 钱包相关的所有 REST API 请求，包括：
-- 资产查询 (余额、详情、账本、分红)
-- 资产划转 (通用划转、期货划转、合约划转等)
-- 充值相关 (充值地址、充值历史)
-- 提现相关 (提现申请、提现历史、提现地址)
-- 小额资产转换 (Dust)
+ Binance  REST API ，：
+-  (、、、)
+-  (、、)
+-  (、)
+-  (、、)
+-  (Dust)
 """
 
 from __future__ import annotations
@@ -21,12 +21,13 @@ from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataWallet(BinanceRequestData):
-    """Binance Wallet API 请求类.
+    """Binance Wallet API .
 
-    处理所有钱包相关的请求，包括资产查询、划转、充值、提现等。
+    ，、、、。
     """
 
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
+        """__init__ method"""
         kwargs.setdefault("exchange_data", BinanceExchangeDataWallet())
         kwargs.setdefault("exchange_name", "binance_wallet")
         super().__init__(data_queue, **kwargs)
@@ -36,17 +37,15 @@ class BinanceRequestDataWallet(BinanceRequestData):
         self.request_logger = get_logger("binance_wallet_feed")
         self.async_logger = get_logger("binance_wallet_feed")
 
-    # ==================== 资产查询接口 ====================
+    # ====================  ====================
 
     def _get_wallet_balance(self, extra_data=None, **kwargs):
-        """查询钱包余额.
+        """.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_wallet_balance"
@@ -65,10 +64,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def get_wallet_balance(self, extra_data=None, **kwargs):
-        """查询钱包余额.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_wallet_balance(extra_data=extra_data, **kwargs)
@@ -76,14 +74,12 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _get_asset_detail(self, extra_data=None, **kwargs):
-        """查询资产详情.
+        """.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_asset_detail"
@@ -102,10 +98,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def get_asset_detail(self, extra_data=None, **kwargs):
-        """查询资产详情.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_asset_detail(extra_data=extra_data, **kwargs)
@@ -115,18 +110,16 @@ class BinanceRequestDataWallet(BinanceRequestData):
     def _get_asset_ledger(
         self, asset=None, startTime=None, endTime=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询资产账本.
+        """.
 
-        Args:
-            asset: 资产名称
-            startTime: 开始时间戳
-            endTime: 结束时间戳
-            limit: 数量限制
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            startTime: 
+            endTime: 
+            limit: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_asset_ledger"
@@ -155,10 +148,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
     def get_asset_ledger(
         self, asset=None, startTime=None, endTime=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询资产账本.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_asset_ledger(
@@ -175,18 +167,16 @@ class BinanceRequestDataWallet(BinanceRequestData):
     def _get_asset_dividend(
         self, asset=None, startTime=None, endTime=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询资产分红记录.
+        """.
 
-        Args:
-            asset: 资产名称
-            startTime: 开始时间戳
-            endTime: 结束时间戳
-            limit: 数量限制
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            startTime: 
+            endTime: 
+            limit: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_asset_dividend"
@@ -215,10 +205,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
     def get_asset_dividend(
         self, asset=None, startTime=None, endTime=None, limit=None, extra_data=None, **kwargs
     ):
-        """查询资产分红记录.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_asset_dividend(
@@ -232,7 +221,7 @@ class BinanceRequestDataWallet(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 资产划转接口 ====================
+    # ====================  ====================
 
     def _asset_transfer(
         self,
@@ -244,19 +233,17 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """通用资产划转.
+        """.
 
-        Args:
-            transfer_type: 划转类型 (SPOT, UM, CM, MARGIN, ISOLATED_MARGIN, etc.)
-            asset: 资产名称
-            amount: 划转数量
-            from_symbol: 源交易对 (仅用于 ISOLATED_MARGIN)
-            to_symbol: 目标交易对 (仅用于 ISOLATED_MARGIN)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: transfer_type:  (SPOT, UM, CM, MARGIN, ISOLATED_MARGIN, etc.)
+            asset: 
+            amount: 
+            from_symbol:  ( ISOLATED_MARGIN)
+            to_symbol:  ( ISOLATED_MARGIN)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "asset_transfer"
@@ -292,10 +279,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """通用资产划转.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._asset_transfer(
@@ -319,18 +305,16 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询资产划转历史.
+        """.
 
-        Args:
-            transfer_type: 划转类型
-            startTime: 开始时间戳
-            endTime: 结束时间戳
-            limit: 数量限制
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: transfer_type:
+            startTime: 
+            endTime: 
+            limit: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_asset_transfer"
@@ -365,10 +349,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询资产划转历史.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_asset_transfer(
@@ -383,16 +366,14 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _transfer_to_futures_main(self, asset, amount, extra_data=None, **kwargs):
-        """划转到主账户期货账户.
+        """.
 
-        Args:
-            asset: 资产名称
-            amount: 划转数量
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            amount: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "transfer_to_futures_main"
@@ -414,10 +395,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def transfer_to_futures_main(self, asset, amount, extra_data=None, **kwargs):
-        """划转到主账户期货账户.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._transfer_to_futures_main(
@@ -427,17 +407,15 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _transfer_to_futures_sub(self, email, asset, amount, extra_data=None, **kwargs):
-        """划转到子账户期货账户.
+        """.
 
-        Args:
-            email: 子账户邮箱
-            asset: 资产名称
-            amount: 划转数量
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: email:
+            asset: 
+            amount: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "transfer_to_futures_sub"
@@ -460,10 +438,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def transfer_to_futures_sub(self, email, asset, amount, extra_data=None, **kwargs):
-        """划转到子账户期货账户.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._transfer_to_futures_sub(
@@ -473,16 +450,14 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _transfer_to_um(self, asset, amount, extra_data=None, **kwargs):
-        """划转到U本位合约.
+        """U.
 
-        Args:
-            asset: 资产名称
-            amount: 划转数量
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            amount: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "transfer_to_um"
@@ -504,10 +479,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def transfer_to_um(self, asset, amount, extra_data=None, **kwargs):
-        """划转到U本位合约.
+        """U.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._transfer_to_um(
@@ -517,17 +491,15 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _transfer_to_isolated_margin(self, asset, symbol, amount, extra_data=None, **kwargs):
-        """划转到逐仓杠杆.
+        """.
 
-        Args:
-            asset: 资产名称
-            symbol: 交易对
-            amount: 划转数量
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            symbol: 
+            amount: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "transfer_to_isolated_margin"
@@ -550,10 +522,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def transfer_to_isolated_margin(self, asset, symbol, amount, extra_data=None, **kwargs):
-        """划转到逐仓杠杆.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._transfer_to_isolated_margin(
@@ -562,19 +533,17 @@ class BinanceRequestDataWallet(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 充值相关接口 ====================
+    # ====================  ====================
 
     def _get_deposit_address(self, coin, network=None, extra_data=None, **kwargs):
-        """查询充值地址.
+        """.
 
-        Args:
-            coin: 币种
-            network: 网络
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: coin:
+            network: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_deposit_address"
@@ -597,10 +566,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def get_deposit_address(self, coin, network=None, extra_data=None, **kwargs):
-        """查询充值地址.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_deposit_address(
@@ -619,19 +587,17 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询充值历史.
+        """.
 
-        Args:
-            coin: 币种
-            startTime: 开始时间戳
-            endTime: 结束时间戳
-            limit: 数量限制
-            offset: 偏移量
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: coin:
+            startTime: 
+            endTime: 
+            limit: 
+            offset: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_deposit_history"
@@ -669,10 +635,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询充值历史.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_deposit_history(
@@ -687,7 +652,7 @@ class BinanceRequestDataWallet(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 提现相关接口 ====================
+    # ====================  ====================
 
     def _withdraw(
         self,
@@ -700,20 +665,18 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """提现申请.
+        """.
 
-        Args:
-            coin: 币种
-            address: 提现地址
-            amount: 提现数量
-            network: 网络
-            addressTag: 地址标签
-            name: 提现备注名
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: coin:
+            address: 
+            amount: 
+            network: 
+            addressTag: 
+            name: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "withdraw"
@@ -752,10 +715,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """提现申请.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._withdraw(
@@ -781,19 +743,17 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询提现历史.
+        """.
 
-        Args:
-            coin: 币种
-            startTime: 开始时间戳
-            endTime: 结束时间戳
-            limit: 数量限制
-            offset: 偏移量
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: coin:
+            startTime: 
+            endTime: 
+            limit: 
+            offset: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_withdraw_history"
@@ -831,10 +791,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询提现历史.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_withdraw_history(
@@ -850,15 +809,13 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _get_withdraw_address(self, coin=None, extra_data=None, **kwargs):
-        """查询提现地址.
+        """.
 
-        Args:
-            coin: 币种
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: coin:
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_withdraw_address"
@@ -879,10 +836,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def get_withdraw_address(self, coin=None, extra_data=None, **kwargs):
-        """查询提现地址.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_withdraw_address(
@@ -891,17 +847,15 @@ class BinanceRequestDataWallet(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 小额资产转换接口 ====================
+    # ====================  ====================
 
     def _get_dust(self, extra_data=None, **kwargs):
-        """查询小额资产.
+        """.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_dust"
@@ -920,10 +874,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def get_dust(self, extra_data=None, **kwargs):
-        """查询小额资产.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_dust(extra_data=extra_data, **kwargs)
@@ -931,15 +884,13 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return data
 
     def _dust_transfer(self, assets, extra_data=None, **kwargs):
-        """小额资产转换BTC.
+        """BTC.
 
-        Args:
-            assets: 资产列表 (用逗号分隔的数组)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: assets:  ()
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "dust_transfer"
@@ -960,10 +911,9 @@ class BinanceRequestDataWallet(BinanceRequestData):
         return path, params, extra_data
 
     def dust_transfer(self, assets, extra_data=None, **kwargs):
-        """小额资产转换BTC.
+        """BTC.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._dust_transfer(

@@ -1,9 +1,9 @@
-"""Binance Portfolio Margin API - 组合保证金接口请求类.
+"""Binance Portfolio Margin API - .
 
-实现 Binance 组合保证金相关的所有 REST API 请求，包括：
-- 组合保证金账户查询
-- 抵押率查询
-- 组合保证金资产划转
+ Binance  REST API ，：
+- 
+- 
+- 
 """
 
 from __future__ import annotations
@@ -19,12 +19,13 @@ from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataPortfolio(BinanceRequestData):
-    """Binance Portfolio Margin API 请求类.
+    """Binance Portfolio Margin API .
 
-    处理所有组合保证金相关的请求。
+    。
     """
 
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         kwargs.setdefault("exchange_data", BinanceExchangeDataPortfolio())
         kwargs.setdefault("exchange_name", "binance_portfolio")
         super().__init__(data_queue, **kwargs)
@@ -34,17 +35,15 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         self.request_logger = get_logger("binance_portfolio_feed")
         self.async_logger = get_logger("binance_portfolio_feed")
 
-    # ==================== 组合保证金接口 ====================
+    # ====================  ====================
 
     def _get_portfolio_account(self, extra_data=None, **kwargs):
-        """查询组合保证金账户信息.
+        """.
 
-        Args:
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: extra_data:
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_portfolio_account"
@@ -63,10 +62,9 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         return path, params, extra_data
 
     def get_portfolio_account(self, extra_data=None, **kwargs) -> Any:
-        """查询组合保证金账户信息.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_portfolio_account(extra_data=extra_data, **kwargs)
@@ -74,15 +72,13 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         return data
 
     def _get_portfolio_collateral_rate(self, asset_type=None, extra_data=None, **kwargs):
-        """查询抵押率.
+        """.
 
-        Args:
-            asset_type: 资产类型 (如: USDT)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset_type:  (: USDT)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_portfolio_collateral_rate"
@@ -103,10 +99,9 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         return path, params, extra_data
 
     def get_portfolio_collateral_rate(self, asset_type=None, extra_data=None, **kwargs) -> Any:
-        """查询抵押率.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_portfolio_collateral_rate(
@@ -116,17 +111,15 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         return data
 
     def _portfolio_transfer(self, asset, amount, transfer_type, extra_data=None, **kwargs):
-        """组合保证金资产划转.
+        """.
 
-        Args:
-            asset: 资产名称
-            amount: 划转数量
-            transfer_type: 划转类型 (SPOT_TO_PORTFOLIO, PORTFOLIO_TO_SPOT)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            amount: 
+            transfer_type:  (SPOT_TO_PORTFOLIO, PORTFOLIO_TO_SPOT)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "portfolio_transfer"
@@ -149,10 +142,9 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         return path, params, extra_data
 
     def portfolio_transfer(self, asset, amount, transfer_type, extra_data=None, **kwargs):
-        """组合保证金资产划转.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._portfolio_transfer(

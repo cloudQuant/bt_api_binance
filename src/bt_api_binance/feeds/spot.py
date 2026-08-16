@@ -1,3 +1,4 @@
+"""Module documentation"""
 from __future__ import annotations
 
 import json
@@ -21,7 +22,9 @@ from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataSpot(BinanceRequestData):
+    """Class BinanceRequestDataSpot"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "SPOT")
         self.logger_name = kwargs.get("logger_name", "binance_spot_feed.log")
@@ -87,18 +90,16 @@ class BinanceRequestDataSpot(BinanceRequestData):
             data = []
         return data, status
 
-    # ==================== 账户快照接口 ====================
+    # ====================  ====================
 
     def _get_account_snapshot(self, account_type="SPOT", extra_data=None, **kwargs):
-        """获取账户快照.
+        """.
 
-        Args:
-            account_type: 账户类型 (SPOT, MARGIN, FUTURES)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: account_type:  (SPOT, MARGIN, FUTURES)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_account_snapshot"
@@ -119,13 +120,11 @@ class BinanceRequestDataSpot(BinanceRequestData):
         return path, params, extra_data
 
     def get_account_snapshot(self, account_type="SPOT", extra_data=None, **kwargs):
-        """获取账户快照.
+        """.
 
-        Args:
-            account_type: 账户类型 (SPOT, MARGIN, FUTURES)
+        Args: account_type:  (SPOT, MARGIN, FUTURES)
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_account_snapshot(
@@ -134,18 +133,16 @@ class BinanceRequestDataSpot(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 交易日统计数据接口 ====================
+    # ====================  ====================
 
     def _get_ticker_trading_day(self, symbol=None, extra_data=None, **kwargs):
-        """获取交易日统计数据.
+        """.
 
-        Args:
-            symbol: 交易对
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_ticker_trading_day"
@@ -167,13 +164,11 @@ class BinanceRequestDataSpot(BinanceRequestData):
         return path, params, extra_data
 
     def get_ticker_trading_day(self, symbol=None, extra_data=None, **kwargs):
-        """获取交易日统计数据.
+        """.
 
-        Args:
-            symbol: 交易对
+        Args: symbol:
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_ticker_trading_day(
@@ -182,21 +177,19 @@ class BinanceRequestDataSpot(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
 
-    # ==================== 合约划转接口 ====================
+    # ====================  ====================
 
     def _futures_transfer(self, asset, amount, transfer_type, extra_data=None, **kwargs):
-        """合约账户划转.
+        """.
 
-        Args:
-            asset: 资产名称 (如 USDT)
-            amount: 划转数量
-            transfer_type: 划转类型 (1: 现货转U本位合约, 2: U本位合约转现货,
-                                        3: 现货转币本位合约, 4: 币本位合约转现货)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:  ( USDT)
+            amount: 
+            transfer_type:  (1: U, 2: U,
+                                        3: , 4: )
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "futures_transfer"
@@ -219,16 +212,14 @@ class BinanceRequestDataSpot(BinanceRequestData):
         return path, params, extra_data
 
     def futures_transfer(self, asset, amount, transfer_type, extra_data=None, **kwargs):
-        """合约账户划转.
+        """.
 
-        Args:
-            asset: 资产名称 (如 USDT)
-            amount: 划转数量
-            transfer_type: 划转类型 (1: 现货转U本位合约, 2: U本位合约转现货,
-                                        3: 现货转币本位合约, 4: 币本位合约转现货)
+        Args: asset:  ( USDT)
+            amount: 
+            transfer_type:  (1: U, 2: U,
+                                        3: , 4: )
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._futures_transfer(
@@ -247,19 +238,17 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询合约划转历史.
+        """.
 
-        Args:
-            asset: 资产名称
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            limit: 每页数量 (默认100, 最大1000)
-            page: 页码 (默认1)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: asset:
+            start_time: 
+            end_time: 
+            limit:  (100, 1000)
+            page:  (1)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "get_futures_transfer_history"
@@ -297,17 +286,15 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """查询合约划转历史.
+        """.
 
-        Args:
-            asset: 资产名称
-            start_time: 开始时间戳
-            end_time: 结束时间戳
-            limit: 每页数量 (默认100, 最大1000)
-            page: 页码 (默认1)
+        Args: asset:
+            start_time: 
+            end_time: 
+            limit:  (100, 1000)
+            page:  (1)
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._get_futures_transfer_history(
@@ -335,6 +322,7 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
+        """make_order method"""
         path, params, extra_data = self._make_order(
             symbol,
             volume,
@@ -350,7 +338,7 @@ class BinanceRequestDataSpot(BinanceRequestData):
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    # ==================== 高级订单接口 ====================
+    # ====================  ====================
 
     def _cancel_replace_order(
         self,
@@ -367,24 +355,22 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """取消并替换订单 (Cancel Replace Order).
+        """ (Cancel Replace Order).
 
-        Args:
-            symbol: 交易对
-            cancel_order_id: 要取消的订单ID
-            cancel_client_order_id: 要取消的客户端订单ID (与cancel_order_id二选一)
-            side: 订单方向 (BUY/SELL)
-            order_type: 订单类型 (LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT)
-            quantity: 订单数量
-            price: 订单价格 (LIMIT订单必需)
-            stop_price: 触发价格 (止损/止盈订单必需)
-            new_client_order_id: 新订单的客户端ID
-            cancel_restrictions: 取消限制 (ONLY_NEW, ONLY_PARTIALLY_FILLED)
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            cancel_order_id: ID
+            cancel_client_order_id: ID (cancel_order_id)
+            side:  (BUY/SELL)
+            order_type:  (LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT)
+            quantity: 
+            price:  (LIMIT)
+            stop_price:  (/)
+            new_client_order_id: ID
+            cancel_restrictions:  (ONLY_NEW, ONLY_PARTIALLY_FILLED)
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "cancel_replace_order"
@@ -438,10 +424,9 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """取消并替换订单.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._cancel_replace_order(
@@ -462,15 +447,13 @@ class BinanceRequestDataSpot(BinanceRequestData):
         return data
 
     def _cancel_all_orders(self, symbol=None, extra_data=None, **kwargs):
-        """取消所有订单.
+        """.
 
-        Args:
-            symbol: 交易对，如果不指定则取消所有现货订单
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol: ，
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "cancel_all"
@@ -493,13 +476,11 @@ class BinanceRequestDataSpot(BinanceRequestData):
         return path, params, extra_data
 
     def cancel_all_orders(self, symbol=None, extra_data=None, **kwargs):
-        """取消所有订单.
+        """.
 
-        Args:
-            symbol: 交易对，如果不指定则取消所有现货订单
+        Args: symbol: ，
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._cancel_all_orders(
@@ -518,19 +499,17 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """修改订单并保持队列优先级.
+        """.
 
-        Args:
-            symbol: 交易对
-            order_id: 订单ID (与client_order_id二选一)
-            client_order_id: 客户端订单ID
-            quantity: 新数量
-            price: 新价格
-            extra_data: 额外数据
-            **kwargs: 其他参数
+        Args: symbol:
+            order_id: ID (client_order_id)
+            client_order_id: ID
+            quantity: 
+            price: 
+            extra_data: 
+            **kwargs: 
 
-        Returns:
-            tuple: (path, params, extra_data)
+        Returns: tuple: (path, params, extra_data)
 
         """
         request_type = "amend_keep_priority"
@@ -569,10 +548,9 @@ class BinanceRequestDataSpot(BinanceRequestData):
         extra_data=None,
         **kwargs,
     ):
-        """修改订单并保持队列优先级.
+        """.
 
-        Returns:
-            RequestData: 请求结果
+        Returns: RequestData:
 
         """
         path, params, extra_data = self._amend_keep_priority(
@@ -589,14 +567,18 @@ class BinanceRequestDataSpot(BinanceRequestData):
 
 
 class BinanceMarketWssDataSpot(BinanceMarketWssData):
+    """Class BinanceMarketWssDataSpot"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "SPOT")
         self._params = BinanceExchangeDataSpot()
 
 
 class BinanceAccountWssDataSpot(BinanceAccountWssData):
+    """Class BinanceAccountWssDataSpot"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
+        """__init__ method"""
         kwargs.setdefault("exchange_data", BinanceExchangeDataSpot())
         super().__init__(data_queue, **kwargs)
         self._params = BinanceExchangeDataSpot()
@@ -676,11 +658,13 @@ class BinanceAccountWssDataSpot(BinanceAccountWssData):
         raise RuntimeError(f"Failed to get listen key after {max_retries} attempts: {last_err}")
 
     def wss_author(self):
+        """wss_author method"""
         result = self.get_listen_key()
         self.listen_key = result["listenKey"]
         self.wss_url = f"{self._params.wss_url}"
 
     def open_rsp(self):
+        """open_rsp method"""
         self.wss_logger.info(
             f"===== {time.strftime('%Y-%m-%d %H:%M:%S')} {self._params.exchange_name} Websocket Connected ====="
         )
@@ -688,45 +672,49 @@ class BinanceAccountWssDataSpot(BinanceAccountWssData):
         self.ws.send(subscribe_msg)
 
     def handle_data(self, content):
+        """handle_data method"""
         event = content.get("e", None)
         if event is not None:
-            # 现货账户事件类型
+            # 
             if event == "executionReport" and content.get("x", None) != "TRADE":
                 self.push_order(content)
             if event == "outboundAccountPosition":
                 self.push_account(content)
             if event == "executionReport" and content.get("x", None) == "TRADE":
                 self.push_trade(content)
-            # 余额更新事件 (分红等)
+            #  ()
             if event == "balanceUpdate":
                 self.push_balance(content)
 
     def push_account(self, content):
-        # 推送account数据并添加到事件中
-        # print("订阅到账户数据")
+        # account
+        # print("")
+        """push_account method"""
         symbol = "ALL"
         account_data = BinanceSpotWssAccountData(content, symbol, self.asset_type, True)
         self.data_queue.put(account_data)
-        # print("获取account数据成功，当前账户净值为：", account_data.get_balances()[0].get_margin())
+        # print("account，：", account_data.get_balances()[0].get_margin())
 
     def push_order(self, content):
-        # print("订阅到order数据")
+        # print("order")
+        """push_order method"""
         symbol = content["s"]
         order_data = BinanceSpotWssOrderData(content, symbol, self.asset_type, True)
         self.data_queue.put(order_data)
-        # print("获取order成功，当前order_status 为：", order_data.get_order_status())
+        # print("order，order_status ：", order_data.get_order_status())
 
     def push_trade(self, content):
-        # print("订阅到trade数据")
+        # print("trade")
+        """push_trade method"""
         symbol = content["s"]
         trade_data = BinanceSpotWssTradeData(content, symbol, self.asset_type, True)
         self.data_queue.put(trade_data)
-        # print("获取trade成功，当前trade_id 为：", trade_data.get_trade_id())
+        # print("trade，trade_id ：", trade_data.get_trade_id())
 
     def push_balance(self, content):
-        """推送余额更新数据 (分红等).
+        """ ().
 
-        balanceUpdate 事件结构:
+        balanceUpdate :
         {
             "e": "balanceUpdate",
             "E": 1573200697114,

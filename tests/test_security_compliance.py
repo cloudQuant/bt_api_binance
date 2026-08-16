@@ -123,6 +123,7 @@ class TestSecurityCompliancePackage:
     """Test security_compliance package exports and defaults."""
 
     def test_package_exports_and_versions(self):
+        """test_package_exports_and_versions method"""
         assert security_compliance_module.__version__ == "1.0.0"
         assert security_compliance_module.__compliance_version__ == "2024.3"
         assert "AccessControlManager" in security_compliance_module.__all__
@@ -134,6 +135,7 @@ class TestSecurityCompliancePackage:
         assert security_compliance_module.ThreatDetector.__name__ == "ThreatDetector"
 
     def test_default_security_config_contains_expected_defaults(self):
+        """test_default_security_config_contains_expected_defaults method"""
         config = security_compliance_module.DEFAULT_SECURITY_CONFIG
 
         assert config["encryption"] == {
@@ -212,6 +214,7 @@ class TestAuditLogger:
         assert all(event.user_id == "user1" for event in events)
 
     def test_subscribers_receive_events_and_errors_are_suppressed(self):
+        """test_subscribers_receive_events_and_errors_are_suppressed method"""
         received = []
 
         def good_callback(event):
@@ -234,6 +237,7 @@ class TestAuditLogger:
         assert received == [first_event.event_id]
 
     def test_verify_log_integrity_handles_missing_and_corrupt_logs(self):
+        """test_verify_log_integrity_handles_missing_and_corrupt_logs method"""
         missing_logger = AuditLogger(log_file=self.temp_dir / "missing.log")
 
         assert missing_logger.verify_log_integrity() == {
@@ -264,6 +268,7 @@ class TestAuditLogger:
         }
 
     def test_search_events_filters_limit_and_malformed_lines(self):
+        """test_search_events_filters_limit_and_malformed_lines method"""
         events = [
             AuditEvent(event_type=EventType.USER_LOGIN, user_id="user1", timestamp=100.0),
             AuditEvent(event_type=EventType.ORDER_CREATED, user_id="user1", timestamp=200.0),
@@ -287,6 +292,7 @@ class TestAuditLogger:
         assert filtered[0].timestamp == 300.0
 
     def test_get_compliance_report_and_cleanup_old_events(self, monkeypatch: pytest.MonkeyPatch):
+        """test_get_compliance_report_and_cleanup_old_events method"""
         current_time = 1_000_000.0
         old_event = AuditEvent(
             event_type=EventType.ORDER_CREATED,
@@ -332,6 +338,7 @@ class TestAuditLogger:
         assert {event.user_id for event in remaining} == {"recent-user", "gdpr-user"}
 
     def test_global_audit_logger_helpers(self):
+        """test_global_audit_logger_helpers method"""
         original_logger = audit_logger_module._audit_logger
         audit_logger_module._audit_logger = None
         try:
@@ -392,6 +399,7 @@ class TestEncryptionManager:
         assert new_key.is_active is True
 
     def test_local_key_manager_missing_lookup_and_rotation_error(self):
+        """test_local_key_manager_missing_lookup_and_rotation_error method"""
         local_manager = LocalKeyManager(self.temp_dir / "extra_keys", "password")
 
         assert local_manager.get_key("missing") is None
@@ -400,6 +408,7 @@ class TestEncryptionManager:
             local_manager.rotate_key("missing")
 
     def test_local_key_manager_delete_key_removes_files(self):
+        """test_local_key_manager_delete_key_removes_files method"""
         local_manager = LocalKeyManager(self.temp_dir / "delete_keys", "password")
         key = local_manager.generate_key(EncryptionAlgorithm.AES_256_GCM)
 
@@ -414,16 +423,19 @@ class TestEncryptionManager:
         assert not meta_file.exists()
 
     def test_local_key_manager_rejects_unsupported_algorithm(self):
+        """test_local_key_manager_rejects_unsupported_algorithm method"""
         local_manager = LocalKeyManager(self.temp_dir / "unsupported_keys", "password")
 
         with pytest.raises(EncryptionError, match="Unsupported algorithm"):
             local_manager.generate_key(EncryptionAlgorithm.AES_256_CBC)
 
     def test_encrypt_with_missing_key_id_raises(self):
+        """test_encrypt_with_missing_key_id_raises method"""
         with pytest.raises(EncryptionError, match="Key missing not found"):
             self.encryption_manager.encrypt("payload", key_id="missing")
 
     def test_decrypt_requires_tag_and_rejects_unknown_algorithm(self):
+        """test_decrypt_requires_tag_and_rejects_unknown_algorithm method"""
         encrypted = self.encryption_manager.encrypt("payload")
         encrypted_without_tag = dict(encrypted)
         encrypted_without_tag["tag"] = None
@@ -438,6 +450,7 @@ class TestEncryptionManager:
             self.encryption_manager.decrypt(encrypted_with_bad_algorithm)
 
     def test_chacha20_encrypt_decrypt_roundtrip(self):
+        """test_chacha20_encrypt_decrypt_roundtrip method"""
         key = self.encryption_manager.key_manager.generate_key(
             EncryptionAlgorithm.CHACHA20_POLY1305
         )
@@ -448,6 +461,7 @@ class TestEncryptionManager:
         assert decrypted == b"payload"
 
     def test_rsa_key_pair_encrypt_decrypt_roundtrip(self):
+        """test_rsa_key_pair_encrypt_decrypt_roundtrip method"""
         key_pair = self.encryption_manager.generate_key_pair()
 
         encrypted = self.encryption_manager.encrypt_with_public_key(
@@ -460,6 +474,7 @@ class TestEncryptionManager:
         assert decrypted == b"secret"
 
     def test_create_key_manager_validation_and_singleton_initialization(self):
+        """test_create_key_manager_validation_and_singleton_initialization method"""
         local_manager = create_key_manager(
             KeyProvider.LOCAL,
             key_dir=self.temp_dir / "factory_keys",
@@ -557,9 +572,11 @@ class TestComplianceMonitor:
     """Test compliance monitor functionality."""
 
     def setup_method(self):
+        """setup_method method"""
         self.monitor = ComplianceMonitor()
 
     def test_default_rules_are_initialized(self):
+        """test_default_rules_are_initialized method"""
         rule_ids = {rule.rule_id for rule in self.monitor.rules}
         standards = {rule.standard for rule in self.monitor.rules}
 
@@ -571,6 +588,7 @@ class TestComplianceMonitor:
         }
 
     def test_run_compliance_check_filters_standard_and_handles_errors(self):
+        """test_run_compliance_check_filters_standard_and_handles_errors method"""
         self.monitor.rules.append(
             ComplianceRule(
                 rule_id="SOX_FAIL",
@@ -590,6 +608,7 @@ class TestComplianceMonitor:
         assert sox_results["SOX_FAIL"]["severity"] == "critical"
 
     def test_generate_compliance_report_groups_results(self):
+        """test_generate_compliance_report_groups_results method"""
         self.monitor.rules = [
             ComplianceRule(
                 rule_id="SOX_OK",
@@ -625,6 +644,7 @@ class TestComplianceMonitor:
         assert report["by_standard"][ComplianceStandard.GDPR.value]["passed"] == 1
 
     def test_generate_compliance_report_handles_no_rules(self):
+        """test_generate_compliance_report_handles_no_rules method"""
         self.monitor.rules = []
 
         report = self.monitor.generate_compliance_report()
@@ -643,6 +663,7 @@ class TestIdentityManager:
     """Test identity manager functionality."""
 
     def setup_method(self):
+        """setup_method method"""
         self.manager = IdentityManager(
             {
                 "ldap": {"users": {"ldap_user": {}}},
@@ -651,6 +672,7 @@ class TestIdentityManager:
         )
 
     def test_create_and_authenticate_local_identity(self):
+        """test_create_and_authenticate_local_identity method"""
         identity = self.manager.create_identity(
             "alice",
             "alice@example.com",
@@ -671,6 +693,7 @@ class TestIdentityManager:
         assert identity.attributes["department"] == "trading"
 
     def test_external_provider_authentication_and_lookup(self):
+        """test_external_provider_authentication_and_lookup method"""
         ldap_identity = self.manager.create_identity(
             "ldap_user",
             "ldap@example.com",
@@ -698,6 +721,7 @@ class TestIdentityManager:
         assert self.manager.get_identity(saml_identity.identity_id) is saml_identity
 
     def test_group_membership_permissions_and_search_filters(self):
+        """test_group_membership_permissions_and_search_filters method"""
         identity = self.manager.create_identity(
             "bob",
             "bob@example.com",
@@ -739,6 +763,7 @@ class TestIdentityManager:
         assert self.manager.remove_user_from_group(identity.identity_id, "missing") is False
 
     def test_status_transitions_sync_metadata_and_summary(self):
+        """test_status_transitions_sync_metadata_and_summary method"""
         local_identity = self.manager.create_identity(
             "carol",
             "carol@example.com",
@@ -839,10 +864,13 @@ class TestDataProtectionManager:
 
         # Mock encryption manager
         class MockEncryptionManager:
+            """Class MockEncryptionManager"""
             def encrypt(self, data):
+                """encrypt method"""
                 return {"encrypted": str(data)}
 
             def decrypt(self, data):
+                """decrypt method"""
                 return data.get("encrypted", "").encode()
 
         self.data_protection = DataProtectionManager(MockEncryptionManager(), {})
@@ -906,9 +934,11 @@ class TestDisasterRecoveryManager:
     """Test disaster recovery functionality."""
 
     def setup_method(self):
+        """setup_method method"""
         self.manager = DisasterRecoveryManager()
 
     def test_default_configs_and_status(self):
+        """test_default_configs_and_status method"""
         status = self.manager.get_recovery_status()
 
         assert status == {
@@ -920,6 +950,7 @@ class TestDisasterRecoveryManager:
         assert "primary_recovery" in self.manager._recovery_plans
 
     def test_create_and_initiate_backup(self, monkeypatch: pytest.MonkeyPatch):
+        """test_create_and_initiate_backup method"""
         monkeypatch.setattr(
             "bt_api_py.security_compliance.recovery.disaster_recovery.time.time",
             lambda: 12345.0,
@@ -948,6 +979,7 @@ class TestDisasterRecoveryManager:
         }
 
     def test_create_and_execute_recovery_plan(self, monkeypatch: pytest.MonkeyPatch):
+        """test_create_and_execute_recovery_plan method"""
         monkeypatch.setattr(
             "bt_api_py.security_compliance.recovery.disaster_recovery.time.time",
             lambda: 45678.0,
@@ -988,6 +1020,7 @@ class TestDisasterRecoveryManager:
         }
 
     def test_generate_recovery_report(self):
+        """test_generate_recovery_report method"""
         report = self.manager.generate_recovery_report()
 
         assert report["current_status"] == "normal"
@@ -1062,9 +1095,11 @@ class TestSecurityFrameworkHelpers:
     """Test security framework helpers."""
 
     def teardown_method(self):
+        """teardown_method method"""
         framework_module._security_framework = None
 
     def test_create_security_config_from_env(self, monkeypatch: pytest.MonkeyPatch):
+        """test_create_security_config_from_env method"""
         env_values = {
             "SECURITY_KEY_PROVIDER": "local",
             "SECURITY_KEY_DIR": "/tmp/security_keys",
@@ -1127,6 +1162,7 @@ class TestSecurityFrameworkHelpers:
         assert config["encryption_key"] == "enc-key"
 
     def test_initialize_and_get_security_framework(self, monkeypatch: pytest.MonkeyPatch):
+        """test_initialize_and_get_security_framework method"""
         config = {
             "encryption": {"provider": "local", "provider_config": {"key_dir": "./tmp_keys"}},
             "audit": {"log_file": "./tmp_audit.log"},
@@ -1147,8 +1183,11 @@ class TestSecurityFrameworkHelpers:
         assert initialized_from_env is get_security_framework()
 
     def test_integrate_with_bt_api_requires_framework(self):
+        """test_integrate_with_bt_api_requires_framework method"""
         class DummyBtApi:
+            """Class DummyBtApi"""
             def create_feed(self, *args, **kwargs):
+                """create_feed method"""
                 return {"args": args, "kwargs": kwargs}
 
         framework_module._security_framework = None
@@ -1157,30 +1196,42 @@ class TestSecurityFrameworkHelpers:
             integrate_with_bt_api(DummyBtApi())
 
     def test_integrate_with_bt_api_wraps_create_feed(self):
+        """test_integrate_with_bt_api_wraps_create_feed method"""
         class DummyAccessControl:
+            """Class DummyAccessControl"""
             def __init__(self):
+                """__init__ method"""
                 self.calls = []
 
             def require_permission(self, user_id, resource, action, level):
+                """require_permission method"""
                 self.calls.append((user_id, resource, action, level))
 
         class DummyAuditLogger:
+            """Class DummyAuditLogger"""
             def __init__(self):
+                """__init__ method"""
                 self.events = []
 
             def log_event(self, event):
+                """log_event method"""
                 self.events.append(event)
 
         class DummyFramework:
+            """Class DummyFramework"""
             def __init__(self):
+                """__init__ method"""
                 self.access_control = DummyAccessControl()
                 self.audit_logger = DummyAuditLogger()
 
         class DummyBtApi:
+            """Class DummyBtApi"""
             def __init__(self):
+                """__init__ method"""
                 self.calls = []
 
             def create_feed(self, *args, **kwargs):
+                """create_feed method"""
                 self.calls.append((args, kwargs))
                 return "created"
 
@@ -1200,14 +1251,19 @@ class TestSecurityFrameworkHelpers:
         assert bt_api.calls == [(("BINANCE",), {"market": "spot"})]
 
     def test_require_permission_decorator(self):
+        """test_require_permission_decorator method"""
         calls = []
 
         class DummyAccessControl:
+            """Class DummyAccessControl"""
             def require_permission(self, user_id, resource, action, level):
+                """require_permission method"""
                 calls.append((user_id, resource, action, level))
 
         class DummyFramework:
+            """Class DummyFramework"""
             def __init__(self):
+                """__init__ method"""
                 self.access_control = DummyAccessControl()
 
         @require_permission(Resource.EXCHANGE_CONFIG, "update", PermissionLevel.ADMIN)
@@ -1224,15 +1280,21 @@ class TestSecurityFrameworkHelpers:
         assert calls == [("user-2", Resource.EXCHANGE_CONFIG, "update", PermissionLevel.ADMIN)]
 
     def test_audit_access_decorator_success_and_failure(self):
+        """test_audit_access_decorator_success_and_failure method"""
         class DummyAuditLogger:
+            """Class DummyAuditLogger"""
             def __init__(self):
+                """__init__ method"""
                 self.events = []
 
             def log_event(self, event):
+                """log_event method"""
                 self.events.append(event)
 
         class DummyFramework:
+            """Class DummyFramework"""
             def __init__(self):
+                """__init__ method"""
                 self.audit_logger = DummyAuditLogger()
 
         @audit_access(EventType.CONFIG_CHANGE, SeverityLevel.MEDIUM)

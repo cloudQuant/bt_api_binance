@@ -1,6 +1,6 @@
 """
 Tests for Binance VIP Loan API Request Implementation
-测试 Binance VIP借贷 API 请求实现
+ Binance VIP API 
 """
 
 import queue
@@ -9,7 +9,7 @@ from bt_api_binance.feeds.vip_loan import BinanceRequestDataVipLoan
 
 
 def test_vip_loan_request_init():
-    """测试 VIP Loan Request 初始化"""
+    """ VIP Loan Request """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(
         data_queue, public_key="test_public_key", private_key="test_private_key"
@@ -21,7 +21,7 @@ def test_vip_loan_request_init():
 
 
 def test_vip_loan_request_has_methods():
-    """测试 VIP Loan Request 有所有必需方法"""
+    """ VIP Loan Request """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(data_queue)
 
@@ -39,7 +39,7 @@ def test_vip_loan_request_has_methods():
 
 
 def test_vip_loan_request_get_vip_loan_ongoing_orders_params():
-    """测试 get_vip_loan_ongoing_orders 参数构建"""
+    """ get_vip_loan_ongoing_orders """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(
         data_queue, public_key="test_key", private_key="test_secret"
@@ -55,7 +55,7 @@ def test_vip_loan_request_get_vip_loan_ongoing_orders_params():
 
 
 def test_vip_loan_request_vip_loan_borrow_params():
-    """测试 vip_loan_borrow 参数构建"""
+    """ vip_loan_borrow """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(data_queue)
 
@@ -71,7 +71,7 @@ def test_vip_loan_request_vip_loan_borrow_params():
 
 
 def test_vip_loan_request_vip_loan_repay_params():
-    """测试 vip_loan_repay 参数构建"""
+    """ vip_loan_repay """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(data_queue)
 
@@ -86,7 +86,7 @@ def test_vip_loan_request_vip_loan_repay_params():
 
 
 def test_vip_loan_request_get_vip_loan_history_params():
-    """测试 get_vip_loan_history 参数构建"""
+    """ get_vip_loan_history """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(data_queue)
 
@@ -100,7 +100,7 @@ def test_vip_loan_request_get_vip_loan_history_params():
 
 
 def test_vip_loan_request_get_vip_repayment_history_params():
-    """测试 get_vip_repayment_history 参数构建"""
+    """ get_vip_repayment_history """
     data_queue = queue.Queue()
     vip_loan = BinanceRequestDataVipLoan(data_queue)
 

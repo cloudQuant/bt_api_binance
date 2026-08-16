@@ -1,9 +1,11 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from bt_api_binance.containers.incomes.binance_income import BinanceIncomeData
 
 
 def test_binance_income():
+    """test_binance_income function"""
     data = {
         "symbol": "BTCUSDT",
         "incomeType": "COMMISSION",

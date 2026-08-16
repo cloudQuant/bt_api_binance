@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -11,6 +12,7 @@ class BinanceWssBalanceData:
     """Backward-compatible container for Binance account update payloads."""
 
     def __init__(self, balance_info, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         self.balance_info = balance_info
         self.asset_type = asset_type
         self.has_been_json_encoded = has_been_json_encoded
@@ -18,6 +20,7 @@ class BinanceWssBalanceData:
         self.accounts = []
 
     def init_balance_data(self):
+        """init_balance_data method"""
         if not self.has_been_json_encoded:
             self.balance_data = json.loads(self.balance_info)
             self.has_been_json_encoded = True
@@ -35,19 +38,23 @@ class BinanceWssBalanceData:
         return self
 
     def init_data(self):
+        """init_data method"""
         return self.init_balance_data()
 
     def get_data(self):
+        """get_data method"""
         return self.accounts
 
 
 class BinanceSpotRequestBalanceData(BalanceData):
+    """Class BinanceSpotRequestBalanceData"""
     def __init__(self, balance_info, symbol_name, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.account_type = "SPOT"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.available_margin = None
@@ -57,6 +64,7 @@ class BinanceSpotRequestBalanceData(BalanceData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.balance_data = json.loads(self.balance_info)
             self.has_been_json_encoded = True
@@ -70,6 +78,7 @@ class BinanceSpotRequestBalanceData(BalanceData):
         return self
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -89,81 +98,83 @@ class BinanceSpotRequestBalanceData(BalanceData):
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_symbol_name(self):
-        """# 货币名称"""
+        """# """
         return self.symbol_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_account_id(self):
-        """# 账户id"""
+        """# id"""
         return
 
     def get_account_type(self):
-        """# 账户类型"""
+        """# """
         return self.account_type
 
     def get_fee_tier(self):
-        """# 资金费率等级"""
+        """# """
         return
 
     def get_max_withdraw_amount(self):
-        """# 最大可取资金"""
+        """# """
         return
 
     def get_margin(self):
-        """# 总的保证金"""
+        """# """
         return self.get_used_margin() + self.get_available_margin()
 
     def get_used_margin(self):
-        """# 总的使用的保证金"""
+        """# """
         return self.used_margin
 
     def get_maintain_margin(self):
-        """# 总的维持资金"""
+        """# """
         return
 
     def get_available_margin(self):
-        """# 总的可用保证金"""
+        """# """
         return self.available_margin
 
     def get_open_order_initial_margin(self):
-        """# 总的开仓订单初始保证金"""
+        """# """
         return
 
     def get_position_initial_margin(self):
-        """# 总的持仓初始化保证金"""
+        """# """
         return self.position_initial_margin
         # return None
 
     def get_unrealized_profit(self):
-        """# 总的未实现利润"""
+        """# """
         return
 
     def get_interest(self):
-        """# 获取应计利息"""
+        """# """
         return
 
 
 class BinanceSwapRequestBalanceData(BalanceData):
+    """Class BinanceSwapRequestBalanceData"""
     def __init__(self, balance_info, symbol_name, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.unrealized_profit = None
@@ -180,6 +191,7 @@ class BinanceSwapRequestBalanceData(BalanceData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.balance_data = json.loads(self.balance_info)
             self.has_been_json_encoded = True
@@ -204,6 +216,7 @@ class BinanceSwapRequestBalanceData(BalanceData):
         return self
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -232,80 +245,82 @@ class BinanceSwapRequestBalanceData(BalanceData):
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_symbol_name(self):
-        """# 货币名称"""
+        """# """
         return self.symbol_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return self.server_time
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_account_id(self):
-        """# 账户id"""
+        """# id"""
         return self.account_id
 
     def get_account_type(self):
-        """# 账户类型"""
+        """# """
         return self.account_type
 
     def get_fee_tier(self):
-        """# 资金费率等级"""
+        """# """
         return
 
     def get_max_withdraw_amount(self):
-        """# 最大可取资金"""
+        """# """
         return self.max_withdraw_amount
 
     def get_margin(self):
-        """# 总的保证金"""
+        """# """
         return self.margin
 
     def get_used_margin(self):
-        """# 总的使用的保证金"""
+        """# """
         return self.get_margin() - self.get_available_margin()
 
     def get_maintain_margin(self):
-        """# 总的维持资金"""
+        """# """
         return self.maintain_margin
 
     def get_available_margin(self):
-        """# 总的可用保证金"""
+        """# """
         return self.available_margin
 
     def get_open_order_initial_margin(self):
-        """# 总的开仓订单初始保证金"""
+        """# """
         return self.open_order_initial_margin
 
     def get_position_initial_margin(self):
-        """# 总的持仓初始化保证金"""
+        """# """
         return self.position_initial_margin
 
     def get_unrealized_profit(self):
-        """# 总的未实现利润"""
+        """# """
         return self.unrealized_profit
 
     def get_interest(self):
-        """# 获取应计利息"""
+        """# """
         return
 
 
 class BinanceSwapWssBalanceData(BalanceData):
+    """Class BinanceSwapWssBalanceData"""
     def __init__(self, balance_info, symbol_name, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.margin = None
@@ -315,6 +330,7 @@ class BinanceSwapWssBalanceData(BalanceData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.balance_data = json.loads(self.balance_info)
             self.has_been_json_encoded = True
@@ -327,6 +343,7 @@ class BinanceSwapWssBalanceData(BalanceData):
         return self
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -346,81 +363,83 @@ class BinanceSwapWssBalanceData(BalanceData):
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_symbol_name(self):
-        """# 货币名称"""
+        """# """
         return self.symbol_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_account_id(self):
-        """# 账户id"""
+        """# id"""
         return
 
     def get_account_type(self):
-        """# 账户类型"""
+        """# """
         return self.account_type
 
     def get_fee_tier(self):
-        """# 资金费率等级"""
+        """# """
         return
 
     def get_max_withdraw_amount(self):
-        """# 最大可取资金"""
+        """# """
         return
 
     def get_margin(self):
-        """# 总的保证金"""
+        """# """
         return self.margin
 
     def get_used_margin(self):
-        """# 总的使用的保证金"""
+        """# """
         return
 
     def get_maintain_margin(self):
-        """# 总的维持资金"""
+        """# """
         return
 
     def get_available_margin(self):
-        """# 总的可用保证金"""
+        """# """
         return
 
     def get_open_order_initial_margin(self):
-        """# 总的开仓订单初始保证金"""
+        """# """
         return
 
     def get_position_initial_margin(self):
-        """# 总的持仓初始化保证金"""
+        """# """
         return self.position_initial_margin
         # return None
 
     def get_unrealized_profit(self):
-        """# 总的未实现利润"""
+        """# """
         return
 
     def get_interest(self):
-        """# 获取应计利息"""
+        """# """
         return
 
 
 class BinanceSpotWssBalanceData(BalanceData):
+    """Class BinanceSpotWssBalanceData"""
     def __init__(self, balance_info, symbol_name, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.available_margin = None
@@ -431,6 +450,7 @@ class BinanceSpotWssBalanceData(BalanceData):
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.balance_data = json.loads(self.balance_info)
             self.has_been_json_encoded = True
@@ -444,6 +464,7 @@ class BinanceSpotWssBalanceData(BalanceData):
         return self
 
     def get_all_data(self):
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -463,69 +484,69 @@ class BinanceSpotWssBalanceData(BalanceData):
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_symbol_name(self):
-        """# 货币名称"""
+        """# """
         return self.symbol_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return self.server_time
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_account_id(self):
-        """# 账户id"""
+        """# id"""
         return
 
     def get_account_type(self):
-        """# 账户类型"""
+        """# """
         return
 
     def get_fee_tier(self):
-        """# 资金费率等级"""
+        """# """
         return
 
     def get_max_withdraw_amount(self):
-        """# 最大可取资金"""
+        """# """
         return
 
     def get_margin(self):
-        """# 总的保证金"""
+        """# """
         return self.get_used_margin() + self.get_available_margin()
 
     def get_used_margin(self):
-        """# 总的使用的保证金"""
+        """# """
         return self.used_margin
 
     def get_maintain_margin(self):
-        """# 总的维持资金"""
+        """# """
         return
 
     def get_available_margin(self):
-        """# 总的可用保证金"""
+        """# """
         return self.available_margin
 
     def get_open_order_initial_margin(self):
-        """# 总的开仓订单初始保证金"""
+        """# """
         return
 
     def get_position_initial_margin(self):
-        """# 总的持仓初始化保证金"""
+        """# """
         return self.position_initial_margin
 
     def get_unrealized_profit(self):
-        """# 总的未实现利润"""
+        """# """
         return
 
     def get_interest(self):
-        """# 获取应计利息"""
+        """# """
         return

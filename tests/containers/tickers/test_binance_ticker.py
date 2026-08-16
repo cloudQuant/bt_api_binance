@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -172,14 +173,15 @@ class TestBinanceRequestTickerData:
 
 @pytest.mark.ticker
 def test_binance_request_ticker():
+    """test_binance_request_ticker function"""
     data = {
         "lastUpdateId": 1027024,
-        "symbol": "BTCUSDT",  # 交易对
-        "bidPrice": "4.00000000",  # 最优买单价
-        "bidQty": "431.00000000",  # 挂单量
-        "askPrice": "4.00000200",  # 最优卖单价
-        "askQty": "9.00000000",  # 挂单量
-        "time": 1589437530011,  # 撮合引擎时间
+        "symbol": "BTCUSDT",  # 
+        "bidPrice": "4.00000000",  # 
+        "bidQty": "431.00000000",  # 
+        "askPrice": "4.00000200",  # 
+        "askQty": "9.00000000",  # 
+        "time": 1589437530011,  # 
     }
     bt = BinanceRequestTickerData(data, "BTC-USDT", "PERPETUAL", True)
     bt.init_data()
@@ -197,16 +199,17 @@ def test_binance_request_ticker():
 
 @pytest.mark.ticker
 def test_binance_ticker():
+    """test_binance_ticker function"""
     data = {
-        "e": "bookTicker",  # 事件类型
-        "u": 400900217,  # 更新ID
-        "E": 1568014460893,  # 事件推送时间
-        "T": 1568014460891,  # 撮合时间
-        "s": "BNBUSDT",  # 交易对
-        "b": "25.35190000",  # 买单最优挂单价格
-        "B": "31.21000000",  # 买单最优挂单数量
-        "a": "25.36520000",  # 卖单最优挂单价格
-        "A": "40.66000000",  # 卖单最优挂单数量
+        "e": "bookTicker",  # 
+        "u": 400900217,  # ID
+        "E": 1568014460893,  # 
+        "T": 1568014460891,  # 
+        "s": "BNBUSDT",  # 
+        "b": "25.35190000",  # 
+        "B": "31.21000000",  # 
+        "a": "25.36520000",  # 
+        "A": "40.66000000",  # 
     }
     bt = BinanceWssTickerData(data, "BNB-USDT", "PERPETUAL", True)
     bt.init_data()

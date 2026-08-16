@@ -1,6 +1,6 @@
-"""风险管理系统的基本测试
+"""
 
-测试风险管理器、风险评估器、限制管理器和策略引擎的基本功能
+、、
 """
 
 from __future__ import annotations
@@ -23,11 +23,11 @@ from bt_api_py.risk_management.ml_models.ensemble_model import RiskEnsembleModel
 
 
 class TestRiskManagement:
-    """风险管理系统的测试类"""
+    """"""
 
     @pytest.fixture
     def risk_manager(self):
-        """创建风险管理器实例"""
+        """"""
         config = {
             "monitoring_interval": 0.1,  # 100ms for testing
             "risk_thresholds": {
@@ -41,7 +41,7 @@ class TestRiskManagement:
 
     @pytest.fixture
     def sample_account_data(self):
-        """示例账户数据"""
+        """"""
         return {
             "account_id": "test_account",
             "exchange_name": "BINANCE",
@@ -56,7 +56,7 @@ class TestRiskManagement:
 
     @pytest.fixture
     def sample_position_data(self):
-        """示例仓位数据"""
+        """"""
         return {
             "positions": [
                 {"symbol": "BTCUSDT", "value": 50000, "sector": "technology"},
@@ -72,7 +72,7 @@ class TestRiskManagement:
 
     @pytest.fixture
     def sample_market_data(self):
-        """示例市场数据"""
+        """"""
         return {
             "price_history": [100, 102, 98, 105, 103, 101, 99, 107, 104, 102]
             * 10,  # 100 data points
@@ -95,7 +95,7 @@ class TestRiskManagement:
 
     @pytest.fixture
     def sample_order_data(self):
-        """示例订单数据"""
+        """"""
         return {
             "symbol": "BTCUSDT",
             "side": "buy",
@@ -106,7 +106,7 @@ class TestRiskManagement:
         }
 
     def test_risk_assessor_initialization(self):
-        """测试风险评估器初始化"""
+        """"""
         assessor = RiskAssessor()
 
         assert assessor is not None
@@ -115,10 +115,10 @@ class TestRiskManagement:
         assert len(assessor.historical_assessments) == 0
 
     def test_risk_assessment(self, sample_account_data, sample_position_data, sample_market_data):
-        """测试风险评估"""
+        """"""
         assessor = RiskAssessor()
 
-        # 创建模拟风险指标
+        # 
         risk_metrics = RiskMetrics(
             {
                 "exchange_name": "BINANCE",
@@ -154,7 +154,7 @@ class TestRiskManagement:
             }
         )
 
-        # 评估风险
+        # 
         result = assessor.assess_risk(risk_metrics)
 
         assert result is not None
@@ -165,7 +165,7 @@ class TestRiskManagement:
         assert result.level.value in ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
 
     def test_risk_manager_initialization(self, risk_manager):
-        """测试风险管理器初始化"""
+        """"""
         assert risk_manager is not None
         assert risk_manager.risk_assessor is not None
         assert risk_manager.risk_calculator is not None
@@ -176,7 +176,7 @@ class TestRiskManagement:
     def test_risk_metrics_calculation(
         self, risk_manager, sample_account_data, sample_position_data, sample_market_data
     ):
-        """测试风险指标计算"""
+        """"""
         risk_metrics = risk_manager.risk_calculator.calculate_risk_metrics(
             exchange_name="BINANCE",
             account_id="test_account",
@@ -195,7 +195,7 @@ class TestRiskManagement:
         assert hasattr(risk_metrics, "compliance_risk")
 
     def test_order_risk_check(self, risk_manager, sample_order_data):
-        """测试订单风险检查"""
+        """"""
         result = risk_manager.check_order_risk(
             exchange_name="BINANCE", account_id="test_account", order_data=sample_order_data
         )
@@ -208,7 +208,7 @@ class TestRiskManagement:
         assert "restrictions" in result
 
     def test_risk_event_creation(self, risk_manager):
-        """测试风险事件创建"""
+        """"""
         event = risk_manager.create_risk_event(
             event_type=RiskEventType.MARKET_VOLATILITY_SPIKE,
             risk_level=RiskLevel.HIGH,
@@ -227,7 +227,7 @@ class TestRiskManagement:
         assert event.event_id is not None
 
     def test_limits_manager_initialization(self):
-        """测试限制管理器初始化"""
+        """"""
         manager = LimitsManager()
 
         assert manager is not None
@@ -236,7 +236,7 @@ class TestRiskManagement:
         assert manager.user_limits is not None
 
     def test_static_limit_setting(self):
-        """测试静态限制设置"""
+        """"""
         manager = LimitsManager()
 
         manager.set_static_limit(
@@ -251,10 +251,10 @@ class TestRiskManagement:
         assert limits["max_order_size"]["value"] == 1000000
 
     def test_pre_trade_limits_check(self):
-        """测试预交易限制检查"""
+        """"""
         manager = LimitsManager()
 
-        # 设置限制
+        # 
         manager.set_static_limit(
             limit_type="max_order_size",
             exchange_name="BINANCE",
@@ -262,7 +262,7 @@ class TestRiskManagement:
             value=1000000,
         )
 
-        # 测试订单
+        # 
         order_data = {
             "symbol": "BTCUSDT",
             "size": 10.0,
@@ -279,16 +279,16 @@ class TestRiskManagement:
         assert "restrictions" in result
 
     def test_policy_engine_initialization(self):
-        """测试策略引擎初始化"""
+        """"""
         engine = PolicyEngine()
 
         assert engine is not None
         assert engine.rules is not None
         assert engine.action_handlers is not None
-        assert len(engine.rules) > 0  # 应该有默认规则
+        assert len(engine.rules) > 0  # 
 
     def test_order_policy_evaluation(self):
-        """测试订单策略评估"""
+        """"""
         engine = PolicyEngine()
 
         order_data = {
@@ -316,7 +316,7 @@ class TestRiskManagement:
         assert "triggered_rules" in result
 
     def test_anomaly_detector_initialization(self):
-        """测试异常检测器初始化"""
+        """"""
         detector = AnomalyDetector()
 
         assert detector is not None
@@ -325,10 +325,10 @@ class TestRiskManagement:
         assert not detector.is_trained
 
     def test_anomaly_detection_training(self):
-        """测试异常检测器训练"""
+        """"""
         detector = AnomalyDetector()
 
-        # 生成训练数据
+        # 
         import numpy as np
 
         np.random.seed(42)
@@ -341,32 +341,32 @@ class TestRiskManagement:
         assert "success" in result
 
     def test_anomaly_detection(self):
-        """测试异常检测"""
+        """"""
         detector = AnomalyDetector()
 
-        # 先训练
+        # 
         import numpy as np
 
         np.random.seed(42)
         X_normal = np.random.normal(0, 1, (1000, 5))
         detector.train(X_normal)
 
-        # 测试正常数据
+        # 
         X_test_normal = np.random.normal(0, 1, (1, 5))
         result_normal = detector.detect_anomaly(X_test_normal)
 
         assert result_normal is not None
         assert hasattr(result_normal, "is_anomaly")
 
-        # 测试异常数据
-        X_test_anomaly = np.random.normal(5, 1, (1, 5))  # 明显的异常
+        # 
+        X_test_anomaly = np.random.normal(5, 1, (1, 5))  # 
         result_anomaly = detector.detect_anomaly(X_test_anomaly)
 
         assert result_anomaly is not None
         assert hasattr(result_anomaly, "is_anomaly")
 
     def test_ensemble_model_initialization(self):
-        """测试集成模型初始化"""
+        """"""
         model = RiskEnsembleModel()
 
         assert model is not None
@@ -376,15 +376,15 @@ class TestRiskManagement:
         assert not model.is_trained
 
     def test_ensemble_model_training(self):
-        """测试集成模型训练"""
+        """"""
         model = RiskEnsembleModel()
 
-        # 生成训练数据
+        # 
         import numpy as np
 
         np.random.seed(42)
         X = np.random.normal(0, 1, (1000, 5))
-        y = np.random.choice([0, 1], 1000)  # 二分类
+        y = np.random.choice([0, 1], 1000)  # 
 
         result = model.train(X, y)
 
@@ -393,10 +393,10 @@ class TestRiskManagement:
         assert "success" in result
 
     def test_ensemble_model_prediction(self):
-        """测试集成模型预测"""
+        """"""
         model = RiskEnsembleModel()
 
-        # 先训练
+        # 
         import numpy as np
 
         np.random.seed(42)
@@ -404,7 +404,7 @@ class TestRiskManagement:
         y = np.random.choice([0, 1], 1000)
         model.train(X, y)
 
-        # 测试预测
+        # 
         X_test = np.random.normal(0, 1, (10, 5))
         predictions = model.predict(X_test)
         probabilities = model.predict_proba(X_test)
@@ -416,23 +416,23 @@ class TestRiskManagement:
         assert all(pred in [0, 1] for pred in predictions)
 
     def test_risk_monitoring_start_stop(self, risk_manager):
-        """测试风险监控启动和停止"""
-        # 启动监控
+        """"""
+        # 
         import asyncio
 
-        # 使用异步方式启动
+        # 
         asyncio.run(risk_manager.start_monitoring())
         assert risk_manager.is_monitoring
 
-        # 等待一小段时间确保监控线程启动
+        # 
         time.sleep(0.2)
 
-        # 停止监控
+        # 
         asyncio.run(risk_manager.stop_monitoring())
         assert not risk_manager.is_monitoring
 
     def test_performance_metrics(self, risk_manager):
-        """测试性能指标"""
+        """"""
         metrics = risk_manager.get_performance_metrics()
 
         assert metrics is not None
@@ -451,8 +451,8 @@ class TestRiskManagement:
         sample_market_data,
         sample_order_data,
     ):
-        """测试集成工作流程"""
-        # 1. 计算风险指标
+        """"""
+        # 1. 
         risk_metrics = risk_manager.risk_calculator.calculate_risk_metrics(
             exchange_name="BINANCE",
             account_id="test_account",
@@ -461,17 +461,17 @@ class TestRiskManagement:
             market_data=sample_market_data,
         )
 
-        # 2. 评估风险
+        # 2. 
         assessment_result = risk_manager.risk_assessor.assess_risk(risk_metrics)
         assert assessment_result is not None
 
-        # 3. 检查订单风险
+        # 3. 
         order_check_result = risk_manager.check_order_risk(
             exchange_name="BINANCE", account_id="test_account", order_data=sample_order_data
         )
         assert order_check_result is not None
 
-        # 4. 创建风险事件
+        # 4. 
         if assessment_result.level == "HIGH":
             event = risk_manager.create_risk_event(
                 event_type=RiskEventType.MARKET_VOLATILITY_SPIKE,
@@ -483,7 +483,7 @@ class TestRiskManagement:
             )
             assert event is not None
 
-        # 5. 获取活跃事件
+        # 5. 
         active_events = risk_manager.get_active_events("BINANCE", "test_account")
         assert isinstance(active_events, list)
 
@@ -499,8 +499,8 @@ class TestRiskManagement:
     def test_risk_level_approval(
         self, risk_manager, sample_order_data, risk_level, expected_approval
     ):
-        """测试不同风险级别的审批结果"""
-        # 模拟不同风险级别的指标
+        """"""
+        # 
         risk_metrics = RiskMetrics(
             {
                 "exchange_name": "BINANCE",
@@ -512,10 +512,10 @@ class TestRiskManagement:
             }
         )
 
-        # 缓存风险指标
+        # 
         risk_manager.risk_metrics_cache["BINANCE:test_account"] = risk_metrics
 
-        # 检查订单风险
+        # 
         result = risk_manager.check_order_risk(
             exchange_name="BINANCE", account_id="test_account", order_data=sample_order_data
         )
@@ -526,15 +526,15 @@ class TestRiskManagement:
         )
 
     def test_error_handling(self, risk_manager):
-        """测试错误处理"""
-        # 测试无效的交易所
+        """"""
+        # 
         result = risk_manager.check_order_risk(
             exchange_name="INVALID_EXCHANGE",
             account_id="test_account",
             order_data={"invalid": "data"},
         )
 
-        # 应该返回结果而不是抛出异常
+        # 
         assert result is not None
         assert "approved" in result
 

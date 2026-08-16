@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 import queue
 import random
 import time
@@ -63,6 +64,7 @@ def _collect_wss_data(data_queue, wait_seconds=20, max_items=50000):
 
 @pytest.mark.timeout(60)
 def test_binance_wss_data_feed():
+    """test_binance_wss_data_feed function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -125,6 +127,7 @@ def test_binance_wss_data_feed():
 
 @pytest.mark.ticker
 def test_binance_wss_mini_ticker():
+    """test_binance_wss_mini_ticker function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -141,6 +144,7 @@ def test_binance_wss_mini_ticker():
 
 @pytest.mark.ticker
 def test_binance_wss_all_mini_ticker():
+    """test_binance_wss_all_mini_ticker function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -157,6 +161,7 @@ def test_binance_wss_all_mini_ticker():
 
 @pytest.mark.ticker
 def test_binance_wss_all_book_ticker():
+    """test_binance_wss_all_book_ticker function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -175,6 +180,7 @@ def test_binance_wss_all_book_ticker():
 @pytest.mark.timeout(120)
 @pytest.mark.kline
 def test_binance_wss_continuous_kline():
+    """test_binance_wss_continuous_kline function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -191,6 +197,7 @@ def test_binance_wss_continuous_kline():
 
 
 def test_binance_wss_contract_info():
+    """test_binance_wss_contract_info function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -205,6 +212,7 @@ def test_binance_wss_contract_info():
 
 
 def test_binance_wss_liquidation():
+    """test_binance_wss_liquidation function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -220,6 +228,7 @@ def test_binance_wss_liquidation():
 
 
 def test_binance_wss_all_mark_price():
+    """test_binance_wss_all_mark_price function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -237,6 +246,7 @@ def test_binance_wss_all_mark_price():
 
 @pytest.mark.ticker
 def test_binance_wss_all_ticker():
+    """test_binance_wss_all_ticker function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -253,6 +263,7 @@ def test_binance_wss_all_ticker():
 
 @pytest.mark.timeout(60)
 def test_binance_wss_all_force_order():
+    """test_binance_wss_all_force_order function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -269,6 +280,7 @@ def test_binance_wss_all_force_order():
 
 @pytest.mark.orderbook
 def test_binance_wss_depth_with_symbol_list():
+    """test_binance_wss_depth_with_symbol_list function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -287,6 +299,7 @@ def test_binance_wss_depth_with_symbol_list():
 
 
 def test_binance_wss_agg_trade_with_symbol_list():
+    """test_binance_wss_agg_trade_with_symbol_list function"""
     data_queue = queue.Queue()
     kwargs = _make_wss_kwargs(
         [
@@ -306,6 +319,7 @@ def test_binance_wss_agg_trade_with_symbol_list():
 
 @pytest.mark.auth_order
 def test_get_binance_account_data_feed():
+    """test_get_binance_account_data_feed function"""
     data_queue = queue.Queue()
     data = read_account_config()
     kwargs = {
@@ -326,7 +340,7 @@ def test_get_binance_account_data_feed():
     time.sleep(3)
     # receive_binance_position_data = False
     receive_binance_order_data = False
-    # 下单撤单测试订单功能
+    # 
     live_binance_swap_feed = init_req_feed()
     price_data = live_binance_swap_feed.get_tick("OP-USDT")
     price_data = price_data.get_data()[0].init_data()
@@ -359,15 +373,15 @@ def test_get_binance_account_data_feed():
 
     print(sell_data.get_data()[0].init_data())
     # data = live_binance_swap_feed.query_order("OP-USDT", client_order_id=sell_client_order_id)
-    # print("下单数据", data.get_data())
+    # print("", data.get_data())
     cancel_buy_data = live_binance_swap_feed.cancel_order(
         "OP-USDT", client_order_id=buy_client_order_id
     )
-    print("撤单数据", cancel_buy_data.get_data()[0].init_data())
+    print("", cancel_buy_data.get_data()[0].init_data())
     cancel_sell_data = live_binance_swap_feed.cancel_order(
         "OP-USDT", client_order_id=sell_client_order_id
     )
-    print("撤单数据", cancel_sell_data.get_data()[0].init_data())
+    print("", cancel_sell_data.get_data()[0].init_data())
     time.sleep(5)
     count = 1
     while True:

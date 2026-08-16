@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -12,11 +13,13 @@ from bt_api_base.functions.utils import (
 
 
 class BinanceAggTradeData:
+    """Class BinanceAggTradeData"""
     def __init__(self, trade_info, symbol_name, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         self.exchange_name = "BINANCE"
         self.event = "AggTradeUpdate"
         self.trade_info = trade_info
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.asset_type = asset_type
         self.symbol_name = symbol_name
         self.trade_data = self.trade_info if has_been_json_encoded else None
@@ -33,6 +36,7 @@ class BinanceAggTradeData:
         self.trade_time = None
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.trade_data = json.loads(self.trade_info)
             self.has_been_json_encoded = True
@@ -52,6 +56,7 @@ class BinanceAggTradeData:
         return self
 
     def get_all_data(self):
+        """get_all_data method"""
         if not self.has_been_init_data:
             self.init_data()
         content = {
@@ -70,7 +75,7 @@ class BinanceAggTradeData:
         return content
 
     def __str__(self):
-        """输出字符串"""
+        """"""
         self.init_data()
         return json.dumps(self.get_all_data())
 
@@ -78,68 +83,73 @@ class BinanceAggTradeData:
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return self.server_time
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_trade_id(self):
-        """# 交易所返回唯一成交id"""
+        """# id"""
         return self.trade_id
 
     def get_first_trade_id(self):
+        """get_first_trade_id method"""
         return self.first_trade_id
 
     def get_last_trade_id(self):
+        """get_last_trade_id method"""
         return self.last_trade_id
 
     def get_trade_symbol_name(self):
-        """# 返回成交的symbol"""
+        """# symbol"""
         return self.trade_symbol_name
 
     def get_symbol_name(self):
+        """get_symbol_name method"""
         return self.symbol_name
 
     def get_trade_price(self):
-        """# 成交价格"""
+        """# """
         return self.trade_price
 
     def get_trade_volume(self):
-        """# 成交量"""
+        """# """
         return self.trade_volume
 
     def get_trade_type(self):
-        """# 成交类型，maker还是taker"""
+        """# ，makertaker"""
         return self.trade_type
 
     def get_trade_time(self):
-        """# 成交时间"""
+        """# """
         return self.trade_time
 
 
 class BinanceTradeData(TradeData):
-    """交易类，用于保存成交信息"""
+    """，"""
 
     def __init__(self, trade_info, symbol_name, asset_type, has_been_json_encoded=False):
+        """__init__ method"""
         super().__init__(trade_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
-        self.local_update_time = time.time()  # 本地时间戳
+        self.local_update_time = time.time()  # 
         self.asset_type = asset_type
         self.symbol_name = symbol_name
         self.trade_data = self.trade_info if has_been_json_encoded else None
         self.has_been_init_data = False
 
     def init_data(self):
+        """init_data method"""
         raise NotImplementedError
 
     def _init_wss_data(self):
@@ -158,7 +168,7 @@ class BinanceTradeData(TradeData):
         self.trade_fee_symbol = from_dict_get_string(self.trade_data, "N")
 
     def __str__(self):
-        """输出字符串"""
+        """"""
         self.init_data()
         return json.dumps(self.get_all_data())
 
@@ -166,82 +176,83 @@ class BinanceTradeData(TradeData):
         return self.__str__()
 
     def get_exchange_name(self):
-        """# 交易所名称"""
+        """# """
         return self.exchange_name
 
     def get_symbol_name(self):
-        """# symbol名称"""
+        """# symbol"""
         return self.symbol_name
 
     def get_asset_type(self):
-        """# 资产类型"""
+        """# """
         return self.asset_type
 
     def get_server_time(self):
-        """# 服务器时间戳"""
+        """# """
         return self.server_time
 
     def get_local_update_time(self):
-        """# 本地时间戳"""
+        """# """
         return self.local_update_time
 
     def get_trade_id(self):
-        """# 交易所返回唯一成交id"""
+        """# id"""
         return self.trade_id
 
     def get_trade_symbol_name(self):
-        """# 返回成交的symbol"""
+        """# symbol"""
         return self.trade_symbol_name
 
     def get_order_id(self):
-        """# 返回下单的id"""
+        """# id"""
         return self.order_id
 
     def get_client_order_id(self):
-        """# 返回下单的客户自定义Id"""
+        """# Id"""
         return self.client_order_id
 
     def get_trade_side(self):
-        """# 返回交易的方向"""
+        """# """
         return self.trade_side
 
     def get_trade_offset(self):
-        """# offset用于确定是开仓还是平仓"""
+        """# offset"""
         return
 
     def get_trade_price(self):
-        """# 成交价格"""
+        """# """
         return self.trade_price
 
     def get_trade_volume(self):
-        """# 成交量"""
+        """# """
         return self.trade_volume
 
     def get_trade_accumulate_volume(self):
-        """# 累计成交量"""
+        """# """
         return self.trade_accumulate_volume
 
     def get_trade_type(self):
-        """# 成交类型，maker还是taker"""
+        """# ，makertaker"""
         return self.trade_type
 
     def get_trade_time(self):
-        """# 成交时间"""
+        """# """
         return self.trade_time
 
     def get_trade_fee(self):
-        """# 成交手续费"""
+        """# """
         return self.trade_fee
 
     def get_trade_fee_symbol(self):
-        """成交手续费币种"""
+        """"""
         return self.trade_fee_symbol
 
 
 class BinanceRequestTradeData(BinanceTradeData):
-    """交易类，用于保存成交信息"""
+    """，"""
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.trade_data = json.loads(self.trade_info)
             self.has_been_json_encoded = True
@@ -267,9 +278,10 @@ class BinanceRequestTradeData(BinanceTradeData):
 
 
 class BinanceSwapWssTradeData(BinanceTradeData):
-    """交易类，用于保存成交信息"""
+    """，"""
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.trade_info = json.loads(self.trade_info)
             self.has_been_json_encoded = True
@@ -286,9 +298,10 @@ class BinanceSwapWssTradeData(BinanceTradeData):
 
 
 class BinanceSpotWssTradeData(BinanceTradeData):
-    """spot交易类，用于保存成交信息"""
+    """spot，"""
 
     def init_data(self):
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.trade_data = json.loads(self.trade_info)
             self.has_been_json_encoded = True

@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import Any
@@ -10,7 +11,9 @@ from .request_base import BinanceRequestData
 
 
 class BinanceRequestDataAlgo(BinanceRequestData):
+    """Class BinanceRequestDataAlgo"""
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "ALGO")
         self.logger_name = kwargs.get("logger_name", "binance_algo_feed.log")

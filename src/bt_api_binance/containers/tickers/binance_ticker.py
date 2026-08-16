@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -15,11 +16,12 @@ class BinanceTickerData(TickerData):
     """Binance ticker data container (supports REST API and WebSocket)."""
 
     def __init__(self, ticker_info, symbol_name, asset_type, has_been_json_encoded=False) -> None:
+        """__init__ method"""
         super().__init__(ticker_info, has_been_json_encoded)
-        self.exchange_name = "BINANCE"  # 交易所名称
-        self.local_update_time = time.time()  # 本地时间戳
+        self.exchange_name = "BINANCE"  # 
+        self.local_update_time = time.time()  # 
         self.symbol_name = symbol_name
-        self.asset_type = asset_type  # ticker的类型
+        self.asset_type = asset_type  # ticker
         self.ticker_data: dict[str, Any] | None = ticker_info if has_been_json_encoded else None
         self.ticker_symbol_name: str | None = None
         self.server_time: float | None = None
@@ -41,9 +43,11 @@ class BinanceTickerData(TickerData):
         self.has_been_init_data = False
 
     def init_data(self) -> Self:
+        """init_data method"""
         raise NotImplementedError
 
     def get_all_data(self) -> dict[str, Any]:
+        """get_all_data method"""
         if self.all_data is None:
             self.all_data = {
                 "exchange_name": self.exchange_name,
@@ -77,63 +81,83 @@ class BinanceTickerData(TickerData):
         return self.__str__()
 
     def get_exchange_name(self) -> str:
+        """get_exchange_name method"""
         return str(self.exchange_name)
 
     def get_local_update_time(self) -> float:
+        """get_local_update_time method"""
         return float(self.local_update_time)
 
     def get_symbol_name(self) -> str:
+        """get_symbol_name method"""
         return str(self.symbol_name)
 
     def get_ticker_symbol_name(self) -> str | None:
+        """get_ticker_symbol_name method"""
         return self.ticker_symbol_name
 
     def get_asset_type(self) -> str:
+        """get_asset_type method"""
         return str(self.asset_type)
 
     def get_server_time(self) -> float | None:
+        """get_server_time method"""
         return self.server_time
 
     def get_bid_price(self) -> float | None:
+        """get_bid_price method"""
         return self.bid_price
 
     def get_ask_price(self) -> float | None:
+        """get_ask_price method"""
         return self.ask_price
 
     def get_bid_volume(self) -> float | None:
+        """get_bid_volume method"""
         return self.bid_volume
 
     def get_ask_volume(self) -> float | None:
+        """get_ask_volume method"""
         return self.ask_volume
 
     def get_last_price(self) -> float | None:
+        """get_last_price method"""
         return self.last_price
 
     def get_last_volume(self) -> float | None:
+        """get_last_volume method"""
         return self.last_volume
 
     def get_open_price(self) -> float | None:
+        """get_open_price method"""
         return self.open_price
 
     def get_high_price(self) -> float | None:
+        """get_high_price method"""
         return self.high_price
 
     def get_low_price(self) -> float | None:
+        """get_low_price method"""
         return self.low_price
 
     def get_prev_close(self) -> float | None:
+        """get_prev_close method"""
         return self.prev_close
 
     def get_volume_24h(self) -> float | None:
+        """get_volume_24h method"""
         return self.volume_24h
 
     def get_turnover_24h(self) -> float | None:
+        """get_turnover_24h method"""
         return self.turnover_24h
 
     def get_price_change(self) -> float | None:
+        """get_price_change method"""
         return self.price_change
 
     def get_price_change_pct(self) -> float | None:
+        """get_price_change_pct method"""
         return self.price_change_pct
 
 
@@ -141,6 +165,7 @@ class BinanceWssTickerData(BinanceTickerData):
     """Binance WebSocket ticker data container."""
 
     def init_data(self) -> Self:
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.ticker_data = json.loads(self.ticker_info)
             self.has_been_json_encoded = True
@@ -171,6 +196,7 @@ class BinanceRequestTickerData(BinanceTickerData):
     """Binance REST API ticker data container."""
 
     def init_data(self) -> Self:
+        """init_data method"""
         if not self.has_been_json_encoded:
             self.ticker_data = json.loads(self.ticker_info)
             self.has_been_json_encoded = True

@@ -1,6 +1,6 @@
 """
 Tests for Binance Grid Trading API Request Implementation
-测试 Binance 网格交易 API 请求实现
+ Binance  API 
 """
 
 import queue
@@ -9,7 +9,7 @@ from bt_api_binance.feeds.grid import BinanceRequestDataGrid
 
 
 def test_grid_request_init():
-    """测试 Grid Request 初始化"""
+    """ Grid Request """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(
         data_queue, public_key="test_public_key", private_key="test_private_key"
@@ -21,7 +21,7 @@ def test_grid_request_init():
 
 
 def test_grid_request_has_methods():
-    """测试 Grid Request 有所有必需方法"""
+    """ Grid Request """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(data_queue)
 
@@ -39,7 +39,7 @@ def test_grid_request_has_methods():
 
 
 def test_grid_request_futures_grid_new_order_params():
-    """测试 futures_grid_new_order 参数构建"""
+    """ futures_grid_new_order """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(data_queue)
 
@@ -48,7 +48,7 @@ def test_grid_request_futures_grid_new_order_params():
     )
 
     assert path == "POST /sapi/v1/futures/fortune/order"
-    assert params["pair"] == "BTCUSDT"  # symbol转换
+    assert params["pair"] == "BTCUSDT"  # symbol
     assert params["upperPrice"] == 50000
     assert params["lowerPrice"] == 40000
     assert params["gridNumber"] == 10
@@ -56,7 +56,7 @@ def test_grid_request_futures_grid_new_order_params():
 
 
 def test_grid_request_futures_grid_cancel_order_params():
-    """测试 futures_grid_cancel_order 参数构建"""
+    """ futures_grid_cancel_order """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(data_queue)
 
@@ -68,7 +68,7 @@ def test_grid_request_futures_grid_cancel_order_params():
 
 
 def test_grid_request_get_futures_grid_orders_params():
-    """测试 get_futures_grid_orders 参数构建"""
+    """ get_futures_grid_orders """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(data_queue)
 
@@ -79,7 +79,7 @@ def test_grid_request_get_futures_grid_orders_params():
 
 
 def test_grid_request_get_futures_grid_position_params():
-    """测试 get_futures_grid_position 参数构建"""
+    """ get_futures_grid_position """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(data_queue)
 
@@ -90,7 +90,7 @@ def test_grid_request_get_futures_grid_position_params():
 
 
 def test_grid_request_get_futures_grid_income_params():
-    """测试 get_futures_grid_income 参数构建"""
+    """ get_futures_grid_income """
     data_queue = queue.Queue()
     grid = BinanceRequestDataGrid(data_queue)
 

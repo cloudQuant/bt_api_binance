@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -312,6 +313,7 @@ class TestBinanceSpotWssTradeData:
 
 
 def test_binance_agg_trade():
+    """test_binance_agg_trade function"""
     data = {
         "e": "aggTrade",
         "E": 123456789,
@@ -338,6 +340,7 @@ def test_binance_agg_trade():
 
 
 def test_binance_spot_wss_trade():
+    """test_binance_spot_wss_trade function"""
     data = {
         "e": "executionReport",
         "E": 1709103527340,
@@ -383,21 +386,22 @@ def test_binance_spot_wss_trade():
 
 
 def test_binance_req_trade():
+    """test_binance_req_trade function"""
     data = {
-        "buyer": "false",  # 是否是买方
-        "commission": "-0.07819010",  # 手续费
-        "commissionAsset": "USDT",  # 手续费计价单位
-        "id": 698759,  # 交易ID
-        "maker": "false",  # 是否是挂单方
-        "orderId": 25851813,  # 订单编号
-        "price": "7819.01",  # 成交价
-        "qty": "0.002",  # 成交量
-        "quoteQty": "15.63802",  # 成交额
-        "realizedPnl": "-0.91539999",  # 实现盈亏
-        "side": "SELL",  # 买卖方向
-        "positionSide": "SHORT",  # 持仓方向
-        "symbol": "BTCUSDT",  # 交易对
-        "time": 1569514978020,  # 时间
+        "buyer": "false",  # 
+        "commission": "-0.07819010",  # 
+        "commissionAsset": "USDT",  # 
+        "id": 698759,  # ID
+        "maker": "false",  # 
+        "orderId": 25851813,  # 
+        "price": "7819.01",  # 
+        "qty": "0.002",  # 
+        "quoteQty": "15.63802",  # 
+        "realizedPnl": "-0.91539999",  # 
+        "side": "SELL",  # 
+        "positionSide": "SHORT",  # 
+        "symbol": "BTCUSDT",  # 
+        "time": 1569514978020,  # 
     }
     bo = BinanceRequestTradeData(data, "BTC-USDT", "PERPETUAL", True)
     bo.init_data()
@@ -420,51 +424,52 @@ def test_binance_req_trade():
 
 
 def test_binance_wss_trade():
+    """test_binance_wss_trade function"""
     data = {
-        "e": "ORDER_TRADE_UPDATE",  # 事件类型
-        "E": 1568879465651,  # 事件时间
-        "T": 1568879465650,  # 撮合时间
+        "e": "ORDER_TRADE_UPDATE",  # 
+        "E": 1568879465651,  # 
+        "T": 1568879465650,  # 
         "o": {
-            "s": "BTCUSDT",  # 交易对
-            "c": "TEST",  # 客户端自定订单ID
-            # 特殊的自定义订单ID:
-            # "autoclose-"开头的字符串: 系统强平订单
-            # "adl_autoclose": ADL自动减仓订单
-            # "settlement_autoclose-": 下架或交割的结算订单
-            "S": "SELL",  # 订单方向
-            "o": "TRAILING_STOP_MARKET",  # 订单类型
-            "f": "GTC",  # 有效方式
-            "q": "0.001",  # 订单原始数量
-            "p": "0",  # 订单原始价格
-            "ap": "0",  # 订单平均价格
-            "sp": "7103.04",  # 条件订单触发价格，对追踪止损单无效
-            "x": "NEW",  # 本次事件的具体执行类型
-            "X": "NEW",  # 订单的当前状态
-            "i": 8886774,  # 订单ID
-            "l": "0",  # 订单末次成交量
-            "z": "0",  # 订单累计已成交量
-            "L": "0",  # 订单末次成交价格
-            "N": "USDT",  # 手续费资产类型
-            "n": "0",  # 手续费数量
-            "T": 1568879465650,  # 成交时间
-            "t": 0,  # 成交ID
-            "b": "0",  # 买单净值
-            "a": "9.91",  # 卖单净值
-            "m": False,  # 该成交是作为挂单成交吗？
-            "R": False,  # 是否是只减仓单
-            "wt": "CONTRACT_PRICE",  # 触发价类型
-            "ot": "TRAILING_STOP_MARKET",  # 原始订单类型
-            "ps": "LONG",  # 持仓方向
-            "cp": False,  # 是否为触发平仓单; 仅在条件订单情况下会推送此字段
-            "AP": "7476.89",  # 追踪止损激活价格, 仅在追踪止损单时会推送此字段
-            "cr": "5.0",  # 追踪止损回调比例, 仅在追踪止损单时会推送此字段
-            "pP": False,  # 是否开启条件单触发保护
-            "si": 0,  # 忽略
-            "ss": 0,  # 忽略
-            "rp": "0",  # 该交易实现盈亏
-            "V": "EXPIRE_TAKER",  # 自成交防止模式
-            "pm": "OPPONENT",  # 价格匹配模式
-            "gtd": 0,  # TIF为GTD的订单自动取消时间
+            "s": "BTCUSDT",  # 
+            "c": "TEST",  # ID
+            # ID:
+            # "autoclose-": 
+            # "adl_autoclose": ADL
+            # "settlement_autoclose-": 
+            "S": "SELL",  # 
+            "o": "TRAILING_STOP_MARKET",  # 
+            "f": "GTC",  # 
+            "q": "0.001",  # 
+            "p": "0",  # 
+            "ap": "0",  # 
+            "sp": "7103.04",  # ，
+            "x": "NEW",  # 
+            "X": "NEW",  # 
+            "i": 8886774,  # ID
+            "l": "0",  # 
+            "z": "0",  # 
+            "L": "0",  # 
+            "N": "USDT",  # 
+            "n": "0",  # 
+            "T": 1568879465650,  # 
+            "t": 0,  # ID
+            "b": "0",  # 
+            "a": "9.91",  # 
+            "m": False,  # ？
+            "R": False,  # 
+            "wt": "CONTRACT_PRICE",  # 
+            "ot": "TRAILING_STOP_MARKET",  # 
+            "ps": "LONG",  # 
+            "cp": False,  # ; 
+            "AP": "7476.89",  # , 
+            "cr": "5.0",  # , 
+            "pP": False,  # 
+            "si": 0,  # 
+            "ss": 0,  # 
+            "rp": "0",  # 
+            "V": "EXPIRE_TAKER",  # 
+            "pm": "OPPONENT",  # 
+            "gtd": 0,  # TIFGTD
         },
     }
     bo = BinanceSwapWssTradeData(data, "BTCUSDT", "PERPETUAL", True)

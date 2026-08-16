@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import json
@@ -357,6 +358,7 @@ class TestBinanceWssBarData:
 @pytest.mark.kline
 def test_binance_wss_bar_functions():
     # {"code":"0","msg":"","data":[["1696089660000","26990.4","27004.5","26990.3","27004.5","4794","47.94","1294336.087","1"]]}
+    """test_binance_wss_bar_functions function"""
     data = {
         "e": "continuous_kline",
         "E": 1607443058651,
@@ -401,6 +403,7 @@ def test_binance_wss_bar_functions():
 @pytest.mark.kline
 def test_binance_req_bar_functions():
     # {"code":"0","msg":"","data":[["1696089660000","26990.4","27004.5","26990.3","27004.5","4794","47.94","1294336.087","1"]]}
+    """test_binance_req_bar_functions function"""
     data = [
         1607444700000,
         "18879.99",

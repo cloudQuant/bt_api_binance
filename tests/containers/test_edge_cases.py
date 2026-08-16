@@ -157,7 +157,7 @@ class TestTickerEdgeCases:
     def test_ticker_unicode_symbol(self):
         """Ticker should handle unicode in symbol names"""
         data = {
-            "s": "测试USDT",
+            "s": "USDT",
             "E": 1234567890.123,
             "b": "50000.00",
             "a": "50001.00",
@@ -165,10 +165,10 @@ class TestTickerEdgeCases:
             "A": "10.00",
         }
         ticker = BinanceWssTickerData(
-            json.dumps(data), "测试USDT", "SPOT", has_been_json_encoded=False
+            json.dumps(data), "USDT", "SPOT", has_been_json_encoded=False
         )
         ticker.init_data()
-        assert ticker.ticker_symbol_name == "测试USDT"
+        assert ticker.ticker_symbol_name == "USDT"
 
     @pytest.mark.ticker
     def test_ticker_special_characters_symbol(self):
@@ -352,7 +352,7 @@ class TestOrderEdgeCases:
         data = {
             "E": 1234567890.123,
             "o": {
-                "s": "测试USDT",
+                "s": "USDT",
                 "S": "BUY",
                 "o": "LIMIT",
                 "f": "GTC",
@@ -366,10 +366,10 @@ class TestOrderEdgeCases:
             },
         }
         order = BinanceForceOrderData(
-            json.dumps(data), "测试USDT", "SPOT", has_been_json_encoded=False
+            json.dumps(data), "USDT", "SPOT", has_been_json_encoded=False
         )
         order.init_data()
-        assert order.order_symbol_name == "测试USDT"
+        assert order.order_symbol_name == "USDT"
 
 
 class TestBalanceEdgeCases:

@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -13,6 +14,7 @@ if TYPE_CHECKING:
 
 
 def register_plugin(registry: ExchangeRegistry, runtime_factory: Any) -> PluginInfo:
+    """register_plugin function"""
     register_binance(registry)
     runtime_factory.register_adapter("BINANCE", BinanceGatewayAdapter)
 

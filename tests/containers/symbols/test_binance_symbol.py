@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 import requests
@@ -9,18 +10,21 @@ from bt_api_binance.containers.symbols.binance_symbol import (
 
 
 def get_binance_swap_symbol_info():
+    """get_binance_swap_symbol_info function"""
     res = requests.get("https://fapi.binance.com/fapi/v1/exchangeInfo", timeout=30)
     result = res.json()
     return result
 
 
 def get_binance_spot_symbol_info():
+    """get_binance_spot_symbol_info function"""
     res = requests.get("https://api.binance.com/fapi/v3/exchangeInfo", timeout=30)
     result = res.json()
     return result
 
 
 def test_swap_binance_symbol():
+    """test_swap_binance_symbol function"""
     symbol_info = {
         "symbol": "BTCUSDT",
         "pair": "BTCUSDT",
@@ -95,6 +99,7 @@ def test_swap_binance_symbol():
 
 
 def test_spot_binance_symbol():
+    """test_spot_binance_symbol function"""
     symbol_info = {
         "symbol": "ETHBTC",
         "status": "TRADING",

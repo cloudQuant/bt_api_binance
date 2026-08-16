@@ -1,6 +1,6 @@
 """
 Tests for Binance Staking API Request Implementation
-测试 Binance 质押理财 API 请求实现
+ Binance  API 
 """
 
 import queue
@@ -9,7 +9,7 @@ from bt_api_binance.feeds.staking import BinanceRequestDataStaking
 
 
 def test_staking_request_init():
-    """测试 Staking Request 初始化"""
+    """ Staking Request """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(
         data_queue, public_key="test_public_key", private_key="test_private_key"
@@ -21,7 +21,7 @@ def test_staking_request_init():
 
 
 def test_staking_request_has_methods():
-    """测试 Staking Request 有所有必需方法"""
+    """ Staking Request """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(data_queue)
 
@@ -39,7 +39,7 @@ def test_staking_request_has_methods():
 
 
 def test_staking_request_get_staking_products_params():
-    """测试 get_staking_products 参数构建"""
+    """ get_staking_products """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(
         data_queue, public_key="test_key", private_key="test_secret"
@@ -53,7 +53,7 @@ def test_staking_request_get_staking_products_params():
 
 
 def test_staking_request_staking_purchase_params():
-    """测试 staking_purchase 参数构建"""
+    """ staking_purchase """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(data_queue)
 
@@ -65,7 +65,7 @@ def test_staking_request_staking_purchase_params():
 
 
 def test_staking_request_staking_redeem_params():
-    """测试 staking_redeem 参数构建"""
+    """ staking_redeem """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(data_queue)
 
@@ -80,7 +80,7 @@ def test_staking_request_staking_redeem_params():
 
 
 def test_staking_request_get_staking_position_params():
-    """测试 get_staking_position 参数构建"""
+    """ get_staking_position """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(data_queue)
 
@@ -92,7 +92,7 @@ def test_staking_request_get_staking_position_params():
 
 
 def test_staking_request_get_staking_history_params():
-    """测试 get_staking_history 参数构建"""
+    """ get_staking_history """
     data_queue = queue.Queue()
     staking = BinanceRequestDataStaking(data_queue)
 

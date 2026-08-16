@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from bt_api_binance.containers.positions.binance_position import (
@@ -7,16 +8,17 @@ from bt_api_binance.containers.positions.binance_position import (
 
 
 def test_binance_position():
+    """test_binance_position function"""
     data = {
-        "s": "BTCUSDT",  # 交易对
-        "pa": "0",  # 仓位
-        "ep": "0.00000",  # 入仓价格
-        "bep": "0",  # 盈亏平衡价
-        "cr": "200",  # (费前)累计实现损益
-        "up": "0",  # 持仓未实现盈亏
-        "mt": "isolated",  # 保证金模式
-        "iw": "0.00000000",  # 若为逐仓，仓位保证金
-        "ps": "BOTH",  # 持仓方向
+        "s": "BTCUSDT",  # 
+        "pa": "0",  # 
+        "ep": "0.00000",  # 
+        "bep": "0",  # 
+        "cr": "200",  # ()
+        "up": "0",  # 
+        "mt": "isolated",  # 
+        "iw": "0.00000000",  # ，
+        "ps": "BOTH",  # 
     }
     bo = BinanceWssPositionData(data, "BTC-USDT", "PERPETUAL", True)
     bo.init_data()
@@ -49,23 +51,24 @@ def test_binance_position():
 
 
 def test_binance_req_position():
+    """test_binance_req_position function"""
     data = {
-        "entryPrice": "0.00000",  # 开仓均价
-        "breakEvenPrice": "0.0",  # 盈亏平衡价
-        "marginType": "isolated",  # 逐仓模式或全仓模式
+        "entryPrice": "0.00000",  # 
+        "breakEvenPrice": "0.0",  # 
+        "marginType": "isolated",  # 
         "isAutoAddMargin": "false",
-        "isolatedMargin": "0.00000000",  # 逐仓保证金
-        "leverage": "10",  # 当前杠杆倍数
-        "liquidationPrice": "0",  # 参考强平价格
-        "markPrice": "6679.50671178",  # 当前标记价格
-        "maxNotionalValue": "20000000",  # 当前杠杆倍数允许的名义价值上限
-        "positionAmt": "0.000",  # 头寸数量，符号代表多空方向, 正数为多，负数为空
+        "isolatedMargin": "0.00000000",  # 
+        "leverage": "10",  # 
+        "liquidationPrice": "0",  # 
+        "markPrice": "6679.50671178",  # 
+        "maxNotionalValue": "20000000",  # 
+        "positionAmt": "0.000",  # ，, ，
         "notional": "0",
         "isolatedWallet": "0",
-        "symbol": "BTCUSDT",  # 交易对
-        "unRealizedProfit": "0.00000000",  # 持仓未实现盈亏
-        "positionSide": "BOTH",  # 持仓方向
-        "updateTime": 1625474304765,  # 更新时间
+        "symbol": "BTCUSDT",  # 
+        "unRealizedProfit": "0.00000000",  # 
+        "positionSide": "BOTH",  # 
+        "updateTime": 1625474304765,  # 
     }
     bo = BinanceRequestPositionData(data, "BTC-USDT", "PERPETUAL", True)
     bo.init_data()
