@@ -54,6 +54,7 @@ from bt_api_binance.exchange_data import (
 )
 from bt_api_binance.feeds.async_rest import AsyncRestMixin
 from bt_api_binance.feeds.normalize import NormalizeMixin
+from bt_api_binance.feeds.rest_derivatives import RestDerivativesMixin
 from bt_api_binance.feeds.rest_market import RestMarketMixin
 from bt_api_binance.feeds.rest_trade import RestTradeMixin
 
@@ -68,7 +69,7 @@ from bt_api_binance.feeds.rest_trade import RestTradeMixin
 # session.mount('https://', adapter)
 
 
-class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, RestTradeMixin):
+class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, RestTradeMixin, RestDerivativesMixin):
     """Class BinanceRequestData"""
     @classmethod
     def _capabilities(cls) -> set[Capability]:
