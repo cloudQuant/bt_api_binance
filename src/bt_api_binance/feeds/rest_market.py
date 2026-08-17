@@ -5,6 +5,9 @@
 
 from __future__ import annotations
 
+from bt_api_base.functions.calculate_time import datetime2timestamp
+from bt_api_base.functions.utils import update_extra_data
+
 
 class RestMarketMixin:
     """行情 REST 方法集合。"""
@@ -32,7 +35,7 @@ class RestMarketMixin:
                 "symbol_name": symbol,
                 "asset_type": self.asset_type,
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_tick_normalize_function,
+                "normalize_function": self._get_tick_normalize_function,
             },
         )
         if kwargs is not None:
@@ -59,7 +62,7 @@ class RestMarketMixin:
                 "symbol_name": symbol,
                 "asset_type": self.asset_type,
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_depth_normalize_function,
+                "normalize_function": self._get_depth_normalize_function,
             },
         )
         if kwargs is not None:
@@ -110,7 +113,7 @@ class RestMarketMixin:
                 "symbol_name": symbol,
                 "asset_type": self.asset_type,
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_kline_normalize_function,
+                "normalize_function": self._get_kline_normalize_function,
             },
         )
         if kwargs is not None:
@@ -138,7 +141,7 @@ class RestMarketMixin:
                 "symbol_name": symbol,
                 "asset_type": self.asset_type,
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_funding_rate_normalize_function,
+                "normalize_function": self._get_funding_rate_normalize_function,
             },
         )
         if kwargs is not None:
@@ -187,7 +190,7 @@ class RestMarketMixin:
                 "symbol_name": symbol,
                 "asset_type": self.asset_type,
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_history_funding_rate_normalize_function,
+                "normalize_function": self._get_history_funding_rate_normalize_function,
             },
         )
         if kwargs is not None:
@@ -215,7 +218,7 @@ class RestMarketMixin:
                 "symbol_name": symbol,
                 "asset_type": "SPOT",
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_mark_price_normalize_function,
+                "normalize_function": self._get_mark_price_normalize_function,
             },
         )
         if kwargs is not None:
@@ -316,7 +319,7 @@ class RestMarketMixin:
                 "symbol_name": pair,
                 "asset_type": self.asset_type,
                 "exchange_name": self.exchange_name,
-                "normalize_function": BinanceRequestData._get_kline_normalize_function,
+                "normalize_function": self._get_kline_normalize_function,
             },
         )
         if kwargs is not None:
