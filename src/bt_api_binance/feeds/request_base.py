@@ -140,6 +140,12 @@ class BinanceRequestData(Feed):
                 return self._error_translator.translate(raw_response, self.exchange_name)
         return None
 
+    def _raise_if_error(self, raw_response):
+        """API 响应含错误(code<0)时抛出翻译后的 UnifiedError，否则静默返回。"""
+        error = self.translate_error(raw_response)
+        if error is not None:
+            raise error
+
     def push_data_to_queue(self, data):
         """push_data_to_queue method"""
         if self.data_queue is not None:
@@ -210,6 +216,7 @@ class BinanceRequestData(Feed):
         # print(f"self.public_key:{self.public_key}")
         # print(f"self.private_key:{self.private_key}")
         res = self.http_request(method, url, headers, body, timeout)
+        self._raise_if_error(res)
         # print("res", res)
         # data_factory = self._params.request_data_dict.get(request_type)
         return RequestData(res, extra_data)
@@ -2147,6 +2154,7 @@ class BinanceRequestData(Feed):
             "X-MBX-APIKEY": self.public_key,
         }
         res = await self.async_http_request(method, url, headers, body, timeout)
+        self._raise_if_error(res)
         # self.request_logger.info(f"""request:{get_string_tz_time()} {res}""")
         # request_type = extra_data.get('request_type')
         # data_factory = self._params.request_data_dict.get(request_type)

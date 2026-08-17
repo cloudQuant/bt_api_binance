@@ -38,3 +38,40 @@ def test_binance_accepts_api_key_and_api_secret_aliases() -> None:
 
     assert request_data.public_key == "public-key"
     assert request_data.private_key == "secret-key"
+
+
+def test_binance_error_response_raises_invalid_api_key() -> None:
+    """API 错误(code<0)必须翻译为 UnifiedError 并抛出，而非当作正常数据返回。"""
+    import pytest
+
+    from bt_api_base.error import UnifiedError
+
+    request_data = BinanceRequestData(public_key="pk", private_key="sk")
+    with pytest.raises(UnifiedError):
+        request_data._raise_if_error({"code": -2014, "msg": "API-key format invalid."})
+
+
+def test_binance_error_response_raises_rate_limit() -> None:
+    import pytest
+
+    from bt_api_base.error import UnifiedError
+
+    request_data = BinanceRequestData(public_key="pk", private_key="sk")
+    with pytest.raises(UnifiedError):
+        request_data._raise_if_error({"code": -1003, "msg": "Too many requests."})
+
+
+def test_binance_error_response_raises_invalid_signature() -> None:
+    import pytest
+
+    from bt_api_base.error import UnifiedError
+
+    request_data = BinanceRequestData(public_key="pk", private_key="sk")
+    with pytest.raises(UnifiedError):
+        request_data._raise_if_error({"code": -1022, "msg": "Signature not valid."})
+
+
+def test_binance_success_response_does_not_raise() -> None:
+    """成功响应(无 code 或 code>=0)不抛异常。"""
+    request_data = BinanceRequestData(public_key="pk", private_key="sk")
+    request_data._raise_if_error({"symbol": "BTCUSDT", "price": "67000"})
