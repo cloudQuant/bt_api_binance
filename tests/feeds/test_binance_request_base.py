@@ -75,3 +75,14 @@ def test_binance_success_response_does_not_raise() -> None:
     """成功响应(无 code 或 code>=0)不抛异常。"""
     request_data = BinanceRequestData(public_key="pk", private_key="sk")
     request_data._raise_if_error({"symbol": "BTCUSDT", "price": "67000"})
+
+
+def test_binance_sign_requires_private_key() -> None:
+    """私钥缺失时签名必须抛 ConfigurationError，不得用空串静默签名。"""
+    import pytest
+
+    from bt_api_base.exceptions import ConfigurationError
+
+    request_data = BinanceRequestData(public_key="pk")  # private_key=None
+    with pytest.raises(ConfigurationError):
+        request_data.sign("some-content")

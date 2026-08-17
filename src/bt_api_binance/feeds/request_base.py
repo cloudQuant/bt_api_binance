@@ -10,7 +10,7 @@ from typing import Any
 from urllib.parse import urlencode
 
 from bt_api_base.containers.requestdatas.request_data import RequestData
-from bt_api_base.exceptions import QueueNotInitializedError
+from bt_api_base.exceptions import ConfigurationError, QueueNotInitializedError
 from bt_api_base.feeds.capability import Capability
 from bt_api_base.feeds.feed import Feed
 from bt_api_base.functions.calculate_time import datetime2timestamp
@@ -169,7 +169,9 @@ class BinanceRequestData(Feed):
         Args: content (TYPE): Description
 
         """
-        pk = self.private_key or ""
+        if self.private_key is None:
+            raise ConfigurationError("private key is required for signed requests")
+        pk = self.private_key
         sign = hmac.new(
             pk.encode("utf-8"), (content or "").encode("utf-8"), digestmod="sha256"
         ).hexdigest()
