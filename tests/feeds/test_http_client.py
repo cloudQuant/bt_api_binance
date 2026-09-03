@@ -2,7 +2,11 @@
 
 from unittest.mock import MagicMock, patch
 
+import httpx
 import pytest
+
+from bt_api_base.exceptions import RequestFailedError
+from bt_api_base.feeds.http_client import HttpClient
 
 
 class TestHttpClient:
@@ -36,7 +40,9 @@ class TestHttpClient:
 
     def test_request_success(self):
         """Test successful HTTP request."""
-        with patch("bt_api_base.feeds.http_client.httpx") as mock_httpx:
+        with patch("bt_api_base.feeds.http_client.httpx.Client") as mock_client_factory, patch(
+            "bt_api_base.feeds.http_client.httpx.Limits"
+        ):
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.is_success = True
@@ -45,20 +51,19 @@ class TestHttpClient:
 
             mock_client = MagicMock()
             mock_client.request.return_value = mock_response
-            mock_httpx.Client.return_value = mock_client
-            mock_httpx.Limits.return_value = MagicMock()
+            mock_client_factory.return_value = mock_client
 
-        from bt_api_base.feeds.http_client import HttpClient
-
-        client = HttpClient(venue="test")
-        result = client.request("GET", "https://api.example.com/test")
+            client = HttpClient(venue="test")
+            result = client.request("GET", "https://api.example.com/test")
 
         # _process_response returns JSON directly for 2xx success
         assert result == {"result": "success"}
 
     def test_request_with_params(self):
         """Test HTTP request with query params."""
-        with patch("bt_api_base.feeds.http_client.httpx") as mock_httpx:
+        with patch("bt_api_base.feeds.http_client.httpx.Client") as mock_client_factory, patch(
+            "bt_api_base.feeds.http_client.httpx.Limits"
+        ):
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.is_success = True
@@ -67,21 +72,20 @@ class TestHttpClient:
 
             mock_client = MagicMock()
             mock_client.request.return_value = mock_response
-            mock_httpx.Client.return_value = mock_client
-            mock_httpx.Limits.return_value = MagicMock()
+            mock_client_factory.return_value = mock_client
 
-        from bt_api_base.feeds.http_client import HttpClient
+            client = HttpClient(venue="test")
+            _ = client.request("GET", "https://api.example.com/test", params={"symbol": "BTC"})
 
-        client = HttpClient(venue="test")
-        _ = client.request("GET", "https://api.example.com/test", params={"symbol": "BTC"})
-
-        mock_client.request.assert_called_once()
-        call_kwargs = mock_client.request.call_args[1]
-        assert call_kwargs["params"] == {"symbol": "BTC"}
+            mock_client.request.assert_called_once()
+            call_kwargs = mock_client.request.call_args[1]
+            assert call_kwargs["params"] == {"symbol": "BTC"}
 
     def test_request_with_headers(self):
         """Test HTTP request with custom headers."""
-        with patch("bt_api_base.feeds.http_client.httpx") as mock_httpx:
+        with patch("bt_api_base.feeds.http_client.httpx.Client") as mock_client_factory, patch(
+            "bt_api_base.feeds.http_client.httpx.Limits"
+        ):
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.is_success = True
@@ -90,26 +94,21 @@ class TestHttpClient:
 
             mock_client = MagicMock()
             mock_client.request.return_value = mock_response
-            mock_httpx.Client.return_value = mock_client
-            mock_httpx.Limits.return_value = MagicMock()
+            mock_client_factory.return_value = mock_client
 
-        from bt_api_base.feeds.http_client import HttpClient
+            client = HttpClient(venue="test")
+            client.request("GET", "https://api.example.com/test", headers={"X-Custom": "value"})
 
-        client = HttpClient(venue="test")
-        client.request("GET", "https://api.example.com/test", headers={"X-Custom": "value"})
-
-        mock_client.request.assert_called_once()
+            mock_client.request.assert_called_once()
 
     def test_request_timeout_error(self):
         """Test request timeout handling."""
-        with patch("bt_api_base.feeds.http_client.httpx") as mock_httpx:
+        with patch("bt_api_base.feeds.http_client.httpx.Client") as mock_client_factory, patch(
+            "bt_api_base.feeds.http_client.httpx.Limits"
+        ):
             mock_client = MagicMock()
-            mock_client.request.side_effect = mock_httpx.TimeoutException("timeout")
-            mock_httpx.Client.return_value = mock_client
-            mock_httpx.Limits.return_value = MagicMock()
-
-            from bt_api_base.feeds.http_client import HttpClient
-            from bt_api_py.exceptions import RequestFailedError
+            mock_client.request.side_effect = httpx.TimeoutException("timeout")
+            mock_client_factory.return_value = mock_client
 
             client = HttpClient(venue="test")
             with pytest.raises(RequestFailedError):
@@ -117,14 +116,12 @@ class TestHttpClient:
 
     def test_request_connection_error(self):
         """Test connection error handling."""
-        with patch("bt_api_base.feeds.http_client.httpx") as mock_httpx:
+        with patch("bt_api_base.feeds.http_client.httpx.Client") as mock_client_factory, patch(
+            "bt_api_base.feeds.http_client.httpx.Limits"
+        ):
             mock_client = MagicMock()
-            mock_client.request.side_effect = mock_httpx.ConnectError("connection failed")
-            mock_httpx.Client.return_value = mock_client
-            mock_httpx.Limits.return_value = MagicMock()
-
-            from bt_api_base.feeds.http_client import HttpClient
-            from bt_api_py.exceptions import RequestFailedError
+            mock_client.request.side_effect = httpx.ConnectError("connection failed")
+            mock_client_factory.return_value = mock_client
 
             client = HttpClient(venue="test")
             with pytest.raises(RequestFailedError):
