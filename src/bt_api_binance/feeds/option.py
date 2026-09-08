@@ -27,7 +27,7 @@ class BinanceRequestDataOption(BinanceRequestData):
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "OPTION")
         self.logger_name = kwargs.get("logger_name", "binance_option_feed.log")
-        self._params = BinanceExchangeDataOption()
+        self._params = self._configure_exchange_data(BinanceExchangeDataOption())
         self.request_logger = get_logger("binance_option_feed")
         self.async_logger = get_logger("binance_option_feed")
 
@@ -45,7 +45,7 @@ class BinanceMarketWssDataOption(BinanceMarketWssData):
         """
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "OPTION")
-        self._params = BinanceExchangeDataOption()
+        self._params = self._configure_exchange_data(BinanceExchangeDataOption())
 
 
 class BinanceAccountWssDataOption(BinanceAccountWssData):
@@ -59,4 +59,4 @@ class BinanceAccountWssDataOption(BinanceAccountWssData):
 
         """
         super().__init__(data_queue, **kwargs)
-        self._params = BinanceExchangeDataOption()
+        self._params = self._configure_exchange_data(BinanceExchangeDataOption())

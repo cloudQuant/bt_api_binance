@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import queue
 
+import pytest
+from bt_api_base.feeds.capability import Capability, NotSupportedError
+
 from bt_api_binance.client import BinanceDirectClient
 from bt_api_binance.feeds.swap import BinanceRequestDataSwap
 
@@ -42,39 +45,27 @@ def test_cancel_order_accepts_gateway_order_ref_and_instrument_alias() -> None:
     ]
 
 
-def test_place_order_forwards_position_side_reduce_only_and_time_in_force() -> None:
+def test_place_order_rejects_before_unverified_private_stream_or_rest_write() -> None:
     client = BinanceDirectClient.__new__(BinanceDirectClient)
     feed = _FakeFeed()
     client.feed = feed
-    client._ensure_account_stream = lambda: None
+    stream_attempts: list[bool] = []
+    client._ensure_account_stream = lambda: stream_attempts.append(True)
 
-    result = client.place_order(
-        {
-            "symbol": "BTC-USDT",
-            "size": "0.2",
-            "side": "sell",
-            "order_type": "market",
-            "offset": "close",
-            "position_side": "LONG",
-            "reduce_only": True,
-            "time_in_force": "IOC",
-        }
-    )
+    with pytest.raises(NotSupportedError) as exc_info:
+        client.place_order(
+            {
+                "symbol": "BTC-USDT",
+                "size": "0.2",
+                "side": "sell",
+                "order_type": "market",
+            }
+        )
 
-    assert result == {"status": "ok", "order_id": "binance-order-1"}
-    assert feed.order_calls == [
-        {
-            "symbol": "BTC-USDT",
-            "vol": 0.2,
-            "price": None,
-            "order_type": "sell-market",
-            "offset": "close",
-            "client_order_id": None,
-            "position_side": "LONG",
-            "reduceOnly": True,
-            "time_in_force": "IOC",
-        }
-    ]
+    assert exc_info.value.capability is Capability.MAKE_ORDER
+    assert "authenticated account-stream readiness is not verifiable" in str(exc_info.value)
+    assert stream_attempts == []
+    assert feed.order_calls == []
 
 
 def test_swap_order_defaults_to_one_way_reduce_only_without_position_side() -> None:

@@ -5,6 +5,9 @@
 
 from __future__ import annotations
 
+from typing import Any
+
+from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 
 
@@ -60,7 +63,8 @@ class RestTradeMixin:
             params.pop("price", None)
         if position_side not in (None, ""):
             params["positionSide"] = str(position_side).upper()
-            params.pop("reduceOnly", None)
+            if params["positionSide"] in {"LONG", "SHORT"}:
+                params.pop("reduceOnly", None)
         elif self.asset_type != "SWAP":
             params.pop("reduceOnly", None)
 
@@ -473,6 +477,56 @@ class RestTradeMixin:
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
+    def _get_account_config(self, extra_data=None, **kwargs):
+        """Build the signed, read-only USD-M futures account-config request."""
+        request_type = "get_account_config"
+        params: dict[str, Any] = {}
+        path = self._params.get_rest_path(request_type)
+        extra_data = update_extra_data(
+            extra_data,
+            **{
+                "request_type": request_type,
+                "symbol_name": "ALL",
+                "asset_type": self.asset_type,
+                "exchange_name": self.exchange_name,
+                "normalize_function": None,
+            },
+        )
+        if kwargs is not None:
+            extra_data.update(kwargs)
+        return path, params, extra_data
+
+    def get_account_config(self, extra_data=None, **kwargs):
+        """Return the native USD-M futures account configuration."""
+        path, params, extra_data = self._get_account_config(extra_data, **kwargs)
+        return self.request(path, params=params, extra_data=extra_data, is_sign=True)
+
+    def _get_symbol_config(self, symbol=None, extra_data=None, **kwargs):
+        """Build the signed, read-only USD-M per-symbol configuration request."""
+        request_type = "get_symbol_config"
+        params: dict[str, Any] = {}
+        if symbol is not None:
+            params["symbol"] = self._params.get_symbol(symbol)
+        path = self._params.get_rest_path(request_type)
+        extra_data = update_extra_data(
+            extra_data,
+            **{
+                "request_type": request_type,
+                "symbol_name": symbol,
+                "asset_type": self.asset_type,
+                "exchange_name": self.exchange_name,
+                "normalize_function": None,
+            },
+        )
+        if kwargs is not None:
+            extra_data.update(kwargs)
+        return path, params, extra_data
+
+    def get_symbol_config(self, symbol=None, extra_data=None, **kwargs):
+        """Return configured margin mode, leverage, and account notional cap."""
+        path, params, extra_data = self._get_symbol_config(symbol, extra_data, **kwargs)
+        return self.request(path, params=params, extra_data=extra_data, is_sign=True)
+
     def _get_position_mode(self, extra_data=None, **kwargs):
         request_type = "get_position_mode"
         params: dict[str, Any] = {}
@@ -496,6 +550,43 @@ class RestTradeMixin:
         path, params, extra_data = self._get_position_mode(extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
+
+    def _change_position_mode(self, dual_side_position, extra_data=None, **kwargs):
+        """Build a signed USD-M position-mode mutation request."""
+        if self.asset_type != "SWAP":
+            raise ValueError("position_mode_only_supported_for_swap")
+        if not isinstance(dual_side_position, bool):
+            raise TypeError("dual_side_position must be a bool")
+        request_type = "change_position_mode"
+        params = {
+            "dualSidePosition": "true" if dual_side_position else "false",
+        }
+        path = self._params.get_rest_path(request_type)
+        extra_data = update_extra_data(
+            extra_data,
+            **{
+                "request_type": request_type,
+                "symbol_name": "ALL",
+                "asset_type": self.asset_type,
+                "exchange_name": self.exchange_name,
+                "normalize_function": None,
+            },
+        )
+        if kwargs is not None:
+            extra_data.update(kwargs)
+        return path, params, extra_data
+
+    def change_position_mode(self, dual_side_position, extra_data=None, **kwargs):
+        """Change USD-M one-way/hedge mode for every symbol on the account."""
+        path, params, extra_data = self._change_position_mode(
+            dual_side_position, extra_data, **kwargs
+        )
+        return self.request(
+            path,
+            params=params,
+            extra_data=extra_data,
+            is_sign=True,
+        )
 
     def _get_income(
         self,
@@ -581,4 +672,3 @@ class RestTradeMixin:
         path, params, extra_data = self._get_fee(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
-

@@ -23,7 +23,7 @@ class BinanceRequestDataMargin(BinanceRequestData):
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "MARGIN")
         self.logger_name = kwargs.get("logger_name", "binance_margin_feed.log")
-        self._params = BinanceExchangeDataMargin()
+        self._params = self._configure_exchange_data(BinanceExchangeDataMargin())
         self.request_logger = get_logger("binance_margin_feed")
         self.async_logger = get_logger("binance_margin_feed")
 
@@ -415,7 +415,7 @@ class BinanceMarketWssDataMargin(BinanceMarketWssData):
         """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "MARGIN")
-        self._params = BinanceExchangeDataMargin()
+        self._params = self._configure_exchange_data(BinanceExchangeDataMargin())
 
 
 class BinanceAccountWssDataMargin(BinanceAccountWssData):
@@ -423,7 +423,7 @@ class BinanceAccountWssDataMargin(BinanceAccountWssData):
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """__init__ method"""
         super().__init__(data_queue, **kwargs)
-        self._params = BinanceExchangeDataMargin()
+        self._params = self._configure_exchange_data(BinanceExchangeDataMargin())
 
     def handle_data(self, content):
         """ WebSocket .

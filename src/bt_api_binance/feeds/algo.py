@@ -17,6 +17,6 @@ class BinanceRequestDataAlgo(BinanceRequestData):
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "ALGO")
         self.logger_name = kwargs.get("logger_name", "binance_algo_feed.log")
-        self._params = BinanceExchangeDataAlgo()
+        self._params = self._configure_exchange_data(BinanceExchangeDataAlgo())
         self.request_logger = get_logger("binance_algo_feed")
         self.async_logger = get_logger("binance_algo_feed")

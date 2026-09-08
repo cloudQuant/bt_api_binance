@@ -8,6 +8,7 @@ import time
 from collections import defaultdict
 from typing import Any
 
+from bt_api_base.feeds.capability import Capability, NotSupportedError
 from bt_api_base.logging_factory import get_logger
 
 from bt_api_binance.containers.orders.binance_order import BinanceSwapWssOrderData
@@ -332,11 +333,12 @@ class BinanceDirectClient:
             topics.append({"topic": "ticker", "symbol": symbol})
             topics.append({"topic": "book_ticker", "symbol": symbol})
         wss_kwargs = dict(self.kwargs)
-        if self.asset_type == "SPOT":
-            wss_url = "wss://stream.binance.com:9443/ws"
-        else:
-            wss_url = "wss://fstream.binance.com/ws"
-        wss_kwargs["wss_url"] = wss_url
+        resolved = self.feed._params
+        wss_kwargs.update(
+            exchange_data=resolved,
+            wss_url=resolved.wss_url,
+            acct_wss_url=resolved.acct_wss_url,
+        )
         wss_kwargs["wss_name"] = "binance_market_data"
         wss_kwargs["topics"] = topics
 
@@ -358,11 +360,12 @@ class BinanceDirectClient:
         if self.account_stream is not None:
             return
         wss_kwargs = dict(self.kwargs)
-        if self.asset_type == "SPOT":
-            wss_url = "wss://stream.binance.com:9443/ws"
-        else:
-            wss_url = "wss://fstream.binance.com/ws"
-        wss_kwargs["wss_url"] = wss_url
+        resolved = self.feed._params
+        wss_kwargs.update(
+            exchange_data=resolved,
+            wss_url=resolved.wss_url,
+            acct_wss_url=resolved.acct_wss_url,
+        )
         wss_kwargs["wss_name"] = "binance_account_data"
         wss_kwargs["topics"] = [
             {"topic": "account"},
@@ -464,42 +467,11 @@ class BinanceDirectClient:
             return {}
 
     def place_order(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """place_order method"""
-        self._ensure_account_stream()
-        symbol = payload.get("data_name") or payload.get("symbol") or ""
-        volume = float(payload.get("volume") or payload.get("size") or 0)
-        price = payload.get("price")
-        if price is not None:
-            price = float(price)
-        side = str(payload.get("side") or "buy").lower()
-        order_type = str(payload.get("order_type") or "limit").lower()
-        offset = str(payload.get("offset") or "open").lower()
-        order_type_str = f"{side}-{order_type}"
-        client_order_id = payload.get("client_order_id")
-        position_side = _first_value(payload, "position_side", "positionSide", "posSide")
-        reduce_only = _first_value(payload, "reduceOnly", "reduce_only")
-        time_in_force = _first_value(payload, "time_in_force", "timeInForce")
-
-        result = self.feed.make_order(
-            symbol=symbol,
-            vol=volume,
-            price=price,
-            order_type=order_type_str,
-            offset=offset,
-            client_order_id=client_order_id,
-            position_side=position_side,
-            reduceOnly=reduce_only,
-            time_in_force=time_in_force or "GTC",
+        """Reject standalone writes until private-stream readiness is verifiable."""
+        raise NotSupportedError(
+            Capability.MAKE_ORDER,
+            "BinanceDirectClient: authenticated account-stream readiness is not verifiable",
         )
-        data = result.get_data() if hasattr(result, "get_data") else result
-        if isinstance(data, list) and len(data) > 0:
-            item = data[0]
-            if hasattr(item, "get_all_data"):
-                return item.get_all_data()
-            return dict(item) if isinstance(item, dict) else {"raw": str(item)}
-        if isinstance(data, dict):
-            return data
-        return {"raw": str(data)}
 
     def cancel_order(self, payload: dict[str, Any]) -> dict[str, Any]:
         """cancel_order method"""

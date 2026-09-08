@@ -1,11 +1,16 @@
 """Module-level docstring."""
+
 from __future__ import annotations
 
 import json
-import time
 
 from bt_api_base.containers.orderbooks.orderbook import OrderBookData
-from bt_api_base.functions.utils import from_dict_get_float, from_dict_get_string
+from bt_api_base.event_clock import capture_receive_clock
+from bt_api_base.functions.utils import (
+    from_dict_get_float,
+    from_dict_get_int,
+    from_dict_get_string,
+)
 
 
 class BinanceOrderBookData(OrderBookData):
@@ -14,13 +19,24 @@ class BinanceOrderBookData(OrderBookData):
     def __init__(self, order_book_info, symbol_name, asset_type, has_been_json_encoded=False):
         """__init__ method"""
         super().__init__(order_book_info, has_been_json_encoded)
-        self.exchange_name = "BINANCE"  # 
-        self.local_update_time = time.time()  # 
+        self.exchange_name = "BINANCE"  #
+        (
+            self.local_update_time,
+            self.received_monotonic_ns,
+            self.clock_domain_id,
+        ) = capture_receive_clock()
         self.symbol_name = symbol_name
         self.asset_type = asset_type  # ticker
         self.order_book_data = order_book_info
         self.order_book_symbol_name = None
         self.server_time = None
+        self.sequence_id = None
+        self.first_sequence_id = None
+        self.previous_sequence = None
+        self.snapshot_or_delta = "snapshot"
+        self.continuity_status = "unverified"
+        self.stale = False
+        self.stale_reason = None
         self.bid_price_list = None
         self.ask_price_list = None
         self.bid_volume_list = None
@@ -42,6 +58,15 @@ class BinanceOrderBookData(OrderBookData):
                 "order_book_symbol_name": self.order_book_symbol_name,
                 "local_update_time": self.local_update_time,
                 "server_time": self.server_time,
+                "sequence_id": self.sequence_id,
+                "first_sequence_id": self.first_sequence_id,
+                "previous_sequence": self.previous_sequence,
+                "snapshot_or_delta": self.snapshot_or_delta,
+                "continuity_status": self.continuity_status,
+                "stale": self.stale,
+                "stale_reason": self.stale_reason,
+                "received_monotonic_ns": self.received_monotonic_ns,
+                "clock_domain_id": self.clock_domain_id,
                 "bid_price_list": self.bid_price_list,
                 "ask_price_list": self.ask_price_list,
                 "bid_volume_list": self.bid_volume_list,
@@ -80,6 +105,14 @@ class BinanceOrderBookData(OrderBookData):
         """get_server_time method"""
         return self.server_time
 
+    def get_sequence_id(self):
+        """Final update id (WSS ``u`` / REST ``lastUpdateId``) for gap detection."""
+        return self.sequence_id
+
+    def get_previous_sequence(self):
+        """Previous final update id when Binance supplies ``pu``."""
+        return self.previous_sequence
+
     def get_bid_price_list(self):
         """get_bid_price_list method"""
         return self.bid_price_list
@@ -117,6 +150,9 @@ class BinanceRequestOrderBookData(BinanceOrderBookData):
             return self
         self.order_book_symbol_name = from_dict_get_string(self.order_book_data, "s")
         self.server_time = from_dict_get_float(self.order_book_data, "E")
+        self.sequence_id = from_dict_get_int(self.order_book_data, "lastUpdateId")
+        self.snapshot_or_delta = "snapshot"
+        self.continuity_status = "snapshot" if self.sequence_id is not None else "unverified"
         bids_list = self.order_book_data["bids"]
         asks_list = self.order_book_data["asks"]
         self.bid_price_list = [float(i[0]) for i in bids_list]
@@ -139,6 +175,13 @@ class BinanceWssOrderBookData(BinanceOrderBookData):
             return self
         self.order_book_symbol_name = from_dict_get_string(self.order_book_data, "s")
         self.server_time = from_dict_get_float(self.order_book_data, "E")
+        self.sequence_id = from_dict_get_int(self.order_book_data, "u")
+        self.first_sequence_id = from_dict_get_int(self.order_book_data, "U")
+        self.previous_sequence = from_dict_get_int(self.order_book_data, "pu")
+        self.snapshot_or_delta = str(self.order_book_data.get("snapshot_or_delta") or "delta")
+        self.continuity_status = str(self.order_book_data.get("continuity_status") or "unverified")
+        self.stale = bool(self.order_book_data.get("stale", False))
+        self.stale_reason = self.order_book_data.get("stale_reason")
         self.bid_price_list = [float(i[0]) for i in self.order_book_data["b"]]
         self.ask_price_list = [float(i[0]) for i in self.order_book_data["a"]]
         self.bid_volume_list = [float(i[1]) for i in self.order_book_data["b"]]

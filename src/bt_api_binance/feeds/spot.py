@@ -5,6 +5,7 @@ import json
 import time
 from typing import Any
 
+from bt_api_base.feeds.transport_safety import sanitize_text, sanitize_value
 from bt_api_base.functions.utils import update_extra_data
 from bt_api_base.logging_factory import get_logger
 
@@ -28,7 +29,7 @@ class BinanceRequestDataSpot(BinanceRequestData):
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "SPOT")
         self.logger_name = kwargs.get("logger_name", "binance_spot_feed.log")
-        self._params = BinanceExchangeDataSpot()
+        self._params = self._configure_exchange_data(BinanceExchangeDataSpot())
         self.request_logger = get_logger("binance_spot_feed")
         self.async_logger = get_logger("binance_spot_feed")
 
@@ -570,9 +571,10 @@ class BinanceMarketWssDataSpot(BinanceMarketWssData):
     """Class BinanceMarketWssDataSpot"""
     def __init__(self, data_queue: Any, **kwargs: Any) -> None:
         """__init__ method"""
+        kwargs.setdefault("exchange_data", BinanceExchangeDataSpot())
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "SPOT")
-        self._params = BinanceExchangeDataSpot()
+        self._params = self._configure_exchange_data(BinanceExchangeDataSpot())
 
 
 class BinanceAccountWssDataSpot(BinanceAccountWssData):
@@ -581,7 +583,7 @@ class BinanceAccountWssDataSpot(BinanceAccountWssData):
         """__init__ method"""
         kwargs.setdefault("exchange_data", BinanceExchangeDataSpot())
         super().__init__(data_queue, **kwargs)
-        self._params = BinanceExchangeDataSpot()
+        self._params = self._configure_exchange_data(BinanceExchangeDataSpot())
 
     def get_listen_key(self, max_retries=3):
         """Obtain listenKey via WebSocket API userDataStream.start.
@@ -615,12 +617,12 @@ class BinanceAccountWssDataSpot(BinanceAccountWssData):
             if rsp.get("status") == 200 and "listenKey" in rsp.get("result", {}):
                 result_holder[0] = rsp["result"]
             else:
-                error_holder[0] = rsp.get("error", rsp)
+                error_holder[0] = sanitize_value(rsp.get("error", rsp))
             done.set()
             ws.close()
 
         def _on_error(ws, error):
-            error_holder[0] = str(error)
+            error_holder[0] = sanitize_text(error)
             done.set()
 
         last_err = None
@@ -636,26 +638,31 @@ class BinanceAccountWssDataSpot(BinanceAccountWssData):
                     on_error=_on_error,
                 )
                 t = threading.Thread(
-                    target=lambda ws=tmp_ws: ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE}),
+                    target=lambda ws=tmp_ws: ws.run_forever(
+                        sslopt={"cert_reqs": ssl.CERT_REQUIRED, "check_hostname": True}
+                    ),
                     daemon=True,
                 )
                 t.start()
                 done.wait(timeout=10)
                 if result_holder[0] is not None:
                     return result_holder[0]
-                last_err = error_holder[0]
+                last_err = sanitize_value(error_holder[0])
                 self.logger.warning(
                     f"get_listen_key attempt {attempt + 1}/{max_retries} "
-                    f"unexpected response: {last_err}"
+                    f"unexpected response: {sanitize_text(last_err)}"
                 )
             except Exception as e:
-                last_err = e
+                last_err = sanitize_text(e)
                 self.logger.warning(
-                    f"get_listen_key attempt {attempt + 1}/{max_retries} error: {e}"
+                    f"get_listen_key attempt {attempt + 1}/{max_retries} "
+                    f"error: {last_err}"
                 )
             if attempt < max_retries - 1:
                 time.sleep(2)
-        raise RuntimeError(f"Failed to get listen key after {max_retries} attempts: {last_err}")
+        raise RuntimeError(
+            f"Failed to get listen key after {max_retries} attempts: {sanitize_text(last_err)}"
+        )
 
     def wss_author(self):
         """wss_author method"""

@@ -29,6 +29,53 @@
 
 ## Features
 
+### Explicit demo and testnet environments
+
+Configure USD-M futures demo through the public `BtApi` entry point:
+
+```python
+import os
+from bt_api_py import BtApi
+
+api = BtApi({"BINANCE___SWAP": {
+    "environment": "demo",
+    "api_key": os.environ["BINANCE_DEMO_API_KEY"],
+    "api_secret": os.environ["BINANCE_DEMO_API_SECRET"],
+}})
+try:
+    instruments = api.get_exchange_info("BINANCE___SWAP", "BTCUSDT")
+finally:
+    api.close()
+```
+
+| Asset and environment | REST origin | Market/account stream |
+| --- | --- | --- |
+| USD-M `demo` (also `testnet`) | `https://demo-fapi.binance.com` | `wss://demo-fstream.binance.com/ws` |
+| Spot `testnet` | `https://testnet.binance.vision` | `wss://stream.testnet.binance.vision/ws` |
+| Spot `demo` | `https://demo-api.binance.com` | `wss://demo-stream.binance.com/ws` |
+
+The Spot WS API origins are `wss://ws-api.testnet.binance.vision/ws-api/v3`
+and `wss://demo-ws-api.binance.com/ws-api/v3`, respectively. Spot Testnet keys
+and Binance Demo keys belong to separate environments. Spot private-stream
+behavior has not been certified by these futures demo checks.
+
+Omitting `environment` preserves production defaults. Boolean `testnet=True`
+or `demo=True` are accepted aliases. Unknown environments, contradictory flags,
+unsupported simulated asset types, and production endpoint overrides combined
+with simulation are rejected before requests are sent. Public metadata, funding,
+mark price, and depth queries do not require credentials. Set
+`subscribe_account=False` for market-only subscriptions with configured keys.
+
+Futures limit orders support `time_in_force="IOC"` and `reduce_only`; quantity
+remains base-asset units. Mutating REST requests send once, so response loss
+does not automatically submit duplicate orders. Reconcile by client order ID.
+Authenticated trading acceptance requires demo keys; offline signature checks
+and successful public data reads do not establish fill behavior or profitability.
+
+References: [USD-M demo endpoints](https://developers.binance.com/en/docs/products/derivatives-trading-usds-futures/general-info),
+[Spot Testnet](https://testnet.binance.vision/),
+[Spot Demo specification](https://github.com/binance/binance-spot-api-docs/blob/master/demo-mode/general-info.md).
+
 ### 13 Asset Types
 
 | Asset Type | Code | REST | WebSocket | Description |

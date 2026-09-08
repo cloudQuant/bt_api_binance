@@ -1,4 +1,5 @@
 """Module documentation"""
+
 from __future__ import annotations
 
 import hmac
@@ -13,41 +14,11 @@ from bt_api_base.containers.requestdatas.request_data import RequestData
 from bt_api_base.exceptions import ConfigurationError, QueueNotInitializedError
 from bt_api_base.feeds.capability import Capability
 from bt_api_base.feeds.feed import Feed
-from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 from bt_api_base.logging_factory import get_logger
 from bt_api_base.rate_limiter import RateLimiter, RateLimitRule, RateLimitScope, RateLimitType
 
-from bt_api_binance.containers.accounts.binance_account import (
-    BinanceSpotRequestAccountData,
-    BinanceSwapRequestAccountData,
-)
-from bt_api_binance.containers.balances.binance_balance import (
-    BinanceSwapRequestBalanceData,
-)  # , BinanceSpotRequestBalanceData
-from bt_api_binance.containers.bars.binance_bar import BinanceRequestBarData
-from bt_api_binance.containers.fundingrates.binance_funding_rate import (
-    BinanceRequestFundingRateData,
-    BinanceRequestHistoryFundingRateData,
-)
-from bt_api_binance.containers.markprices.binance_mark_price import (
-    BinanceRequestMarkPriceData,
-)
-from bt_api_binance.containers.orderbooks.binance_orderbook import (
-    BinanceRequestOrderBookData,
-)
-from bt_api_binance.containers.orders.binance_order import (
-    BinanceRequestOrderData,
-)
-from bt_api_binance.containers.positions.binance_position import (
-    BinanceRequestPositionData,
-)
-from bt_api_binance.containers.tickers.binance_ticker import (
-    BinanceRequestTickerData,
-)
-from bt_api_binance.containers.trades.binance_trade import (
-    BinanceRequestTradeData,
-)
+from bt_api_binance.environment import configure_environment
 from bt_api_binance.errors.binance_translator import BinanceErrorTranslator
 from bt_api_binance.exchange_data import (
     BinanceExchangeDataSwap,
@@ -58,19 +29,39 @@ from bt_api_binance.feeds.rest_derivatives import RestDerivativesMixin
 from bt_api_binance.feeds.rest_market import RestMarketMixin
 from bt_api_binance.feeds.rest_trade import RestTradeMixin
 
+
+def strict_credential_alias(parameters, names):
+    supplied = []
+    for name in names:
+        if name not in parameters or parameters[name] is None:
+            continue
+        value = parameters[name]
+        if value == "":
+            continue
+        if not isinstance(value, str) or not value.strip() or value != value.strip():
+            raise ConfigurationError("Binance credentials must be non-empty trimmed strings")
+        supplied.append(value)
+    if len(set(supplied)) > 1:
+        raise ConfigurationError("Binance credential aliases conflict")
+    return supplied[0] if supplied else None
+
+
 # session = requests.Session()
 # session.keep_alive = False
 # adapter = requests.adapters.HTTPAdapter(
-#     max_retries=5, # 
-#     pool_connections=100, # 
-#     pool_maxsize=100, # 
+#     max_retries=5, #
+#     pool_connections=100, #
+#     pool_maxsize=100, #
 #     pool_block=True, # )
 # session.mount('http://', adapter)
 # session.mount('https://', adapter)
 
 
-class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, RestTradeMixin, RestDerivativesMixin):
+class BinanceRequestData(
+    NormalizeMixin, AsyncRestMixin, RestMarketMixin, RestTradeMixin, RestDerivativesMixin, Feed
+):
     """Class BinanceRequestData"""
+
     @classmethod
     def _capabilities(cls) -> set[Capability]:
         return {
@@ -100,21 +91,42 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
 
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
         """__init__ method"""
+        self._environment_options = dict(kwargs)
         super().__init__(data_queue, **kwargs)
         self.data_queue = data_queue
-        self.public_key = kwargs.get("public_key") or kwargs.get("api_key")
-        self.private_key = (
-            kwargs.get("private_key") or kwargs.get("secret_key") or kwargs.get("api_secret")
+        self.public_key = strict_credential_alias(kwargs, ("public_key", "api_key"))
+        self.private_key = strict_credential_alias(
+            kwargs, ("private_key", "secret_key", "api_secret")
         )
         self.exchange_name = kwargs.get("exchange_name", "BINANCE___SWAP")
         self.asset_type = kwargs.get("asset_type", "SWAP")
         self.logger_name = kwargs.get("logger_name", "binance_swap_feed.log")
-        self._params = kwargs.get("exchange_data", BinanceExchangeDataSwap())
+        self._params = self._configure_exchange_data(
+            kwargs.get("exchange_data") or BinanceExchangeDataSwap()
+        )
         self.request_logger = get_logger("binance_swap_feed")
         self.async_logger = get_logger("binance_swap_feed")
         self._error_translator = BinanceErrorTranslator()
         self._rate_limiter = kwargs.get("rate_limiter", self._create_default_rate_limiter())
-        # self.start_loop()  # 
+        # self.start_loop()  #
+
+    def get_exchange_info(self, symbol=None, extra_data=None, **kwargs):
+        """Return public exchangeInfo with symbols, filters and rate limits intact."""
+        # USD-M exchangeInfo does not accept a symbol filter.
+        params = (
+            {"symbol": self._params.get_symbol(symbol)}
+            if symbol and self.asset_type == "SPOT"
+            else {}
+        )
+        return self.request(
+            self._params.get_rest_path("get_contract"),
+            params=params,
+            extra_data=extra_data,
+            is_sign=False,
+        )
+
+    def _configure_exchange_data(self, params):
+        return configure_environment(params, self._environment_options)
 
     @staticmethod
     def _create_default_rate_limiter():
@@ -138,7 +150,7 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         return RateLimiter(rules)
 
     def translate_error(self, raw_response):
-        """ Binance API  UnifiedError（）， None."""
+        """Binance API  UnifiedError（）， None."""
         if isinstance(raw_response, dict):
             code = raw_response.get("code")
             if code is not None and int(code) < 0:
@@ -155,7 +167,8 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         """push_data_to_queue method"""
         if self.data_queue is not None:
             self.data_queue.put(data)
-        else: raise QueueNotInitializedError("data_queue not initialized")
+        else:
+            raise QueueNotInitializedError("data_queue not initialized")
 
     # noinspection PyMethodMayBeStatic
     # def signature(self, timestamp, method, request_path, secret_key, body=None):
@@ -183,6 +196,16 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
 
         return sign
 
+    def _require_private_credentials(self):
+        """Reject partial private credentials before constructing any request."""
+        if (
+            not isinstance(self.public_key, str)
+            or not self.public_key.strip()
+            or not isinstance(self.private_key, str)
+            or not self.private_key.strip()
+        ):
+            raise ConfigurationError("Binance private requests require both API key and secret")
+
     # set request header
     # noinspection PyMethodMayBeStatic
     def request(self, path, params=None, body=None, extra_data=None, timeout=10, is_sign=True):
@@ -204,6 +227,7 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         if is_sign is False:
             req = params
         else:
+            self._require_private_credentials()
             req = {
                 "recvWindow": 60000,
                 "timestamp": int(time.time() * 1000),
@@ -214,7 +238,7 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
             # req['signature'] = self.sign(str(req))
         req = urlencode(req)
         url = f"{self._params.rest_url}{path}?{req}"
-        headers = {"X-MBX-APIKEY": self.public_key}
+        headers = {"X-MBX-APIKEY": self.public_key} if self.public_key else {}
         # print("url ", url)
         # print("headers ", headers)
         # print("method ", method)
@@ -222,7 +246,10 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         # print("request_type", request_type)
         # print(f"self.public_key:{self.public_key}")
         # print(f"self.private_key:{self.private_key}")
-        res = self.http_request(method, url, headers, body, timeout)
+        if method.upper() == "GET":
+            res = self.http_request(method, url, headers, body, timeout)
+        else:
+            res = self.http_request(method, url, headers, body, timeout, max_retries=1)
         self._raise_if_error(res)
         # print("res", res)
         # data_factory = self._params.request_data_dict.get(request_type)
@@ -289,19 +316,17 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-    def _get_position(self, symbol, extra_data=None, **kwargs):
+    def _get_position(self, symbol=None, extra_data=None, **kwargs):
         """Get position info from okx by symbol
         :param symbol: default None, get all the currency, can be string, e.g. "BTC-USDT".
         :param extra_data: extra_data, default is None, can be a dict passed by user
         :param kwargs: pass key-worded, variable-length arguments.
         :return: RequestData.
         """
-        request_symbol = self._params.get_symbol(symbol)
+        request_symbol = self._params.get_symbol(symbol) if symbol else None
         request_type = "get_position"
         path = self._params.get_rest_path(request_type)
-        params = {
-            "symbol": request_symbol,
-        }
+        params = {"symbol": request_symbol} if request_symbol else {}
         extra_data = update_extra_data(
             extra_data,
             **{
@@ -326,15 +351,6 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         path, params, extra_data = self._get_position(symbol, extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data)
         return data
-
-
-
-
-
-
-
-
-
 
     def _get_server_time(self, extra_data=None, **kwargs):
         request_symbol = "ALL"
@@ -362,10 +378,6 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         path, params, extra_data = self._get_server_time(extra_data=extra_data, **kwargs)
         data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
-
-
-
-
 
     def _get_open_orders(self, symbol=None, extra_data=None, **kwargs):
         """Get open orders by symbol using async
@@ -409,9 +421,9 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         """Get history trade records from okx
         :param symbol: , btc/usdt
         :param count: , 100, 100
-        :param start_time: , 
-        :param end_time: , 
-        :param extra_data: 
+        :param start_time: ,
+        :param end_time: ,
+        :param extra_data:
         :return:
         """
         # params = {'instType': instType, 'uly': uly, 'symbol': symbol,
@@ -456,37 +468,13 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         data = self.request(path, params=params, extra_data=extra_data, is_sign=True)
         return data
 
-
     # ===== New market data methods =====
-
-
-
-
-
-
-
-
 
     # ===== New trade methods =====
 
-
-
     # ===== New account query methods =====
 
-
-
-
-
-
-
-
-
     # ====================  ====================
-
-
-
-
-
 
     def async_callback(self, future):
         """Callback function for async_get_tick, push tickerData to data_queue
@@ -499,41 +487,20 @@ class BinanceRequestData(Feed, NormalizeMixin, AsyncRestMixin, RestMarketMixin, 
         except Exception as e:
             import traceback
 
-            self.async_logger.warning(f"async_callback::{e}\n{traceback.format_exc()}")
+            from bt_api_base.feeds.transport_safety import sanitize_text
 
-
-
-
-
-
-
-
-
-
-
-
-
+            sensitive_values = (
+                getattr(self, "public_key", None),
+                getattr(self, "private_key", None),
+            )
+            message = sanitize_text(e, sensitive_values=sensitive_values)
+            safe_traceback = sanitize_text(
+                traceback.format_exc(), sensitive_values=sensitive_values
+            )
+            self.async_logger.warning(f"async_callback::{message}\n{safe_traceback}")
 
     # ===== Async methods for new market data endpoints =====
 
-
-
-
-
-
-
-
-
     # ===== Async methods for new trade endpoints =====
 
-
-
-
-
     # ===== Async methods for new account endpoints =====
-
-
-
-
-
-

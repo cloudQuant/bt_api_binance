@@ -27,7 +27,7 @@ class BinanceRequestDataCoinM(BinanceRequestData):
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "COIN_M")
         self.logger_name = kwargs.get("logger_name", "binance_coin_m_feed.log")
-        self._params = BinanceExchangeDataCoinM()
+        self._params = self._configure_exchange_data(BinanceExchangeDataCoinM())
         self.request_logger = get_logger("binance_coin_m_feed")
         self.async_logger = get_logger("binance_coin_m_feed")
 
@@ -45,7 +45,7 @@ class BinanceMarketWssDataCoinM(BinanceMarketWssData):
         """
         super().__init__(data_queue, **kwargs)
         self.asset_type = kwargs.get("asset_type", "COIN_M")
-        self._params = BinanceExchangeDataCoinM()
+        self._params = self._configure_exchange_data(BinanceExchangeDataCoinM())
 
 
 class BinanceAccountWssDataCoinM(BinanceAccountWssData):
@@ -59,4 +59,4 @@ class BinanceAccountWssDataCoinM(BinanceAccountWssData):
 
         """
         super().__init__(data_queue, **kwargs)
-        self._params = BinanceExchangeDataCoinM()
+        self._params = self._configure_exchange_data(BinanceExchangeDataCoinM())

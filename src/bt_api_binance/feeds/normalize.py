@@ -88,9 +88,10 @@ class NormalizeMixin:
         status = input_data is not None
         symbol_name = extra_data["symbol_name"]
         asset_type = extra_data["asset_type"]
-        if isinstance(input_data, list) and isinstance(input_data[0], dict):
+        if isinstance(input_data, list) and input_data and isinstance(input_data[0], dict):
             data = [
-                BinanceRequestPositionData(i, symbol_name, asset_type, True) for i in input_data
+                BinanceRequestPositionData(i, symbol_name or i.get("symbol"), asset_type, True)
+                for i in input_data
             ]
         else:
             data = []

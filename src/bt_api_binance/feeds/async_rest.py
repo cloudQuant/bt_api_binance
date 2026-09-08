@@ -385,6 +385,26 @@ class AsyncRestMixin:
             callback=self.async_callback,
         )
 
+    def async_change_position_mode(self, dual_side_position, extra_data=None, **kwargs):
+        """Schedule a signed USD-M one-way/hedge mode mutation."""
+        path, params, extra_data = self._change_position_mode(
+            dual_side_position, extra_data, **kwargs
+        )
+        self.submit(
+            self.async_request(
+                path, params=params, extra_data=extra_data, is_sign=True
+            ),
+            callback=self.async_callback,
+        )
+
+    def async_get_symbol_config(self, symbol=None, extra_data=None, **kwargs):
+        """Schedule a read-only USD-M per-symbol configuration request."""
+        path, params, extra_data = self._get_symbol_config(symbol, extra_data, **kwargs)
+        self.submit(
+            self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
+            callback=self.async_callback,
+        )
+
     def async_get_income(
         self,
         symbol=None,
@@ -429,4 +449,3 @@ class AsyncRestMixin:
             self.async_request(path, params=params, extra_data=extra_data, is_sign=True),
             callback=self.async_callback,
         )
-

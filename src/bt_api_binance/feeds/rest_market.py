@@ -272,7 +272,7 @@ class RestMarketMixin:
     def get_funding_rate(self, symbol, extra_data=None, **kwargs):
         """get_funding_rate method"""
         path, params, extra_data = self._get_funding_rate(symbol, extra_data, **kwargs)
-        data = self.request(path, params=params, extra_data=extra_data)
+        data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
 
 
@@ -283,14 +283,14 @@ class RestMarketMixin:
         path, params, extra_data = self._get_history_funding_rate(
             symbol, start_time, end_time, count, extra_data, **kwargs
         )
-        data = self.request(path, params=params, extra_data=extra_data)
+        data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
 
 
     def get_mark_price(self, symbol, extra_data=None, **kwargs):
         """get_mark_price method"""
         path, params, extra_data = self._get_mark_price(symbol, extra_data, **kwargs)
-        data = self.request(path, params=params, extra_data=extra_data)
+        data = self.request(path, params=params, extra_data=extra_data, is_sign=False)
         return data
 
 
@@ -308,4 +308,3 @@ class RestMarketMixin:
     def get_clear_price(self, symbol, extra_data=None, **kwargs):
         """get_clear_price method"""
         pass
-

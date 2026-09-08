@@ -168,6 +168,7 @@ class BinanceExchangeData(ExchangeData):
         :return: path.
         """
         # 'depth': {'params': ['<symbol>@depth20@100ms'], 'method': 'SUBSCRIBE', 'id': 1},
+        request_id = kwargs.pop("_request_id", None)
         key = kwargs["topic"]
         if "symbol" in kwargs:
             kwargs["symbol"] = self.get_symbol(kwargs["symbol"])
@@ -189,6 +190,8 @@ class BinanceExchangeData(ExchangeData):
                 value = req[key]
                 new_value.append(value[0].replace("<symbol>", self.get_symbol(symbol).lower()))
             req[key] = new_value
+        if request_id is not None:
+            req["id"] = request_id
         return json.dumps(req)
 
 
@@ -234,6 +237,7 @@ class BinanceExchangeDataSpot(BinanceExchangeData):
         :param kwargs: kwargs params
         :return: path.
         """
+        request_id = kwargs.pop("_request_id", None)
         key = kwargs["topic"]
         if "symbol" in kwargs:
             kwargs["symbol"] = self.get_symbol(kwargs["symbol"])
@@ -253,6 +257,8 @@ class BinanceExchangeDataSpot(BinanceExchangeData):
                 value = req[key]
                 new_value.append(value[0].replace("<symbol>", self.get_symbol(symbol).lower()))
             req[key] = new_value
+        if request_id is not None:
+            req["id"] = request_id
         return json.dumps(req)
 
 

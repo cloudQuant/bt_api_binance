@@ -5,6 +5,11 @@
 
 from __future__ import annotations
 
+import time
+from typing import Any
+from urllib.parse import urlencode
+from bt_api_base.containers.requestdatas.request_data import RequestData
+
 from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 
@@ -680,6 +685,7 @@ class RestDerivativesMixin:
         if is_sign is False:
             req = params
         else:
+            self._require_private_credentials()
             req = {
                 "recvWindow": 3000,
                 "timestamp": int(time.time() * 1000),
@@ -689,9 +695,7 @@ class RestDerivativesMixin:
             req["signature"] = self.sign(sign)
         req = urlencode(req)
         url = f"{self._params.rest_url}{path}?{req}"
-        headers = {
-            "X-MBX-APIKEY": self.public_key,
-        }
+        headers = {"X-MBX-APIKEY": self.public_key} if self.public_key else {}
         res = await self.async_http_request(method, url, headers, body, timeout)
         self._raise_if_error(res)
         # self.request_logger.info(f"""request:{get_string_tz_time()} {res}""")
@@ -700,7 +704,4 @@ class RestDerivativesMixin:
         return RequestData(res, extra_data)
 
     # noinspection PyBroadException
-
-
-
 
