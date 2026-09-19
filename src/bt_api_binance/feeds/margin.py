@@ -33,7 +33,7 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -67,8 +67,8 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: symbols:  ()
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -108,11 +108,11 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: asset:
-            start_time: 
-            end_time: 
-            limit: 
-            extra_data: 
-            **kwargs: 
+            start_time:
+            end_time:
+            limit:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -165,7 +165,7 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """BNB.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -199,7 +199,7 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """BNB.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -235,8 +235,8 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: symbol:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -275,8 +275,8 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: asset_names:  ()
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -316,11 +316,11 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: asset:
-            start_time: 
-            end_time: 
-            limit: 
-            extra_data: 
-            **kwargs: 
+            start_time:
+            end_time:
+            limit:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -371,8 +371,8 @@ class BinanceRequestDataMargin(BinanceRequestData):
         """.
 
         Args: max_leverage:  (1-125)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -429,8 +429,8 @@ class BinanceAccountWssDataMargin(BinanceAccountWssData):
         """ WebSocket .
 
         :
-        - executionReport: 
-        - outboundAccountPosition: 
+        - executionReport:
+        - outboundAccountPosition:
         - balanceUpdate:  ()
         """
         event = content.get("e", None)
@@ -438,10 +438,10 @@ class BinanceAccountWssDataMargin(BinanceAccountWssData):
             #  ()
             if event == "executionReport" and content.get("x", None) != "TRADE":
                 self.push_order(content)
-            # 
+            #
             if event == "outboundAccountPosition":
                 self.push_account(content)
-            # 
+            #
             if event == "executionReport" and content.get("x", None) == "TRADE":
                 self.push_trade(content)
             #  ()

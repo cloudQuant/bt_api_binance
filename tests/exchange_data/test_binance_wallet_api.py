@@ -1,6 +1,6 @@
 """
 Tests for Binance Wallet API
- Binance  API 
+ Binance  API
 """
 
 from __future__ import annotations
@@ -28,13 +28,13 @@ def test_binance_wallet_rest_paths():
     """ Binance Wallet REST """
     wallet = BinanceExchangeDataWallet()
 
-    # 
+    #
     assert wallet.get_rest_path("get_wallet_balance") == "GET /sapi/v1/asset/wallet/balance"
     assert wallet.get_rest_path("get_asset_detail") == "GET /sapi/v1/asset/assetDetail"
     assert wallet.get_rest_path("get_asset_ledger") == "GET /sapi/v1/asset/ledger"
     assert wallet.get_rest_path("get_asset_dividend") == "GET /sapi/v1/asset/assetDividend"
 
-    # 
+    #
     assert wallet.get_rest_path("asset_transfer") == "POST /sapi/v1/asset/transfer"
     assert wallet.get_rest_path("get_asset_transfer") == "GET /sapi/v1/asset/transfer"
     assert (
@@ -51,16 +51,16 @@ def test_binance_wallet_rest_paths():
         == "POST /sapi/v1/asset/transfer-to-isolated-margin"
     )
 
-    # 
+    #
     assert wallet.get_rest_path("get_deposit_address") == "GET /sapi/v1/capital/deposit/address"
     assert wallet.get_rest_path("get_deposit_history") == "GET /sapi/v1/capital/deposit/hisrec"
 
-    # 
+    #
     assert wallet.get_rest_path("withdraw") == "POST /sapi/v1/capital/withdraw/apply"
     assert wallet.get_rest_path("get_withdraw_history") == "GET /sapi/v1/capital/withdraw/history"
     assert wallet.get_rest_path("get_withdraw_address") == "GET /sapi/v1/capital/withdraw/address"
 
-    # 
+    #
     assert wallet.get_rest_path("get_dust") == "GET /sapi/v1/asset/dust"
     assert wallet.get_rest_path("dust_transfer") == "POST /sapi/v1/asset/dust/btc"
 
@@ -71,7 +71,7 @@ def test_binance_wallet_symbol_conversion():
     # get_symbol  '-'
     assert wallet.get_symbol("BTC-USDT") == "BTCUSDT"
     assert wallet.get_symbol("ETH-USDT") == "ETHUSDT"
-    assert wallet.get_symbol("BTC/USDT") == "BTC/USDT"  # / 
+    assert wallet.get_symbol("BTC/USDT") == "BTC/USDT"  # /
 
 
 def test_binance_sub_account_api_init():
@@ -85,7 +85,7 @@ def test_binance_sub_account_rest_paths():
     """ Binance Sub-account REST """
     sub_account = BinanceExchangeDataSubAccount()
 
-    # 
+    #
     assert sub_account.get_rest_path("get_sub_account_list") == "GET /sapi/v1/sub-account/list"
     assert sub_account.get_rest_path("get_sub_account_status") == "GET /sapi/v1/sub-account/status"
     assert (
@@ -93,7 +93,7 @@ def test_binance_sub_account_rest_paths():
         == "GET /sapi/v1/sub-account/spotSummary"
     )
 
-    # 
+    #
     assert (
         sub_account.get_rest_path("sub_transfer_to_main")
         == "POST /sapi/v1/sub-account/transfer/sub-to-main"
@@ -115,7 +115,7 @@ def test_binance_sub_account_rest_paths():
         == "GET /sapi/v1/sub-account/universal-transfer"
     )
 
-    # 
+    #
     assert sub_account.get_rest_path("get_sub_account_assets") == "GET /sapi/v1/sub-account/assets"
     assert (
         sub_account.get_rest_path("get_sub_account_margin_account")
@@ -130,7 +130,7 @@ def test_binance_sub_account_rest_paths():
         == "GET /sapi/v1/sub-account/futuresAccount"
     )
 
-    #  API Key 
+    #  API Key
     assert sub_account.get_rest_path("create_sub_api_key") == "POST /sapi/v1/sub-account/apiKey"
     assert sub_account.get_rest_path("get_sub_api_key") == "GET /sapi/v1/sub-account/apiKey"
     assert sub_account.get_rest_path("delete_sub_api_key") == "DELETE /sapi/v1/sub-account/apiKey"
@@ -155,7 +155,7 @@ def test_binance_portfolio_rest_paths():
     """ Binance Portfolio Margin REST """
     portfolio = BinanceExchangeDataPortfolio()
 
-    # 
+    #
     assert portfolio.get_rest_path("get_portfolio_account") == "GET /sapi/v1/portfolio/account"
     assert (
         portfolio.get_rest_path("get_portfolio_collateral_rate")
@@ -175,7 +175,7 @@ def test_binance_grid_rest_paths():
     """ Binance Grid Trading REST """
     grid = BinanceExchangeDataGrid()
 
-    # 
+    #
     assert grid.get_rest_path("futures_grid_new_order") == "POST /sapi/v1/futures/fortune/order"
     assert (
         grid.get_rest_path("futures_grid_cancel_order") == "DELETE /sapi/v1/futures/fortune/order"
@@ -198,7 +198,7 @@ def test_binance_staking_rest_paths():
     """ Binance Staking REST """
     staking = BinanceExchangeDataStaking()
 
-    #  Staking 
+    #  Staking
     assert staking.get_rest_path("get_staking_products") == "GET /sapi/v1/staking/productList"
     assert staking.get_rest_path("staking_purchase") == "POST /sapi/v1/staking/purchase"
     assert staking.get_rest_path("staking_redeem") == "POST /sapi/v1/staking/redeem"
@@ -217,7 +217,7 @@ def test_binance_mining_rest_paths():
     """ Binance Mining REST """
     mining = BinanceExchangeDataMining()
 
-    # 
+    #
     assert mining.get_rest_path("get_mining_algo_list") == "GET /sapi/v1/mining/pub/algoList"
     assert mining.get_rest_path("get_mining_worker_list") == "GET /sapi/v1/mining/worker/list"
     assert (
@@ -237,7 +237,7 @@ def test_binance_vip_loan_rest_paths():
     """ Binance VIP Loan REST """
     vip_loan = BinanceExchangeDataVipLoan()
 
-    #  VIP Loan 
+    #  VIP Loan
     assert (
         vip_loan.get_rest_path("get_vip_loan_ongoing_orders") == "GET /sapi/v1/loan/ongoing/order"
     )
@@ -252,9 +252,9 @@ def test_binance_vip_loan_rest_paths():
 def test_binance_wallet_api_paths_count():
     """ Wallet API """
     wallet = BinanceExchangeDataWallet()
-    # 
+    #
     assert len(wallet.rest_paths) > 10  # 10
-    # 
+    #
     key_paths = ["get_wallet_balance", "asset_transfer", "withdraw", "get_deposit_address"]
     for key in key_paths:
         assert key in wallet.rest_paths

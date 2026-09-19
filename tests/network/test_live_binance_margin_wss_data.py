@@ -21,6 +21,10 @@ def init_margin_wss():
     data_queue = queue.Queue()
     kwargs = {
         "exchange_data": BinanceExchangeDataMargin(),
+        # 占位凭据：wss_author 已被 mock（不联网），但 __init__ 的凭据守卫先于它执行，
+        # 缺 key/secret 会在构造期抛错。
+        "public_key": "test_public_key",
+        "private_key": "test_private_key",
     }
     # Mock wss_author to avoid actual network calls
     with patch.object(BinanceAccountWssDataMargin, "wss_author", return_value=None):
@@ -52,7 +56,7 @@ def test_margin_account_wss_handle_data_execution_report():
         "f": "GTC",
         "q": "1.00000000",
         "p": "50000.00000000",
-        "x": "NEW",  #  TRADE 
+        "x": "NEW",  #  TRADE
         "X": "NEW",
         "r": "NONE",
         "i": 12345678,
@@ -75,7 +79,7 @@ def test_margin_account_wss_handle_data_execution_report():
 
     margin_wss.handle_data(content)
 
-    # 
+    #
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssOrderData)
@@ -87,7 +91,7 @@ def test_margin_account_wss_handle_data_outbound_account_position():
     """ outboundAccountPosition """
     margin_wss, data_queue = init_margin_wss()
 
-    #  outboundAccountPosition 
+    #  outboundAccountPosition
     content = {
         "e": "outboundAccountPosition",
         "E": 123456789,
@@ -100,7 +104,7 @@ def test_margin_account_wss_handle_data_outbound_account_position():
 
     margin_wss.handle_data(content)
 
-    # 
+    #
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssAccountData)
@@ -112,7 +116,7 @@ def test_margin_account_wss_handle_data_execution_report_trade():
     """ executionReport """
     margin_wss, data_queue = init_margin_wss()
 
-    #  executionReport 
+    #  executionReport
     content = {
         "e": "executionReport",
         "E": 123456789,
@@ -123,7 +127,7 @@ def test_margin_account_wss_handle_data_execution_report_trade():
         "f": "GTC",
         "q": "1.00000000",
         "p": "50000.00000000",
-        "x": "TRADE",  # 
+        "x": "TRADE",  #
         "X": "FILLED",
         "r": "NONE",
         "i": 12345678,
@@ -146,7 +150,7 @@ def test_margin_account_wss_handle_data_execution_report_trade():
 
     margin_wss.handle_data(content)
 
-    # 
+    #
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssTradeData)
@@ -169,7 +173,7 @@ def test_margin_account_wss_handle_data_balance_update():
 
     margin_wss.handle_data(content)
 
-    # 
+    #
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssAccountData)
@@ -194,7 +198,12 @@ def test_margin_account_wss_has_push_methods():
 def test_spot_account_wss_has_push_balance():
     """ Spot Account WSS  push_balance """
     data_queue = queue.Queue()
-    kwargs = {"exchange_data": BinanceExchangeDataSpot()}
+    kwargs = {
+        "exchange_data": BinanceExchangeDataSpot(),
+        # 占位凭据：理由同上（wss_author 已 mock，守卫在构造期）
+        "public_key": "test_public_key",
+        "private_key": "test_private_key",
+    }
     # Mock wss_author to avoid actual network calls
     with patch.object(BinanceAccountWssDataSpot, "wss_author", return_value=None):
         spot_wss = BinanceAccountWssDataSpot(data_queue, **kwargs)
@@ -207,13 +216,18 @@ def test_spot_account_wss_has_push_balance():
 def test_spot_account_wss_handle_balance_update():
     """ Spot  balanceUpdate """
     data_queue = queue.Queue()
-    kwargs = {"exchange_data": BinanceExchangeDataSpot()}
+    kwargs = {
+        "exchange_data": BinanceExchangeDataSpot(),
+        # 占位凭据：理由同上（wss_author 已 mock，守卫在构造期）
+        "public_key": "test_public_key",
+        "private_key": "test_private_key",
+    }
     # Mock wss_author to avoid actual network calls
     with patch.object(BinanceAccountWssDataSpot, "wss_author", return_value=None):
         spot_wss = BinanceAccountWssDataSpot(data_queue, **kwargs)
         spot_wss.listen_key = "test_listen_key"
 
-    #  balanceUpdate 
+    #  balanceUpdate
     content = {
         "e": "balanceUpdate",
         "E": 1573200697114,
@@ -224,7 +238,7 @@ def test_spot_account_wss_handle_balance_update():
 
     spot_wss.handle_data(content)
 
-    # 
+    #
     try:
         data = data_queue.get(timeout=1)
         assert isinstance(data, BinanceSpotWssAccountData)

@@ -13,16 +13,11 @@ from __future__ import annotations
 from typing import Any
 
 from bt_api_base.functions.utils import update_extra_data
-from bt_api_base.logging_factory import get_logger
 
-from bt_api_binance.exchange_data import BinanceExchangeDataWallet
-
-from .request_base import BinanceRequestData
+from bt_api_binance.feeds.host_mixin import RestHostMixin
 
 
-
-
-class WalletTransferMixin:
+class WalletTransferMixin(RestHostMixin):
     """钱包充提/流水方法集合。"""
 
     def _withdraw(
@@ -39,13 +34,13 @@ class WalletTransferMixin:
         """.
 
         Args: coin:
-            address: 
-            amount: 
-            network: 
-            addressTag: 
-            name: 
-            extra_data: 
-            **kwargs: 
+            address:
+            amount:
+            network:
+            addressTag:
+            name:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -117,12 +112,12 @@ class WalletTransferMixin:
         """.
 
         Args: coin:
-            startTime: 
-            endTime: 
-            limit: 
-            offset: 
-            extra_data: 
-            **kwargs: 
+            startTime:
+            endTime:
+            limit:
+            offset:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -183,9 +178,9 @@ class WalletTransferMixin:
         """.
 
         Args: coin:
-            network: 
-            extra_data: 
-            **kwargs: 
+            network:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -234,12 +229,12 @@ class WalletTransferMixin:
         """.
 
         Args: coin:
-            startTime: 
-            endTime: 
-            limit: 
-            offset: 
-            extra_data: 
-            **kwargs: 
+            startTime:
+            endTime:
+            limit:
+            offset:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -306,8 +301,8 @@ class WalletTransferMixin:
         """.
 
         Args: coin:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -347,7 +342,7 @@ class WalletTransferMixin:
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -381,8 +376,8 @@ class WalletTransferMixin:
         """BTC.
 
         Args: assets:  ()
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

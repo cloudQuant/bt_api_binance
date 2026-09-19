@@ -1,6 +1,6 @@
 """
 Tests for Binance Sub-account API Request Implementation
- Binance  API 
+ Binance  API
 """
 
 import queue
@@ -136,22 +136,22 @@ def test_sub_account_request_all_public_methods():
     sub_account = BinanceRequestDataSubAccount(data_queue)
 
     public_methods = [
-        # 
+        #
         "get_sub_account_list",
         "get_sub_account_status",
         "get_sub_account_spot_summary",
-        # 
+        #
         "sub_transfer_to_main",
         "main_transfer_to_sub",
         "sub_transfer_to_sub",
         "get_sub_transfer_history",
         "get_sub_account_universal_transfer",
-        # 
+        #
         "get_sub_account_assets",
         "get_sub_account_margin_account",
         "get_sub_account_margin_summary",
         "get_sub_account_futures_account",
-        #  API Key 
+        #  API Key
         "create_sub_api_key",
         "get_sub_api_key",
         "delete_sub_api_key",

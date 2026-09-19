@@ -21,7 +21,7 @@ class BinancePositionData(PositionData):
         self.position_commission = None
         self.maintenance_margin = None
         self.exchange_name = "BINANCE"
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.symbol_name = symbol_name
         self.asset_type = asset_type
         self.position_data = position_info if has_been_json_encoded else None

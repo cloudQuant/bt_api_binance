@@ -5,11 +5,15 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 
+from bt_api_binance.feeds.host_mixin import RestHostMixin
 
-class RestMarketMixin:
+
+class RestMarketMixin(RestHostMixin):
     """行情 REST 方法集合。"""
 
     def _get_tick(self, symbol, extra_data=None, **kwargs):
@@ -173,14 +177,16 @@ class RestMarketMixin:
             params.update({"startTime": start_time})
         elif isinstance(start_time, int):
             params.update({"startTime": start_time})
-        else: pass
+        else:
+            pass
         if isinstance(end_time, str):
             end_time = int(datetime2timestamp(end_time) * 1000)
             # print("end_time = ", end_time)
             params.update({"endTime": end_time})
         elif isinstance(start_time, int):
             params.update({"endTime": end_time})
-        else: pass
+        else:
+            pass
 
         path = self._params.get_rest_path(request_type)
         extra_data = update_extra_data(
@@ -307,4 +313,3 @@ class RestMarketMixin:
 
     def get_clear_price(self, symbol, extra_data=None, **kwargs):
         """get_clear_price method"""
-        pass

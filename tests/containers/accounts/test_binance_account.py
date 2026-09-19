@@ -639,32 +639,32 @@ def test_binance_spot_request_account():
 def test_binance_wss_account():
     """test_binance_wss_account function"""
     data = {
-        "e": "ACCOUNT_UPDATE",  # 
-        "E": 1564745798939,  # 
-        "T": 1564745798938,  # 
-        # 
+        "e": "ACCOUNT_UPDATE",  #
+        "E": 1564745798939,  #
+        "T": 1564745798938,  #
+        #
         "a": {
-            "m": "ORDER",  # 
-            "B": [  # 
+            "m": "ORDER",  #
+            "B": [  #
                 {
-                    "a": "USDT",  # 
-                    "wb": "122624.12345678",  # 
-                    "cw": "100.12345678",  # 
-                    "bc": "50.12345678",  # 
+                    "a": "USDT",  #
+                    "wb": "122624.12345678",  #
+                    "cw": "100.12345678",  #
+                    "bc": "50.12345678",  #
                 },
                 {"a": "BUSD", "wb": "1.00000000", "cw": "0.00000000", "bc": "-49.12345678"},
             ],
             "P": [
                 {
-                    "s": "BTCUSDT",  # 
-                    "pa": "0",  # 
-                    "ep": "0.00000",  # 
-                    "bep": "0",  # 
+                    "s": "BTCUSDT",  #
+                    "pa": "0",  #
+                    "ep": "0.00000",  #
+                    "bep": "0",  #
                     "cr": "200",  # ()
-                    "up": "0",  # 
-                    "mt": "isolated",  # 
+                    "up": "0",  #
+                    "mt": "isolated",  #
                     "iw": "0.00000000",  # ，
-                    "ps": "BOTH",  # 
+                    "ps": "BOTH",  #
                 },
                 {
                     "s": "BTCUSDT",
@@ -729,10 +729,10 @@ def test_binance_wss_account():
 def test_binance_req_single_asset_account():
     """test_binance_req_single_asset_account function"""
     data = {
-        "feeTier": 0,  # 
-        "canTrade": "true",  # 
-        "canDeposit": "true",  # 
-        "canWithdraw": "true",  # 
+        "feeTier": 0,  #
+        "canTrade": "true",  #
+        "canDeposit": "true",  #
+        "canWithdraw": "true",  #
         "updateTime": 0,  # ，
         "multiAssetsMargin": "false",
         "tradeGroupId": -1,
@@ -749,56 +749,56 @@ def test_binance_req_single_asset_account():
         "maxWithdrawAmount": "23.72469206",  # , usdt
         "assets": [
             {
-                "asset": "USDT",  # 
-                "walletBalance": "23.72469206",  # 
-                "unrealizedProfit": "0.00000000",  # 
-                "marginBalance": "23.72469206",  # 
-                "maintMargin": "0.00000000",  # 
-                "initialMargin": "0.00000000",  # 
+                "asset": "USDT",  #
+                "walletBalance": "23.72469206",  #
+                "unrealizedProfit": "0.00000000",  #
+                "marginBalance": "23.72469206",  #
+                "maintMargin": "0.00000000",  #
+                "initialMargin": "0.00000000",  #
                 "positionInitialMargin": "0.00000000",  # ()
                 "openOrderInitialMargin": "0.00000000",  # ()
-                "crossWalletBalance": "23.72469206",  # 
-                "crossUnPnl": "0.00000000",  # 
-                "availableBalance": "126.72469206",  # 
-                "maxWithdrawAmount": "23.72469206",  # 
-                "marginAvailable": "true",  # 
-                "updateTime": 1625474304765,  # 
+                "crossWalletBalance": "23.72469206",  #
+                "crossUnPnl": "0.00000000",  #
+                "availableBalance": "126.72469206",  #
+                "maxWithdrawAmount": "23.72469206",  #
+                "marginAvailable": "true",  #
+                "updateTime": 1625474304765,  #
             },
             {
-                "asset": "BUSD",  # 
-                "walletBalance": "103.12345678",  # 
-                "unrealizedProfit": "0.00000000",  # 
-                "marginBalance": "103.12345678",  # 
-                "maintMargin": "0.00000000",  # 
-                "initialMargin": "0.00000000",  # 
+                "asset": "BUSD",  #
+                "walletBalance": "103.12345678",  #
+                "unrealizedProfit": "0.00000000",  #
+                "marginBalance": "103.12345678",  #
+                "maintMargin": "0.00000000",  #
+                "initialMargin": "0.00000000",  #
                 "positionInitialMargin": "0.00000000",  # ()
                 "openOrderInitialMargin": "0.00000000",  # ()
-                "crossWalletBalance": "103.12345678",  # 
-                "crossUnPnl": "0.00000000",  # 
-                "availableBalance": "126.72469206",  # 
-                "maxWithdrawAmount": "103.12345678",  # 
-                "marginAvailable": "true",  # 
-                "updateTime": 0,  # 
+                "crossWalletBalance": "103.12345678",  #
+                "crossUnPnl": "0.00000000",  #
+                "availableBalance": "126.72469206",  #
+                "maxWithdrawAmount": "103.12345678",  #
+                "marginAvailable": "true",  #
+                "updateTime": 0,  #
             },
         ],
         "positions": [  # ，symbol。
-            # ，BOTH， LONG  SHORT 
+            # ，BOTH， LONG  SHORT
             {
-                "symbol": "BTCUSDT",  # 
+                "symbol": "BTCUSDT",  #
                 "initialMargin": "0",  # ()
-                "maintMargin": "0",  # 
-                "unrealizedProfit": "0.00000000",  # 
+                "maintMargin": "0",  #
+                "unrealizedProfit": "0.00000000",  #
                 "positionInitialMargin": "0",  # ()
                 "openOrderInitialMargin": "0",  # ()
-                "leverage": "100",  # 
-                "isolated": "true",  # 
-                "entryPrice": "0.00000",  # 
-                "maxNotional": "250000",  # 
+                "leverage": "100",  #
+                "isolated": "true",  #
+                "entryPrice": "0.00000",  #
+                "maxNotional": "250000",  #
                 "bidNotional": "0",  # ，
                 "askNotional": "0",  # ，
-                "positionSide": "BOTH",  # 
-                "positionAmt": "0",  # 
-                "updateTime": 0,  # 
+                "positionSide": "BOTH",  #
+                "positionAmt": "0",  #
+                "updateTime": 0,  #
             }
         ],
     }
@@ -830,10 +830,10 @@ def test_binance_req_single_asset_account():
 def test_binance_req_multi_asset_account():
     """test_binance_req_multi_asset_account function"""
     data = {
-        "feeTier": 0,  # 
-        "canTrade": "true",  # 
-        "canDeposit": "true",  # 
-        "canWithdraw": "true",  # 
+        "feeTier": 0,  #
+        "canTrade": "true",  #
+        "canDeposit": "true",  #
+        "canWithdraw": "true",  #
         "updateTime": 0,  # ，
         "multiAssetsMargin": "true",
         "tradeGroupId": -1,
@@ -850,57 +850,57 @@ def test_binance_req_multi_asset_account():
         "maxWithdrawAmount": "126.72469206",  # USD
         "assets": [
             {
-                "asset": "USDT",  # 
-                "walletBalance": "23.72469206",  # 
-                "unrealizedProfit": "0.00000000",  # 
-                "marginBalance": "23.72469206",  # 
-                "maintMargin": "0.00000000",  # 
-                "initialMargin": "0.00000000",  # 
+                "asset": "USDT",  #
+                "walletBalance": "23.72469206",  #
+                "unrealizedProfit": "0.00000000",  #
+                "marginBalance": "23.72469206",  #
+                "maintMargin": "0.00000000",  #
+                "initialMargin": "0.00000000",  #
                 "positionInitialMargin": "0.00000000",  # ()
                 "openOrderInitialMargin": "0.00000000",  # ()
-                "crossWalletBalance": "23.72469206",  # 
-                "crossUnPnl": "0.00000000",  # 
-                "availableBalance": "23.72469206",  # 
-                "maxWithdrawAmount": "23.72469206",  # 
-                "marginAvailable": "true",  # 
-                "updateTime": 1625474304765,  # 
+                "crossWalletBalance": "23.72469206",  #
+                "crossUnPnl": "0.00000000",  #
+                "availableBalance": "23.72469206",  #
+                "maxWithdrawAmount": "23.72469206",  #
+                "marginAvailable": "true",  #
+                "updateTime": 1625474304765,  #
             },
             {
-                "asset": "BUSD",  # 
-                "walletBalance": "103.12345678",  # 
-                "unrealizedProfit": "0.00000000",  # 
-                "marginBalance": "103.12345678",  # 
-                "maintMargin": "0.00000000",  # 
-                "initialMargin": "0.00000000",  # 
+                "asset": "BUSD",  #
+                "walletBalance": "103.12345678",  #
+                "unrealizedProfit": "0.00000000",  #
+                "marginBalance": "103.12345678",  #
+                "maintMargin": "0.00000000",  #
+                "initialMargin": "0.00000000",  #
                 "positionInitialMargin": "0.00000000",  # ()
                 "openOrderInitialMargin": "0.00000000",  # ()
-                "crossWalletBalance": "103.12345678",  # 
-                "crossUnPnl": "0.00000000",  # 
-                "availableBalance": "103.12345678",  # 
-                "maxWithdrawAmount": "103.12345678",  # 
-                "marginAvailable": "true",  # 
-                "updateTime": 0,  # 
+                "crossWalletBalance": "103.12345678",  #
+                "crossUnPnl": "0.00000000",  #
+                "availableBalance": "103.12345678",  #
+                "maxWithdrawAmount": "103.12345678",  #
+                "marginAvailable": "true",  #
+                "updateTime": 0,  #
             },
         ],
         "positions": [  # ，symbol。
-            # ，BOTH， LONG  SHORT 
+            # ，BOTH， LONG  SHORT
             {
-                "symbol": "BTCUSDT",  # 
+                "symbol": "BTCUSDT",  #
                 "initialMargin": "0",  # ()
-                "maintMargin": "0",  # 
-                "unrealizedProfit": "0.00000000",  # 
+                "maintMargin": "0",  #
+                "unrealizedProfit": "0.00000000",  #
                 "positionInitialMargin": "0",  # ()
                 "openOrderInitialMargin": "0",  # ()
-                "leverage": "100",  # 
-                "isolated": "true",  # 
-                "entryPrice": "0.00000",  # 
-                "breakEvenPrice": "0.0",  # 
-                "maxNotional": "250000",  # 
+                "leverage": "100",  #
+                "isolated": "true",  #
+                "entryPrice": "0.00000",  #
+                "breakEvenPrice": "0.0",  #
+                "maxNotional": "250000",  #
                 "bidNotional": "0",  # ，
                 "askNotional": "0",  # ，
-                "positionSide": "BOTH",  # 
-                "positionAmt": "0",  # 
-                "updateTime": 0,  # 
+                "positionSide": "BOTH",  #
+                "positionAmt": "0",  #
+                "updateTime": 0,  #
             }
         ],
     }

@@ -5,8 +5,12 @@
 
 from __future__ import annotations
 
+from typing import Any
 
-class AsyncRestMixin:
+from bt_api_binance.feeds.host_mixin import RestHostMixin
+
+
+class AsyncRestMixin(RestHostMixin):
     """异步 REST 方法集合。"""
 
     def async_get_server_time(self, extra_data=None, **kwargs):
@@ -102,7 +106,7 @@ class AsyncRestMixin:
 
     def async_get_config(self, extra_data=None):
         """async_get_config method"""
-        params = {
+        params: dict[str, Any] = {
             # "posMode":"long_short_mode"
         }
         data_type = "get_config"

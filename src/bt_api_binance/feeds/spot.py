@@ -97,8 +97,8 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: account_type:  (SPOT, MARGIN, FUTURES)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -140,8 +140,8 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: symbol:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -184,11 +184,11 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: asset:  ( USDT)
-            amount: 
+            amount:
             transfer_type:  (1: U, 2: U,
                                         3: , 4: )
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -216,7 +216,7 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: asset:  ( USDT)
-            amount: 
+            amount:
             transfer_type:  (1: U, 2: U,
                                         3: , 4: )
 
@@ -242,12 +242,12 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: asset:
-            start_time: 
-            end_time: 
+            start_time:
+            end_time:
             limit:  (100, 1000)
             page:  (1)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -290,8 +290,8 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: asset:
-            start_time: 
-            end_time: 
+            start_time:
+            end_time:
             limit:  (100, 1000)
             page:  (1)
 
@@ -363,13 +363,13 @@ class BinanceRequestDataSpot(BinanceRequestData):
             cancel_client_order_id: ID (cancel_order_id)
             side:  (BUY/SELL)
             order_type:  (LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT)
-            quantity: 
+            quantity:
             price:  (LIMIT)
             stop_price:  (/)
             new_client_order_id: ID
             cancel_restrictions:  (ONLY_NEW, ONLY_PARTIALLY_FILLED)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -451,8 +451,8 @@ class BinanceRequestDataSpot(BinanceRequestData):
         """.
 
         Args: symbol: ，
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -505,10 +505,10 @@ class BinanceRequestDataSpot(BinanceRequestData):
         Args: symbol:
             order_id: ID (client_order_id)
             client_order_id: ID
-            quantity: 
-            price: 
-            extra_data: 
-            **kwargs: 
+            quantity:
+            price:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -682,7 +682,7 @@ class BinanceAccountWssDataSpot(BinanceAccountWssData):
         """handle_data method"""
         event = content.get("e", None)
         if event is not None:
-            # 
+            #
             if event == "executionReport" and content.get("x", None) != "TRADE":
                 self.push_order(content)
             if event == "outboundAccountPosition":

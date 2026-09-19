@@ -10,8 +10,8 @@ from urllib.parse import parse_qs, urlsplit
 
 import httpx
 import pytest
-
 from bt_api_base.feeds.my_websocket_app import MyWebsocketApp
+
 from bt_api_binance import client as client_module
 from bt_api_binance.client import BinanceDirectClient
 from bt_api_binance.feeds.coin_m import BinanceRequestDataCoinM

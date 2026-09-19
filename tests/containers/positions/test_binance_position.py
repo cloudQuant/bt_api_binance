@@ -58,9 +58,9 @@ def test_binance_position():
 def test_binance_req_position():
     """test_binance_req_position function"""
     data = {
-        "entryPrice": "0.00000",  # 
-        "breakEvenPrice": "0.0",  # 
-        "marginType": "isolated",  # 
+        "entryPrice": "0.00000",  #
+        "breakEvenPrice": "0.0",  #
+        "marginType": "isolated",  #
         "isAutoAddMargin": "false",
 
         "isolatedMargin": "12.5",  # 逐仓保证金

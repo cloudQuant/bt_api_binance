@@ -9,31 +9,31 @@ from bt_api_binance.containers.orders.binance_order import BinanceRequestOrderDa
 def test_request_data() -> None:
     """test_request_data function"""
     datas = {
-        "clientOrderId": "testOrder",  # 
+        "clientOrderId": "testOrder",  #
         "cumQty": "0",
-        "cumQuote": "0",  # 
-        "executedQty": "0",  # 
-        "orderId": 22542179,  # 
-        "avgPrice": "0.00000",  # 
-        "origQty": "10",  # 
-        "price": "0",  # 
-        "reduceOnly": "false",  # 
-        "side": "SELL",  # 
-        "positionSide": "SHORT",  # 
-        "status": "NEW",  # 
+        "cumQuote": "0",  #
+        "executedQty": "0",  #
+        "orderId": 22542179,  #
+        "avgPrice": "0.00000",  #
+        "origQty": "10",  #
+        "price": "0",  #
+        "reduceOnly": "false",  #
+        "side": "SELL",  #
+        "positionSide": "SHORT",  #
+        "status": "NEW",  #
         "stopPrice": "0",  # ，`TRAILING_STOP_MARKET`
-        "closePosition": "false",  # 
-        "symbol": "BTCUSDT",  # 
-        "timeInForce": "GTD",  # 
-        "type": "TRAILING_STOP_MARKET",  # 
-        "origType": "TRAILING_STOP_MARKET",  # 
-        "activatePrice": "9020",  # , `TRAILING_STOP_MARKET` 
-        "priceRate": "0.3",  # , `TRAILING_STOP_MARKET` 
-        "updateTime": 1566818724722,  # 
-        "workingType": "CONTRACT_PRICE",  # 
-        "priceProtect": "false",  # 
-        "priceMatch": "NONE",  # 
-        "selfTradePreventionMode": "NONE",  # 
+        "closePosition": "false",  #
+        "symbol": "BTCUSDT",  #
+        "timeInForce": "GTD",  #
+        "type": "TRAILING_STOP_MARKET",  #
+        "origType": "TRAILING_STOP_MARKET",  #
+        "activatePrice": "9020",  # , `TRAILING_STOP_MARKET`
+        "priceRate": "0.3",  # , `TRAILING_STOP_MARKET`
+        "updateTime": 1566818724722,  #
+        "workingType": "CONTRACT_PRICE",  #
+        "priceProtect": "false",  #
+        "priceMatch": "NONE",  #
+        "selfTradePreventionMode": "NONE",  #
         "goodTillDate": 1693207680000,  # TIFGTD
     }
 

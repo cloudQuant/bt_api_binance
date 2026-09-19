@@ -19,7 +19,7 @@ class BinanceAggTradeData:
         self.exchange_name = "BINANCE"
         self.event = "AggTradeUpdate"
         self.trade_info = trade_info
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.asset_type = asset_type
         self.symbol_name = symbol_name
         self.trade_data = self.trade_info if has_been_json_encoded else None
@@ -142,7 +142,7 @@ class BinanceTradeData(TradeData):
         """__init__ method"""
         super().__init__(trade_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.asset_type = asset_type
         self.symbol_name = symbol_name
         self.trade_data = self.trade_info if has_been_json_encoded else None

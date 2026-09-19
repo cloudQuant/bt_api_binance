@@ -1,5 +1,5 @@
 """
-Binance API 
+Binance API
 """
 
 from __future__ import annotations

@@ -439,7 +439,7 @@ def binance_make_order_and_cancel_order():
     )
     # print("make_order info", buy_data.get_data())
     # "https://fapi.binance.com/fapi/v1/order?recvWindow=3000&timestamp=1708936667118&symbol=OPUSDT&orderId=9106714922&signature=69492a311ad22b37710e029a4e317ac5a7f43f7beadfdfba2caa20baf19a9a6b"
-    # 
+    #
     live_binance_swap_feed.query_order(symbol="OP-USDT", client_order_id=buy_client_order_id)
     # print("query_order", query_data.get_data())
     # get_open_orders
@@ -481,7 +481,7 @@ def test_binance_req_order_functions():
         client_order_id=sell_client_order_id,
         **{"position_side": "SHORT"},
     )
-    # 
+    #
     buy_info = buy_data.get_data()[0]
     assert buy_data.get_status()
     assert isinstance(buy_data, RequestData)

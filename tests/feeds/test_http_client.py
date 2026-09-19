@@ -4,7 +4,6 @@ from unittest.mock import MagicMock, patch
 
 import httpx
 import pytest
-
 from bt_api_base.exceptions import RequestFailedError
 from bt_api_base.feeds.http_client import HttpClient
 

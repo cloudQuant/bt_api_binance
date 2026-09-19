@@ -54,8 +54,9 @@ class BinanceExchangeData(ExchangeData):
         self.rest_url = ""
         self.acct_wss_url = ""
         self.wss_url = ""
-        self.rest_paths = {}
-        self.wss_paths = {}
+        self.rest_paths: dict[str, str] = {}
+        # WSS 路径的值是嵌套结构（订阅报文模板），不是字符串
+        self.wss_paths: dict[str, Any] = {}
 
         self.kline_periods = {
             "1s": "1s",

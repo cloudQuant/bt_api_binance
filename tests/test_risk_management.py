@@ -118,7 +118,7 @@ class TestRiskManagement:
         """"""
         assessor = RiskAssessor()
 
-        # 
+        #
         risk_metrics = RiskMetrics(
             {
                 "exchange_name": "BINANCE",
@@ -154,7 +154,7 @@ class TestRiskManagement:
             }
         )
 
-        # 
+        #
         result = assessor.assess_risk(risk_metrics)
 
         assert result is not None
@@ -254,7 +254,7 @@ class TestRiskManagement:
         """"""
         manager = LimitsManager()
 
-        # 
+        #
         manager.set_static_limit(
             limit_type="max_order_size",
             exchange_name="BINANCE",
@@ -262,7 +262,7 @@ class TestRiskManagement:
             value=1000000,
         )
 
-        # 
+        #
         order_data = {
             "symbol": "BTCUSDT",
             "size": 10.0,
@@ -285,7 +285,7 @@ class TestRiskManagement:
         assert engine is not None
         assert engine.rules is not None
         assert engine.action_handlers is not None
-        assert len(engine.rules) > 0  # 
+        assert len(engine.rules) > 0  #
 
     def test_order_policy_evaluation(self):
         """"""
@@ -328,7 +328,7 @@ class TestRiskManagement:
         """"""
         detector = AnomalyDetector()
 
-        # 
+        #
         import numpy as np
 
         np.random.seed(42)
@@ -344,22 +344,22 @@ class TestRiskManagement:
         """"""
         detector = AnomalyDetector()
 
-        # 
+        #
         import numpy as np
 
         np.random.seed(42)
         X_normal = np.random.normal(0, 1, (1000, 5))
         detector.train(X_normal)
 
-        # 
+        #
         X_test_normal = np.random.normal(0, 1, (1, 5))
         result_normal = detector.detect_anomaly(X_test_normal)
 
         assert result_normal is not None
         assert hasattr(result_normal, "is_anomaly")
 
-        # 
-        X_test_anomaly = np.random.normal(5, 1, (1, 5))  # 
+        #
+        X_test_anomaly = np.random.normal(5, 1, (1, 5))  #
         result_anomaly = detector.detect_anomaly(X_test_anomaly)
 
         assert result_anomaly is not None
@@ -379,12 +379,12 @@ class TestRiskManagement:
         """"""
         model = RiskEnsembleModel()
 
-        # 
+        #
         import numpy as np
 
         np.random.seed(42)
         X = np.random.normal(0, 1, (1000, 5))
-        y = np.random.choice([0, 1], 1000)  # 
+        y = np.random.choice([0, 1], 1000)  #
 
         result = model.train(X, y)
 
@@ -396,7 +396,7 @@ class TestRiskManagement:
         """"""
         model = RiskEnsembleModel()
 
-        # 
+        #
         import numpy as np
 
         np.random.seed(42)
@@ -404,7 +404,7 @@ class TestRiskManagement:
         y = np.random.choice([0, 1], 1000)
         model.train(X, y)
 
-        # 
+        #
         X_test = np.random.normal(0, 1, (10, 5))
         predictions = model.predict(X_test)
         probabilities = model.predict_proba(X_test)
@@ -417,17 +417,17 @@ class TestRiskManagement:
 
     def test_risk_monitoring_start_stop(self, risk_manager):
         """"""
-        # 
+        #
         import asyncio
 
-        # 
+        #
         asyncio.run(risk_manager.start_monitoring())
         assert risk_manager.is_monitoring
 
-        # 
+        #
         time.sleep(0.2)
 
-        # 
+        #
         asyncio.run(risk_manager.stop_monitoring())
         assert not risk_manager.is_monitoring
 
@@ -452,7 +452,7 @@ class TestRiskManagement:
         sample_order_data,
     ):
         """"""
-        # 1. 
+        # 1.
         risk_metrics = risk_manager.risk_calculator.calculate_risk_metrics(
             exchange_name="BINANCE",
             account_id="test_account",
@@ -461,17 +461,17 @@ class TestRiskManagement:
             market_data=sample_market_data,
         )
 
-        # 2. 
+        # 2.
         assessment_result = risk_manager.risk_assessor.assess_risk(risk_metrics)
         assert assessment_result is not None
 
-        # 3. 
+        # 3.
         order_check_result = risk_manager.check_order_risk(
             exchange_name="BINANCE", account_id="test_account", order_data=sample_order_data
         )
         assert order_check_result is not None
 
-        # 4. 
+        # 4.
         if assessment_result.level == "HIGH":
             event = risk_manager.create_risk_event(
                 event_type=RiskEventType.MARKET_VOLATILITY_SPIKE,
@@ -483,7 +483,7 @@ class TestRiskManagement:
             )
             assert event is not None
 
-        # 5. 
+        # 5.
         active_events = risk_manager.get_active_events("BINANCE", "test_account")
         assert isinstance(active_events, list)
 
@@ -500,7 +500,7 @@ class TestRiskManagement:
         self, risk_manager, sample_order_data, risk_level, expected_approval
     ):
         """"""
-        # 
+        #
         risk_metrics = RiskMetrics(
             {
                 "exchange_name": "BINANCE",
@@ -512,10 +512,10 @@ class TestRiskManagement:
             }
         )
 
-        # 
+        #
         risk_manager.risk_metrics_cache["BINANCE:test_account"] = risk_metrics
 
-        # 
+        #
         result = risk_manager.check_order_risk(
             exchange_name="BINANCE", account_id="test_account", order_data=sample_order_data
         )
@@ -527,14 +527,14 @@ class TestRiskManagement:
 
     def test_error_handling(self, risk_manager):
         """"""
-        # 
+        #
         result = risk_manager.check_order_risk(
             exchange_name="INVALID_EXCHANGE",
             account_id="test_account",
             order_data={"invalid": "data"},
         )
 
-        # 
+        #
         assert result is not None
         assert "approved" in result
 

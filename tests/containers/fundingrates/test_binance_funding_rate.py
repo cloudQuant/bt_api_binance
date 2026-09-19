@@ -10,14 +10,14 @@ from bt_api_binance.containers.fundingrates.binance_funding_rate import (
 def test_binance_request_funding_rate():
     """test_binance_request_funding_rate function"""
     data = {
-        "symbol": "BTCUSDT",  # 
-        "markPrice": "11793.63104562",  # 
-        "indexPrice": "11781.80495970",  # 
+        "symbol": "BTCUSDT",  #
+        "markPrice": "11793.63104562",  #
+        "indexPrice": "11781.80495970",  #
         "estimatedSettlePrice": "11781.16138815",  # ,
-        "lastFundingRate": "0.00038246",  # 
-        "nextFundingTime": 1597392000000,  # 
-        "interestRate": "0.00010000",  # 
-        "time": 1597370495002,  # 
+        "lastFundingRate": "0.00038246",  #
+        "nextFundingTime": 1597392000000,  #
+        "interestRate": "0.00010000",  #
+        "time": 1597370495002,  #
     }
     bf = BinanceRequestFundingRateData(data, "BTC-USDT", "SWAP", True)
     bf.init_data()
@@ -36,14 +36,14 @@ def test_binance_request_funding_rate():
 def test_binance_funding_rate():
     """test_binance_funding_rate function"""
     data = {
-        "e": "markPriceUpdate",  # 
-        "E": 1562305380000,  # 
-        "s": "BTCUSDT",  # 
-        "p": "11794.15000000",  # 
-        "i": "11784.62659091",  # 
+        "e": "markPriceUpdate",  #
+        "E": 1562305380000,  #
+        "s": "BTCUSDT",  #
+        "p": "11794.15000000",  #
+        "i": "11784.62659091",  #
         "P": "11784.25641265",  # ,
-        "r": "0.00038167",  # 
-        "T": 1562306400000,  # 
+        "r": "0.00038167",  #
+        "T": 1562306400000,  #
     }
     bf = BinanceWssFundingRateData(data, "BTC-USDT", "PERPETUAL", True)
     bf.init_data()

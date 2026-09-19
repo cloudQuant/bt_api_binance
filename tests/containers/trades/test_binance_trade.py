@@ -388,20 +388,20 @@ def test_binance_spot_wss_trade():
 def test_binance_req_trade():
     """test_binance_req_trade function"""
     data = {
-        "buyer": "false",  # 
-        "commission": "-0.07819010",  # 
-        "commissionAsset": "USDT",  # 
+        "buyer": "false",  #
+        "commission": "-0.07819010",  #
+        "commissionAsset": "USDT",  #
         "id": 698759,  # ID
-        "maker": "false",  # 
-        "orderId": 25851813,  # 
-        "price": "7819.01",  # 
-        "qty": "0.002",  # 
-        "quoteQty": "15.63802",  # 
-        "realizedPnl": "-0.91539999",  # 
-        "side": "SELL",  # 
-        "positionSide": "SHORT",  # 
-        "symbol": "BTCUSDT",  # 
-        "time": 1569514978020,  # 
+        "maker": "false",  #
+        "orderId": 25851813,  #
+        "price": "7819.01",  #
+        "qty": "0.002",  #
+        "quoteQty": "15.63802",  #
+        "realizedPnl": "-0.91539999",  #
+        "side": "SELL",  #
+        "positionSide": "SHORT",  #
+        "symbol": "BTCUSDT",  #
+        "time": 1569514978020,  #
     }
     bo = BinanceRequestTradeData(data, "BTC-USDT", "PERPETUAL", True)
     bo.init_data()
@@ -426,49 +426,49 @@ def test_binance_req_trade():
 def test_binance_wss_trade():
     """test_binance_wss_trade function"""
     data = {
-        "e": "ORDER_TRADE_UPDATE",  # 
-        "E": 1568879465651,  # 
-        "T": 1568879465650,  # 
+        "e": "ORDER_TRADE_UPDATE",  #
+        "E": 1568879465651,  #
+        "T": 1568879465650,  #
         "o": {
-            "s": "BTCUSDT",  # 
+            "s": "BTCUSDT",  #
             "c": "TEST",  # ID
             # ID:
-            # "autoclose-": 
+            # "autoclose-":
             # "adl_autoclose": ADL
-            # "settlement_autoclose-": 
-            "S": "SELL",  # 
-            "o": "TRAILING_STOP_MARKET",  # 
-            "f": "GTC",  # 
-            "q": "0.001",  # 
-            "p": "0",  # 
-            "ap": "0",  # 
+            # "settlement_autoclose-":
+            "S": "SELL",  #
+            "o": "TRAILING_STOP_MARKET",  #
+            "f": "GTC",  #
+            "q": "0.001",  #
+            "p": "0",  #
+            "ap": "0",  #
             "sp": "7103.04",  # ，
-            "x": "NEW",  # 
-            "X": "NEW",  # 
+            "x": "NEW",  #
+            "X": "NEW",  #
             "i": 8886774,  # ID
-            "l": "0",  # 
-            "z": "0",  # 
-            "L": "0",  # 
-            "N": "USDT",  # 
-            "n": "0",  # 
-            "T": 1568879465650,  # 
+            "l": "0",  #
+            "z": "0",  #
+            "L": "0",  #
+            "N": "USDT",  #
+            "n": "0",  #
+            "T": 1568879465650,  #
             "t": 0,  # ID
-            "b": "0",  # 
-            "a": "9.91",  # 
+            "b": "0",  #
+            "a": "9.91",  #
             "m": False,  # ？
-            "R": False,  # 
-            "wt": "CONTRACT_PRICE",  # 
-            "ot": "TRAILING_STOP_MARKET",  # 
-            "ps": "LONG",  # 
-            "cp": False,  # ; 
-            "AP": "7476.89",  # , 
-            "cr": "5.0",  # , 
-            "pP": False,  # 
-            "si": 0,  # 
-            "ss": 0,  # 
-            "rp": "0",  # 
-            "V": "EXPIRE_TAKER",  # 
-            "pm": "OPPONENT",  # 
+            "R": False,  #
+            "wt": "CONTRACT_PRICE",  #
+            "ot": "TRAILING_STOP_MARKET",  #
+            "ps": "LONG",  #
+            "cp": False,  # ;
+            "AP": "7476.89",  # ,
+            "cr": "5.0",  # ,
+            "pP": False,  #
+            "si": 0,  #
+            "ss": 0,  #
+            "rp": "0",  #
+            "V": "EXPIRE_TAKER",  #
+            "pm": "OPPONENT",  #
             "gtd": 0,  # TIFGTD
         },
     }

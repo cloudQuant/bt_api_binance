@@ -341,7 +341,7 @@ def test_binance_make_order_and_cancel_order():
 
     print("make_order info", buy_data.get_data()[0].init_data())
     # "https://fapi.binance.com/fapi/v1/order?recvWindow=3000&timestamp=1708936667118&symbol=OPUSDT&orderId=9106714922&signature=69492a311ad22b37710e029a4e317ac5a7f43f7beadfdfba2caa20baf19a9a6b"
-    # 
+    #
     query_data = live_binance_spot_feed.query_order(
         symbol="OP-USDT", client_order_id=buy_client_order_id
     )
@@ -375,12 +375,12 @@ def test_binance_req_order_functions():
         "buy-limit",
         client_order_id=buy_client_order_id,
     )
-    # 
+    #
     # sell_data = live_binance_spot_feed.make_order("OP-USDT", 2,
     #                                               ask_price, "sell-limit",
     #                                               client_order_id=sell_client_order_id,
     #                                               )
-    # 
+    #
     buy_info = buy_data.get_data()[0]
     assert buy_data.get_status()
     assert isinstance(buy_data, RequestData)
@@ -565,7 +565,7 @@ def test_binance_get_account_snapshot():
     assert isinstance(data, RequestData)
     result = data.get_data()
     print("account_snapshot:", result)
-    # 
+    #
     if result:
         assert isinstance(result, (dict, list))
 
@@ -588,7 +588,7 @@ def test_binance_get_ticker_trading_day():
     assert isinstance(data, RequestData)
     result = data.get_data()
     print("ticker_trading_day:", result)
-    # 
+    #
     if result and isinstance(result, list):
         first_item = result[0]
         assert isinstance(first_item, dict)
@@ -608,7 +608,7 @@ def test_binance_futures_transfer_history():
     assert isinstance(data, RequestData)
     result = data.get_data()
     print("futures_transfer_history:", result)
-    # 
+    #
     if result and isinstance(result, list):
         assert isinstance(result[0], (dict, str))
 
@@ -688,7 +688,7 @@ def test_spot_cancel_all_orders_no_symbol():
     path, params, extra_data = live_binance_spot_feed._cancel_all_orders()
 
     assert path == "DELETE /api/v3/openOrders"
-    assert "symbol" not in params  #  symbol 
+    assert "symbol" not in params  #  symbol
     assert extra_data["symbol_name"] == "ALL"
 
 
@@ -724,7 +724,7 @@ def test_spot_amend_keep_priority_with_client_id():
 
     assert params["origClientOrderId"] == "my_client_id"
     assert params["quantity"] == 5
-    assert "price" not in params  # 
+    assert "price" not in params  #
 
 
 if __name__ == "__main__":

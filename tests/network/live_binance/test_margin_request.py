@@ -1,6 +1,6 @@
 """
 Tests for Binance Margin API Request Implementation
- Binance  API 
+ Binance  API
 """
 
 import queue

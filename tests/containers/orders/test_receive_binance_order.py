@@ -106,49 +106,49 @@ def test_binance_spot_wss_order():
 def test_binance_wss_order():
     """test_binance_wss_order function"""
     data = {
-        "e": "ORDER_TRADE_UPDATE",  # 
-        "E": 1568879465651,  # 
-        "T": 1568879465650,  # 
+        "e": "ORDER_TRADE_UPDATE",  #
+        "E": 1568879465651,  #
+        "T": 1568879465650,  #
         "o": {
-            "s": "BTCUSDT",  # 
+            "s": "BTCUSDT",  #
             "c": "TEST",  # ID
             # ID:
-            # "autoclose-": 
+            # "autoclose-":
             # "adl_autoclose": ADL
-            # "settlement_autoclose-": 
-            "S": "SELL",  # 
-            "o": "TRAILING_STOP_MARKET",  # 
-            "f": "GTC",  # 
-            "q": "0.001",  # 
-            "p": "0",  # 
-            "ap": "0",  # 
+            # "settlement_autoclose-":
+            "S": "SELL",  #
+            "o": "TRAILING_STOP_MARKET",  #
+            "f": "GTC",  #
+            "q": "0.001",  #
+            "p": "0",  #
+            "ap": "0",  #
             "sp": "7103.04",  # ，
-            "x": "NEW",  # 
-            "X": "NEW",  # 
+            "x": "NEW",  #
+            "X": "NEW",  #
             "i": 8886774,  # ID
-            "l": "0",  # 
-            "z": "0",  # 
-            "L": "0",  # 
-            "N": "USDT",  # 
-            "n": "0",  # 
-            "T": 1568879465650,  # 
+            "l": "0",  #
+            "z": "0",  #
+            "L": "0",  #
+            "N": "USDT",  #
+            "n": "0",  #
+            "T": 1568879465650,  #
             "t": 0,  # ID
-            "b": "0",  # 
-            "a": "9.91",  # 
+            "b": "0",  #
+            "a": "9.91",  #
             "m": False,  # ？
-            "R": False,  # 
-            "wt": "CONTRACT_PRICE",  # 
-            "ot": "TRAILING_STOP_MARKET",  # 
-            "ps": "LONG",  # 
-            "cp": False,  # ; 
-            "AP": "7476.89",  # , 
-            "cr": "5.0",  # , 
-            "pP": False,  # 
-            "si": 0,  # 
-            "ss": 0,  # 
-            "rp": "0",  # 
-            "V": "EXPIRE_TAKER",  # 
-            "pm": "OPPONENT",  # 
+            "R": False,  #
+            "wt": "CONTRACT_PRICE",  #
+            "ot": "TRAILING_STOP_MARKET",  #
+            "ps": "LONG",  #
+            "cp": False,  # ;
+            "AP": "7476.89",  # ,
+            "cr": "5.0",  # ,
+            "pP": False,  #
+            "si": 0,  #
+            "ss": 0,  #
+            "rp": "0",  #
+            "V": "EXPIRE_TAKER",  #
+            "pm": "OPPONENT",  #
             "gtd": 0,  # TIFGTD
         },
     }
@@ -181,31 +181,31 @@ def test_binance_wss_order():
 def test_binance_req_order():
     """test_binance_req_order function"""
     data = {
-        "clientOrderId": "testOrder",  # 
+        "clientOrderId": "testOrder",  #
         "cumQty": "0",
-        "cumQuote": "0",  # 
-        "executedQty": "0",  # 
-        "orderId": 22542179,  # 
-        "avgPrice": "0.00000",  # 
-        "origQty": "10",  # 
-        "price": "0",  # 
-        "reduceOnly": "false",  # 
-        "side": "SELL",  # 
-        "positionSide": "SHORT",  # 
-        "status": "NEW",  # 
+        "cumQuote": "0",  #
+        "executedQty": "0",  #
+        "orderId": 22542179,  #
+        "avgPrice": "0.00000",  #
+        "origQty": "10",  #
+        "price": "0",  #
+        "reduceOnly": "false",  #
+        "side": "SELL",  #
+        "positionSide": "SHORT",  #
+        "status": "NEW",  #
         "stopPrice": "0",  # ，`TRAILING_STOP_MARKET`
-        "closePosition": "false",  # 
-        "symbol": "BTCUSDT",  # 
-        "timeInForce": "GTD",  # 
-        "type": "TRAILING_STOP_MARKET",  # 
-        "origType": "TRAILING_STOP_MARKET",  # 
-        "activatePrice": "9020",  # , `TRAILING_STOP_MARKET` 
-        "priceRate": "0.3",  # , `TRAILING_STOP_MARKET` 
-        "updateTime": 1566818724722,  # 
-        "workingType": "CONTRACT_PRICE",  # 
-        "priceProtect": "false",  # 
-        "priceMatch": "NONE",  # 
-        "selfTradePreventionMode": "NONE",  # 
+        "closePosition": "false",  #
+        "symbol": "BTCUSDT",  #
+        "timeInForce": "GTD",  #
+        "type": "TRAILING_STOP_MARKET",  #
+        "origType": "TRAILING_STOP_MARKET",  #
+        "activatePrice": "9020",  # , `TRAILING_STOP_MARKET`
+        "priceRate": "0.3",  # , `TRAILING_STOP_MARKET`
+        "updateTime": 1566818724722,  #
+        "workingType": "CONTRACT_PRICE",  #
+        "priceProtect": "false",  #
+        "priceMatch": "NONE",  #
+        "selfTradePreventionMode": "NONE",  #
         "goodTillDate": 1693207680000,  # TIFGTD
     }
     bo = BinanceRequestOrderData(data, "BTC-USDT", "PERPETUAL", True)

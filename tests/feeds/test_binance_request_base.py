@@ -43,7 +43,6 @@ def test_binance_accepts_api_key_and_api_secret_aliases() -> None:
 def test_binance_error_response_raises_invalid_api_key() -> None:
     """API 错误(code<0)必须翻译为 UnifiedError 并抛出，而非当作正常数据返回。"""
     import pytest
-
     from bt_api_base.error import UnifiedError
 
     request_data = BinanceRequestData(public_key="pk", private_key="sk")
@@ -53,7 +52,6 @@ def test_binance_error_response_raises_invalid_api_key() -> None:
 
 def test_binance_error_response_raises_rate_limit() -> None:
     import pytest
-
     from bt_api_base.error import UnifiedError
 
     request_data = BinanceRequestData(public_key="pk", private_key="sk")
@@ -63,7 +61,6 @@ def test_binance_error_response_raises_rate_limit() -> None:
 
 def test_binance_error_response_raises_invalid_signature() -> None:
     import pytest
-
     from bt_api_base.error import UnifiedError
 
     request_data = BinanceRequestData(public_key="pk", private_key="sk")
@@ -80,7 +77,6 @@ def test_binance_success_response_does_not_raise() -> None:
 def test_binance_sign_requires_private_key() -> None:
     """私钥缺失时签名必须抛 ConfigurationError，不得用空串静默签名。"""
     import pytest
-
     from bt_api_base.exceptions import ConfigurationError
 
     request_data = BinanceRequestData(public_key="pk")  # private_key=None

@@ -176,12 +176,12 @@ def test_binance_request_ticker():
     """test_binance_request_ticker function"""
     data = {
         "lastUpdateId": 1027024,
-        "symbol": "BTCUSDT",  # 
-        "bidPrice": "4.00000000",  # 
-        "bidQty": "431.00000000",  # 
-        "askPrice": "4.00000200",  # 
-        "askQty": "9.00000000",  # 
-        "time": 1589437530011,  # 
+        "symbol": "BTCUSDT",  #
+        "bidPrice": "4.00000000",  #
+        "bidQty": "431.00000000",  #
+        "askPrice": "4.00000200",  #
+        "askQty": "9.00000000",  #
+        "time": 1589437530011,  #
     }
     bt = BinanceRequestTickerData(data, "BTC-USDT", "PERPETUAL", True)
     bt.init_data()
@@ -201,15 +201,15 @@ def test_binance_request_ticker():
 def test_binance_ticker():
     """test_binance_ticker function"""
     data = {
-        "e": "bookTicker",  # 
+        "e": "bookTicker",  #
         "u": 400900217,  # ID
-        "E": 1568014460893,  # 
-        "T": 1568014460891,  # 
-        "s": "BNBUSDT",  # 
-        "b": "25.35190000",  # 
-        "B": "31.21000000",  # 
-        "a": "25.36520000",  # 
-        "A": "40.66000000",  # 
+        "E": 1568014460893,  #
+        "T": 1568014460891,  #
+        "s": "BNBUSDT",  #
+        "b": "25.35190000",  #
+        "B": "31.21000000",  #
+        "a": "25.36520000",  #
+        "A": "40.66000000",  #
     }
     bt = BinanceWssTickerData(data, "BNB-USDT", "PERPETUAL", True)
     bt.init_data()

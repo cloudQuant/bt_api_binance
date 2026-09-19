@@ -42,9 +42,9 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:  ()
-            is_freeze: 
-            extra_data: 
-            **kwargs: 
+            is_freeze:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -84,7 +84,7 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -118,8 +118,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -159,10 +159,10 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            asset: 
-            amount: 
-            extra_data: 
-            **kwargs: 
+            asset:
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -202,10 +202,10 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            asset: 
-            amount: 
-            extra_data: 
-            **kwargs: 
+            asset:
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -245,11 +245,11 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: from_email:
-            to_email: 
-            asset: 
-            amount: 
-            extra_data: 
-            **kwargs: 
+            to_email:
+            asset:
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -297,10 +297,10 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: startTime:
-            endTime: 
-            limit: 
-            extra_data: 
-            **kwargs: 
+            endTime:
+            limit:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -346,11 +346,11 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: from_type:
-            to_type: 
-            asset: 
-            amount: 
-            extra_data: 
-            **kwargs: 
+            to_type:
+            asset:
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -400,8 +400,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -439,8 +439,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -478,8 +478,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -517,8 +517,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """.
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -558,7 +558,7 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """ API Key.
 
         Args: email:
-            extra_data: 
+            extra_data:
             **kwargs:  (canTrade, marginTrade, futuresType)
 
         Returns: tuple: (path, params, extra_data)
@@ -569,7 +569,7 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         params = {
             "email": email,
         }
-        # 
+        #
         if "canTrade" in kwargs:
             params["canTrade"] = kwargs["canTrade"]
         if "marginTrade" in kwargs:
@@ -604,8 +604,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """ API Key.
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -644,8 +644,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
 
         Args: email:
             api_key: API Key
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -684,8 +684,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """ IP .
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -723,8 +723,8 @@ class BinanceRequestDataSubAccount(BinanceRequestData):
         """ IP .
 
         Args: email:
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

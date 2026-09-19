@@ -32,20 +32,20 @@ def test_binance_spot_request_balance():
 def test_binance_request_account_balance():
     """test_binance_request_account_balance function"""
     data = {
-        "asset": "USDT",  # 
-        "walletBalance": "23.72469206",  # 
-        "unrealizedProfit": "0.00000000",  # 
-        "marginBalance": "23.72469206",  # 
-        "maintMargin": "0.00000000",  # 
-        "initialMargin": "0.00000000",  # 
+        "asset": "USDT",  #
+        "walletBalance": "23.72469206",  #
+        "unrealizedProfit": "0.00000000",  #
+        "marginBalance": "23.72469206",  #
+        "maintMargin": "0.00000000",  #
+        "initialMargin": "0.00000000",  #
         "positionInitialMargin": "0.00000000",  # ()
         "openOrderInitialMargin": "0.00000000",  # ()
-        "crossWalletBalance": "23.72469206",  # 
-        "crossUnPnl": "0.00000000",  # 
-        "availableBalance": "126.72469206",  # 
-        "maxWithdrawAmount": "23.72469206",  # 
-        "marginAvailable": "true",  # 
-        "updateTime": 1625474304765,  # 
+        "crossWalletBalance": "23.72469206",  #
+        "crossUnPnl": "0.00000000",  #
+        "availableBalance": "126.72469206",  #
+        "maxWithdrawAmount": "23.72469206",  #
+        "marginAvailable": "true",  #
+        "updateTime": 1625474304765,  #
     }
     symbol = data["asset"]
     asset_type = data["asset"]
@@ -58,14 +58,14 @@ def test_binance_request_account_balance():
 def test_binance_request_balance():
     """test_binance_request_balance function"""
     data = {
-        "accountAlias": "SgsR",  # 
-        "asset": "USDT",  # 
-        "balance": "122607.35137903",  # 
-        "crossWalletBalance": "23.72469206",  # 
-        "crossUnPnl": "0.00000000",  # 
-        "availableBalance": "23.72469206",  # 
-        "maxWithdrawAmount": "23.72469206",  # 
-        "marginAvailable": "true",  # 
+        "accountAlias": "SgsR",  #
+        "asset": "USDT",  #
+        "balance": "122607.35137903",  #
+        "crossWalletBalance": "23.72469206",  #
+        "crossUnPnl": "0.00000000",  #
+        "availableBalance": "23.72469206",  #
+        "maxWithdrawAmount": "23.72469206",  #
+        "marginAvailable": "true",  #
         "updateTime": 1617939110373,
     }
 
@@ -83,10 +83,10 @@ def test_binance_request_balance():
 def test_binance_wss_balance():
     """test_binance_wss_balance function"""
     data = {
-        "a": "USDT",  # 
-        "wb": "122624.12345678",  # 
-        "cw": "100.12345678",  # 
-        "bc": "50.12345678",  # 
+        "a": "USDT",  #
+        "wb": "122624.12345678",  #
+        "cw": "100.12345678",  #
+        "bc": "50.12345678",  #
     }
 
     bo = BinanceSwapWssBalanceData(data, "USDT", "SWAP", True)

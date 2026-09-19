@@ -1,6 +1,6 @@
 """
 Tests for Binance Grid Trading API Request Implementation
- Binance  API 
+ Binance  API
 """
 
 import queue

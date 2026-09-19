@@ -10,8 +10,10 @@ from typing import Any
 from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 
+from bt_api_binance.feeds.host_mixin import RestHostMixin
 
-class RestTradeMixin:
+
+class RestTradeMixin(RestHostMixin):
     """交易 REST 方法集合。"""
 
     def _make_order(

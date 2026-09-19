@@ -14,7 +14,7 @@ class BinanceSwapSymbolData(SymbolData):
         """__init__ method"""
         super().__init__(symbol_info, has_been_json_encoded)
         self.event = "BinanceSymbolEvent"
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.exchange_name = "BINANCE"
         self.symbol_name = None
         self.asset_type = None
@@ -211,7 +211,7 @@ class BinanceSpotSymbolData(SymbolData):
         """__init__ method"""
         super().__init__(symbol_info, has_been_json_encoded)
         self.event = "BinanceSymbolEvent"
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.exchange_name = "BINANCE"
         self.symbol_name = None
         self.asset_type = "SPOT"

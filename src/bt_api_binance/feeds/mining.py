@@ -1,9 +1,9 @@
 """Binance Mining API - .
 
  Binance  REST API ，：
-- 
-- 
-- 
+-
+-
+-
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ class BinanceRequestDataMining(BinanceRequestData):
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -75,9 +75,9 @@ class BinanceRequestDataMining(BinanceRequestData):
         """.
 
         Args: algo:  (: sha256)
-            user_name: 
-            extra_data: 
-            **kwargs: 
+            user_name:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -116,9 +116,9 @@ class BinanceRequestDataMining(BinanceRequestData):
         """.
 
         Args: algo:  (: sha256)
-            user_name: 
-            extra_data: 
-            **kwargs: 
+            user_name:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

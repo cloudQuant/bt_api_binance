@@ -51,11 +51,11 @@ class BinanceRequestDataVipLoan(BinanceRequestData):
         """VIP.
 
         Args: loan_coin:
-            collateral_coin: 
-            current: 
-            size: 
-            extra_data: 
-            **kwargs: 
+            collateral_coin:
+            current:
+            size:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -114,11 +114,11 @@ class BinanceRequestDataVipLoan(BinanceRequestData):
         """VIP.
 
         Args: loan_coin:
-            collateral_coin: 
-            loan_amount: 
-            collateral_amount: 
-            extra_data: 
-            **kwargs: 
+            collateral_coin:
+            loan_amount:
+            collateral_amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -174,11 +174,11 @@ class BinanceRequestDataVipLoan(BinanceRequestData):
         """VIP.
 
         Args: loan_coin:
-            collateral_coin: 
-            repay_amount: 
+            collateral_coin:
+            repay_amount:
             collateral_amount:  ()
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -244,13 +244,13 @@ class BinanceRequestDataVipLoan(BinanceRequestData):
         """VIP.
 
         Args: loan_coin:
-            collateral_coin: 
-            start_time: 
-            end_time: 
-            current: 
-            size: 
-            extra_data: 
-            **kwargs: 
+            collateral_coin:
+            start_time:
+            end_time:
+            current:
+            size:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -325,13 +325,13 @@ class BinanceRequestDataVipLoan(BinanceRequestData):
         """VIP.
 
         Args: loan_coin:
-            collateral_coin: 
-            start_time: 
-            end_time: 
-            current: 
-            size: 
-            extra_data: 
-            **kwargs: 
+            collateral_coin:
+            start_time:
+            end_time:
+            current:
+            size:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

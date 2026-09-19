@@ -44,7 +44,7 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -78,7 +78,7 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -114,11 +114,11 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: asset:
-            startTime: 
-            endTime: 
-            limit: 
-            extra_data: 
-            **kwargs: 
+            startTime:
+            endTime:
+            limit:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -171,11 +171,11 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: asset:
-            startTime: 
-            endTime: 
-            limit: 
-            extra_data: 
-            **kwargs: 
+            startTime:
+            endTime:
+            limit:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -237,12 +237,12 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: transfer_type:  (SPOT, UM, CM, MARGIN, ISOLATED_MARGIN, etc.)
-            asset: 
-            amount: 
+            asset:
+            amount:
             from_symbol:  ( ISOLATED_MARGIN)
             to_symbol:  ( ISOLATED_MARGIN)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -309,11 +309,11 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: transfer_type:
-            startTime: 
-            endTime: 
-            limit: 
-            extra_data: 
-            **kwargs: 
+            startTime:
+            endTime:
+            limit:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -370,9 +370,9 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: asset:
-            amount: 
-            extra_data: 
-            **kwargs: 
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -411,10 +411,10 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: email:
-            asset: 
-            amount: 
-            extra_data: 
-            **kwargs: 
+            asset:
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -454,9 +454,9 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """U.
 
         Args: asset:
-            amount: 
-            extra_data: 
-            **kwargs: 
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -495,10 +495,10 @@ class BinanceRequestDataWallet(BinanceRequestData, WalletTransferMixin):
         """.
 
         Args: asset:
-            symbol: 
-            amount: 
-            extra_data: 
-            **kwargs: 
+            symbol:
+            amount:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

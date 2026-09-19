@@ -573,7 +573,7 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
             state = {"bids": {}, "asks": {}, "last_update_id": int(last_update_id)}
             self._update_depth_side(state["bids"], bids)
             self._update_depth_side(state["asks"], asks)
-            applied = []
+            applied: list[Any] = []
             for payload in buffered:
                 sequence = int(payload.get("u", -1))
                 if sequence <= state["last_update_id"]:
@@ -601,7 +601,7 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
             books[symbol] = state
             self._depth_sequences[symbol] = state["last_update_id"]
             self._depth_gaps.discard(symbol)
-            getattr(self, "_depth_stale_emitted", set()).discard(symbol)
+            getattr(self, "_depth_stale_emitted", set[str]()).discard(symbol)
             buffers.pop(symbol, None)
             source = (
                 applied[-1]
@@ -715,7 +715,7 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
                 request_id = rsp.get("id")
                 with self._subscription_lock:
                     expected = request_id in self._pending_subscription_ids
-                    if expected and rsp.get("result") is None:
+                    if expected and request_id is not None and rsp.get("result") is None:
                         self._pending_subscription_ids.remove(request_id)
                 if not expected:
                     self._emit_event("ws.subscription_ack_ignored", request_id=request_id)

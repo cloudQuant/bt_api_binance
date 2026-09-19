@@ -288,8 +288,8 @@ class BinanceDirectClient:
         self.q: queue.Queue[Any] = queue.Queue()
         self.output_queue: queue.Queue[tuple[str, Any]] = queue.Queue()
         self.feed = _create_feed(self.q, normalized)
-        self.market_stream = None
-        self.account_stream = None
+        self.market_stream: Any = None
+        self.account_stream: Any = None
         self.aliases: dict[str, set[str]] = defaultdict(set)
         self.last_price: dict[str, float] = {}
         self._latest_ticks: dict[str, dict[str, Any]] = {}
@@ -319,8 +319,8 @@ class BinanceDirectClient:
         if thread is not None and thread.is_alive():
             thread.join(timeout=2.0)
         self.thread = None
-        self.market_stream = None
-        self.account_stream = None
+        self.market_stream: Any = None
+        self.account_stream: Any = None
         self.aliases = defaultdict(set)
         self.last_price.clear()
         self._latest_ticks.clear()
@@ -510,7 +510,8 @@ class BinanceDirectClient:
 
     def poll_output(self) -> tuple[str, Any] | None:
         """poll_output method"""
-        try: return self.output_queue.get_nowait()
+        try:
+            return self.output_queue.get_nowait()
         except queue.Empty:
             return None
 

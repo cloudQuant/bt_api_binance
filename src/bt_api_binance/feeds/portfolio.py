@@ -1,9 +1,9 @@
 """Binance Portfolio Margin API - .
 
  Binance  REST API ，：
-- 
-- 
-- 
+-
+-
+-
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         """.
 
         Args: extra_data:
-            **kwargs: 
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -75,8 +75,8 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         """.
 
         Args: asset_type:  (: USDT)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -114,10 +114,10 @@ class BinanceRequestDataPortfolio(BinanceRequestData):
         """.
 
         Args: asset:
-            amount: 
+            amount:
             transfer_type:  (SPOT_TO_PORTFOLIO, PORTFOLIO_TO_SPOT)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

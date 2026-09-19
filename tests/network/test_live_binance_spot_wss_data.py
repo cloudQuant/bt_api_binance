@@ -120,7 +120,7 @@ def test_get_binance_account_data_feed():
     time.sleep(3)
     # receive_binance_position_data = False
     receive_binance_order_data = False
-    # 
+    #
     live_binance_spot_feed = init_req_feed()
     price_data = live_binance_spot_feed.get_tick("OP-USDT")
     price_data = price_data.get_data()[0].init_data()

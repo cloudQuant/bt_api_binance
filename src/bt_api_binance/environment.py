@@ -155,9 +155,12 @@ def configure_environment(params, options):
     params = copy(params)
     environment = resolve_environment(options)
     asset = type(params).__name__.removeprefix("BinanceExchangeData").upper()
+    # SPOT/SWAP 有专门的模拟环境端点；其余资产类型（WALLET/MARGIN/…）只存在于生产环境，
+    # 其 rest/ws 端点来自配置，不做模拟改写——但仍要对 URL 做安全校验（见 _override）。
+    # 历史实现对任何非 SPOT/SWAP 资产一律抛错，导致生产环境下这些资产的请求无法构造。
     endpoint_paths = _ENDPOINT_PATHS.get(asset)
-    if endpoint_paths is None:
-        raise ValueError(f"Binance endpoints are unsupported for asset type {asset}")
+    if endpoint_paths is None and environment != "production":
+        raise ValueError(f"Binance simulation is unsupported for asset type {asset}")
     params.environment = environment
     endpoints = None
     if environment != "production":
@@ -179,10 +182,14 @@ def configure_environment(params, options):
             raise ValueError(f"Binance simulation is unsupported for asset type {asset}")
     for index, field in enumerate(("rest_url", "wss_url", "acct_wss_url")):
         default = endpoints[index] if endpoints else getattr(params, field)
+        if not default:
+            # 该资产类型没有配置这个端点（例如钱包没有私有 WS）：无可校验或改写的内容
+            continue
+        expected_path = endpoint_paths[index] if endpoint_paths else urlsplit(default).path
         allowed = {urlsplit(default).hostname}
         setattr(
             params,
             field,
-            _override(options, field, default, allowed, endpoint_paths[index]),
+            _override(options, field, default, allowed, expected_path),
         )
     return params

@@ -1,6 +1,6 @@
 """
 Tests for Binance VIP Loan API Request Implementation
- Binance VIP API 
+ Binance VIP API
 """
 
 import queue

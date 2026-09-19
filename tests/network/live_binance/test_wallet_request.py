@@ -1,6 +1,6 @@
 """
 Tests for Binance Wallet API Request Implementation
- Binance  API 
+ Binance  API
 """
 
 import queue
@@ -162,26 +162,26 @@ def test_wallet_request_all_public_methods():
     wallet = BinanceRequestDataWallet(data_queue)
 
     public_methods = [
-        # 
+        #
         "get_wallet_balance",
         "get_asset_detail",
         "get_asset_ledger",
         "get_asset_dividend",
-        # 
+        #
         "asset_transfer",
         "get_asset_transfer",
         "transfer_to_futures_main",
         "transfer_to_futures_sub",
         "transfer_to_um",
         "transfer_to_isolated_margin",
-        # 
+        #
         "get_deposit_address",
         "get_deposit_history",
-        # 
+        #
         "withdraw",
         "get_withdraw_history",
         "get_withdraw_address",
-        # 
+        #
         "get_dust",
         "dust_transfer",
     ]

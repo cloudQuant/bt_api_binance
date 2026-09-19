@@ -54,7 +54,7 @@ class BinanceSpotRequestBalanceData(BalanceData):
         self.exchange_name = "BINANCE"
         self.account_type = "SPOT"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.available_margin = None
@@ -174,7 +174,7 @@ class BinanceSwapRequestBalanceData(BalanceData):
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.unrealized_profit = None
@@ -320,7 +320,7 @@ class BinanceSwapWssBalanceData(BalanceData):
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.margin = None
@@ -439,7 +439,7 @@ class BinanceSpotWssBalanceData(BalanceData):
         super().__init__(balance_info, has_been_json_encoded)
         self.exchange_name = "BINANCE"
         self.symbol_name = symbol_name
-        self.local_update_time = time.time()  # 
+        self.local_update_time = time.time()  #
         self.asset_type = asset_type
         self.balance_data = balance_info if has_been_json_encoded else None
         self.available_margin = None

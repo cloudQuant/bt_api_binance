@@ -14,13 +14,10 @@ from bt_api_base.functions.utils import (
 
 from bt_api_binance.containers.balances.binance_balance import (
     BinanceSpotRequestBalanceData,
-    BinanceSpotWssBalanceData,
     BinanceSwapRequestBalanceData,
-    BinanceSwapWssBalanceData,
 )
 from bt_api_binance.containers.positions.binance_position import (
     BinanceRequestPositionData,
-    BinanceWssPositionData,
 )
 
 

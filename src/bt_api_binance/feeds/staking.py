@@ -1,11 +1,11 @@
 """Binance Staking API - .
 
  Binance  REST API ，：
-- Staking 
-- Staking 
-- Staking 
-- Staking 
-- Staking 
+- Staking
+- Staking
+- Staking
+- Staking
+- Staking
 """
 
 from __future__ import annotations
@@ -45,11 +45,11 @@ class BinanceRequestDataStaking(BinanceRequestData):
         """ Staking .
 
         Args: product_type:  (STAKING, F_DEFI, L_DEFI)
-            asset: 
-            size: 
-            current: 
-            extra_data: 
-            **kwargs: 
+            asset:
+            size:
+            current:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -100,10 +100,10 @@ class BinanceRequestDataStaking(BinanceRequestData):
         """ Staking .
 
         Args: product_id: ID
-            amount: 
-            auto_renew: 
-            extra_data: 
-            **kwargs: 
+            amount:
+            auto_renew:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -148,10 +148,10 @@ class BinanceRequestDataStaking(BinanceRequestData):
         """ Staking .
 
         Args: product_id: ID
-            amount: 
+            amount:
             position_id: ID ()
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -198,11 +198,11 @@ class BinanceRequestDataStaking(BinanceRequestData):
         """ Staking .
 
         Args: product_type:  (STAKING, F_DEFI, L_DEFI)
-            asset: 
-            size: 
-            current: 
-            extra_data: 
-            **kwargs: 
+            asset:
+            size:
+            current:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -263,13 +263,13 @@ class BinanceRequestDataStaking(BinanceRequestData):
         """ Staking .
 
         Args: product_type:  (STAKING, F_DEFI, L_DEFI)
-            asset: 
-            start_time: 
-            end_time: 
-            size: 
-            current: 
-            extra_data: 
-            **kwargs: 
+            asset:
+            start_time:
+            end_time:
+            size:
+            current:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

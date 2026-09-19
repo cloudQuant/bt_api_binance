@@ -1,6 +1,6 @@
 """
 Tests for Binance WebSocket API - New implementations
- Binance WebSocket API 
+ Binance WebSocket API
 """
 
 from __future__ import annotations

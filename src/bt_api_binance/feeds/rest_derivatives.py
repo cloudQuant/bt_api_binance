@@ -8,13 +8,15 @@ from __future__ import annotations
 import time
 from typing import Any
 from urllib.parse import urlencode
-from bt_api_base.containers.requestdatas.request_data import RequestData
 
+from bt_api_base.containers.requestdatas.request_data import RequestData
 from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 
+from bt_api_binance.feeds.host_mixin import RestHostMixin
 
-class RestDerivativesMixin:
+
+class RestDerivativesMixin(RestHostMixin):
     """衍生品数据 REST 方法集合。"""
 
     def _get_open_interest(self, symbol, extra_data=None, **kwargs):
@@ -405,10 +407,10 @@ class RestDerivativesMixin:
         Args: symbol:
             period:  (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
             count:  (1-500)
-            start_time: 
-            end_time: 
-            extra_data: 
-            **kwargs: 
+            start_time:
+            end_time:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -476,10 +478,10 @@ class RestDerivativesMixin:
         Args: symbol:
             period:  (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
             count:  (1-500)
-            start_time: 
-            end_time: 
-            extra_data: 
-            **kwargs: 
+            start_time:
+            end_time:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -547,10 +549,10 @@ class RestDerivativesMixin:
         Args: symbol:
             period:  (5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d)
             count:  (1-500)
-            start_time: 
-            end_time: 
-            extra_data: 
-            **kwargs: 
+            start_time:
+            end_time:
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 
@@ -612,11 +614,11 @@ class RestDerivativesMixin:
         """.
 
         Args: symbol:  ()
-            start_time: 
-            end_time: 
+            start_time:
+            end_time:
             limit:  (1-100)
-            extra_data: 
-            **kwargs: 
+            extra_data:
+            **kwargs:
 
         Returns: tuple: (path, params, extra_data)
 

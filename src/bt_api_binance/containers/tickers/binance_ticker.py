@@ -18,8 +18,8 @@ class BinanceTickerData(TickerData):
     def __init__(self, ticker_info, symbol_name, asset_type, has_been_json_encoded=False) -> None:
         """__init__ method"""
         super().__init__(ticker_info, has_been_json_encoded)
-        self.exchange_name = "BINANCE"  # 
-        self.local_update_time = time.time()  # 
+        self.exchange_name = "BINANCE"  #
+        self.local_update_time = time.time()  #
         self.symbol_name = symbol_name
         self.asset_type = asset_type  # ticker
         self.ticker_data: dict[str, Any] | None = ticker_info if has_been_json_encoded else None
