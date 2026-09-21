@@ -213,7 +213,7 @@ asset_types:
       ticker: "<symbol>@ticker"
       ticker_window: "<symbol>@ticker_<window>"
       book_ticker: "<symbol>@bookTicker"
-      depth: "<symbol>@depth20@100ms"
+      depth: "<symbol>@depth@100ms"
       depth500: "<symbol>@depth5@500ms"
       depth_partial: "<symbol>@depth<level>@100ms"
       increDepthFlow: "<symbol>@depth@100ms"

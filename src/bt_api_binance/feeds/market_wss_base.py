@@ -407,12 +407,18 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
                 else:
                     reason = "snapshot_required"
                 schedule_snapshot = self._latch_depth_gap(symbol, payload, reason)
-            elif not self._apply_depth_diff(symbol, payload, native_previous=native_previous):
-                buffered = buffers.setdefault(symbol, [])
-                buffered.append(payload)
-                if len(buffered) > 1000:
-                    del buffered[:-1000]
-                schedule_snapshot = self._latch_depth_gap(symbol, payload, "sequence_gap")
+            else:
+                failure = self._apply_depth_diff(symbol, payload, native_previous=native_previous)
+                if failure:
+                    if failure == "sequence_gap":
+                        buffered = buffers.setdefault(symbol, [])
+                        buffered.append(payload)
+                        if len(buffered) > 1000:
+                            del buffered[:-1000]
+                    else:
+                        # An invalid transition cannot be replayed over a later seed.
+                        buffers.pop(symbol, None)
+                    schedule_snapshot = self._latch_depth_gap(symbol, payload, failure)
         if schedule_snapshot:
             self._schedule_depth_snapshot(symbol)
 
@@ -495,15 +501,56 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
                 self._depth_seed_inflight.discard(symbol)
 
     @staticmethod
-    def _update_depth_side(side, levels):
-        for level in levels or ():
-            if len(level) < 2:
-                continue
+    def _update_depth_side(side, levels, *, allow_zero_quantity_delete):
+        """Apply validated Binance levels to one side; zero quantity deletes a level."""
+        if levels is None:
+            return True
+        try:
+            iterator = iter(levels)
+        except TypeError:
+            return False
+        for level in iterator:
+            if not isinstance(level, (list, tuple)) or len(level) < 2:
+                return False
             price, quantity = str(level[0]), str(level[1])
-            if Decimal(quantity) == 0:
+            try:
+                price_value = Decimal(price)
+                quantity_value = Decimal(quantity)
+            except (ArithmeticError, TypeError, ValueError):
+                return False
+            if (
+                not price_value.is_finite()
+                or not quantity_value.is_finite()
+                or price_value <= 0
+                or quantity_value < 0
+            ):
+                return False
+            if quantity_value == 0:
+                if not allow_zero_quantity_delete:
+                    return False
                 side.pop(price, None)
             else:
                 side[price] = quantity
+        return True
+
+    @staticmethod
+    def _depth_book_is_valid(state):
+        """Require positive, nonempty sides with a strictly uncrossed top of book."""
+        bids, asks = state.get("bids"), state.get("asks")
+        if not bids or not asks:
+            return False
+        try:
+            bid_prices = [Decimal(price) for price in bids]
+            ask_prices = [Decimal(price) for price in asks]
+            bid_sizes = [Decimal(size) for size in bids.values()]
+            ask_sizes = [Decimal(size) for size in asks.values()]
+        except (ArithmeticError, TypeError, ValueError):
+            return False
+        if any(not value.is_finite() or value <= 0 for value in bid_prices + ask_prices):
+            return False
+        if any(not value.is_finite() or value <= 0 for value in bid_sizes + ask_sizes):
+            return False
+        return max(bid_prices) < min(ask_prices)
 
     @staticmethod
     def _sorted_depth_side(side, *, reverse):
@@ -532,7 +579,7 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
         first_sequence = int(payload["U"])
         sequence = int(payload["u"])
         if sequence <= previous:
-            return True
+            return None
         linked = (
             int(native_previous) == previous
             if native_previous is not None
@@ -541,15 +588,26 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
         if bridge and native_previous is not None:
             linked = int(native_previous) == previous or first_sequence <= previous + 1 <= sequence
         if not linked:
-            self._depth_gaps.add(symbol)
-            self._depth_books.pop(symbol, None)
-            return False
-        self._update_depth_side(state["bids"], payload.get("b"))
-        self._update_depth_side(state["asks"], payload.get("a"))
-        state["last_update_id"] = sequence
+            return "sequence_gap"
+        candidate = {
+            "bids": dict(state["bids"]),
+            "asks": dict(state["asks"]),
+            "last_update_id": sequence,
+        }
+        if (
+            not self._update_depth_side(
+                candidate["bids"], payload.get("b"), allow_zero_quantity_delete=True
+            )
+            or not self._update_depth_side(
+                candidate["asks"], payload.get("a"), allow_zero_quantity_delete=True
+            )
+            or not self._depth_book_is_valid(candidate)
+        ):
+            return "invalid_reconstructed_book"
+        self._depth_books[symbol] = candidate
         self._depth_sequences[symbol] = sequence
         self._publish_depth_book(symbol, payload, "continuous")
-        return True
+        return None
 
     def seed_depth_snapshot(
         self,
@@ -571,8 +629,16 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
                 buffers = self._depth_buffers = {}
             buffered = list(buffers.get(symbol, ()))
             state = {"bids": {}, "asks": {}, "last_update_id": int(last_update_id)}
-            self._update_depth_side(state["bids"], bids)
-            self._update_depth_side(state["asks"], asks)
+            if (
+                not self._update_depth_side(state["bids"], bids, allow_zero_quantity_delete=False)
+                or not self._update_depth_side(
+                    state["asks"], asks, allow_zero_quantity_delete=False
+                )
+                or not self._depth_book_is_valid(state)
+            ):
+                buffers.pop(symbol, None)
+                self._latch_depth_gap(symbol, {}, "invalid_orderbook_snapshot")
+                return False
             applied: list[Any] = []
             for payload in buffered:
                 sequence = int(payload.get("u", -1))
@@ -591,8 +657,18 @@ class BinanceMarketWssData(MyWebsocketApp, BinanceRequestData):
                 if not linked:
                     self._latch_depth_gap(symbol, payload, "snapshot_bridge_gap")
                     return False
-                self._update_depth_side(state["bids"], payload.get("b"))
-                self._update_depth_side(state["asks"], payload.get("a"))
+                if (
+                    not self._update_depth_side(
+                        state["bids"], payload.get("b"), allow_zero_quantity_delete=True
+                    )
+                    or not self._update_depth_side(
+                        state["asks"], payload.get("a"), allow_zero_quantity_delete=True
+                    )
+                    or not self._depth_book_is_valid(state)
+                ):
+                    buffers.pop(symbol, None)
+                    self._latch_depth_gap(symbol, payload, "invalid_reconstructed_book")
+                    return False
                 state["last_update_id"] = sequence
                 applied.append(payload)
             books = getattr(self, "_depth_books", None)

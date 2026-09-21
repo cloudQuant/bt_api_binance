@@ -8,6 +8,7 @@ from __future__ import annotations
 import pytest
 
 from bt_api_binance.exchange_data import (
+    BinanceExchangeDataCoinM,
     BinanceExchangeDataSpot,
     BinanceExchangeDataSwap,
 )
@@ -20,6 +21,17 @@ def test_spot_wss_kline_timezone():
     assert "kline_timezone" in spot.wss_paths
     assert spot.wss_paths["kline_timezone"]["params"] == ["<symbol>@kline_<period>@+08:00"]
     assert spot.wss_paths["kline_timezone"]["method"] == "SUBSCRIBE"
+
+
+def test_swap_depth_uses_diff_stream_and_preserves_partial_and_spot_routes():
+    swap = BinanceExchangeDataSwap()
+    spot = BinanceExchangeDataSpot()
+    coin_m = BinanceExchangeDataCoinM()
+
+    assert swap.wss_paths["depth"]["params"] == ["<symbol>@depth@100ms"]
+    assert swap.wss_paths["depth_partial"]["params"] == ["<symbol>@depth<level>@100ms"]
+    assert spot.wss_paths["depth"]["params"] == ["<symbol>@depth20@100ms"]
+    assert coin_m.wss_paths["depth"]["params"] == ["<symbol>@depth20@100ms"]
 
 
 def test_spot_wss_liquidation_order():

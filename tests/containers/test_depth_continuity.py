@@ -45,7 +45,7 @@ def test_depth_requires_snapshot_then_replays_bridge_and_zero_deletes():
         "BTCUSDT",
         9,
         bids=[["59999", "2"]],
-        asks=[["60001", "3"]],
+        asks=[["60001", "3"], ["60003", "2"]],
     )
     replayed = _next(feed)
     assert replayed["snapshot_or_delta"] == "snapshot"
@@ -66,7 +66,58 @@ def test_depth_requires_snapshot_then_replays_bridge_and_zero_deletes():
     rebuilt = _next(feed)
     assert rebuilt["sequence_id"] == 10_015
     assert rebuilt["bid_price_list"] == [60002.0, 59999.0]
-    assert rebuilt["ask_price_list"] == []
+    assert rebuilt["ask_price_list"] == [60003.0]
+
+
+@pytest.mark.parametrize(
+    ("bids", "asks"),
+    [
+        ([], [["101", "0"]]),  # delete the last ask
+        ([["101", "1"]], []),  # lock the top of book
+        ([["102", "1"]], []),  # cross the top of book
+        ([["99", "-1"]], []),  # reject nonpositive update size
+        ([["0", "1"]], []),  # reject nonpositive update price
+    ],
+)
+def test_invalid_depth_transition_latches_gap_without_publishing_book(bids, asks):
+    feed = _feed()
+    assert feed.seed_depth_snapshot("BTCUSDT", 100, bids=[["99", "1"]], asks=[["101", "1"]])
+    _next(feed)
+
+    feed.push_order_book(_event(101, 101, 100, bids=bids, asks=asks))
+
+    stale = feed.data_queue.get_nowait()
+    assert stale["stale"] is True
+    assert stale["stale_reason"] == "invalid_reconstructed_book"
+    assert "BTCUSDT" in feed._depth_gaps
+    assert "BTCUSDT" not in feed._depth_books
+    with pytest.raises(Empty):
+        feed.data_queue.get_nowait()
+
+
+@pytest.mark.parametrize(
+    ("bids", "asks"),
+    [
+        ([], [["101", "1"]]),
+        ([["99", "0"]], [["101", "1"]]),
+        ([["0", "1"]], [["101", "1"]]),
+        ([["99", "1"], ["98", "0"]], [["101", "1"]]),
+        ([["99", "-1"]], [["101", "1"]]),
+        ([["102", "1"]], [["101", "1"]]),
+    ],
+)
+def test_invalid_seed_latches_gap_without_publishing_snapshot(bids, asks):
+    feed = _feed()
+
+    assert not feed.seed_depth_snapshot("BTCUSDT", 100, bids=bids, asks=asks)
+
+    stale = feed.data_queue.get_nowait()
+    assert stale["stale"] is True
+    assert stale["stale_reason"] == "invalid_orderbook_snapshot"
+    assert "BTCUSDT" in feed._depth_gaps
+    assert "BTCUSDT" not in feed._depth_books
+    with pytest.raises(Empty):
+        feed.data_queue.get_nowait()
 
 
 def test_gap_latches_without_publishing_until_complete_snapshot_reseed():
@@ -83,7 +134,7 @@ def test_gap_latches_without_publishing_until_complete_snapshot_reseed():
     with pytest.raises(Empty):
         feed.data_queue.get_nowait()
 
-    assert feed.seed_depth_snapshot("BTCUSDT", 199, bids=[["98", "1"]], asks=[["102", "1"]])
+    assert feed.seed_depth_snapshot("BTCUSDT", 199, bids=[["59998", "1"]], asks=[["60002", "1"]])
     recovered = _next(feed)
     assert recovered["continuity_status"] == "snapshot"
     assert recovered["sequence_id"] == 250
@@ -111,6 +162,19 @@ def test_initial_diff_schedules_snapshot_and_publishes_only_validated_book():
     recovered = _next(feed)
     assert recovered["sequence_id"] == 12
     assert recovered["stale"] is False
+
+
+def test_invalid_buffered_diff_during_reseed_is_not_published_or_replayed():
+    feed = _feed()
+    feed.push_order_book(_event(10, 12, 9, asks=[["60001", "0"]]))
+    assert feed.data_queue.get_nowait()["stale"] is True
+
+    assert not feed.seed_depth_snapshot("BTCUSDT", 9, bids=[["59999", "2"]], asks=[["60001", "3"]])
+
+    assert "BTCUSDT" not in feed._depth_buffers
+    assert "BTCUSDT" in feed._depth_gaps
+    with pytest.raises(Empty):
+        feed.data_queue.get_nowait()
 
 
 def test_snapshot_older_than_buffer_bridge_never_publishes():
