@@ -1,4 +1,4 @@
-# bt_api_binance test layout
+﻿# bt_api_binance test layout
 
 This directory contains all Binance-specific tests, consolidated from the root `tests/` tree and `examples/`.
 
