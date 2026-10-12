@@ -115,7 +115,12 @@ def verify_environment(params):
     result = {"environment": "unknown", "simulated": None, "verified": False}
     try:
         environment = str(params.environment).strip().lower()
-        asset = type(params).__name__.removeprefix("BinanceExchangeData").upper()
+        params_name = type(params).__name__
+        asset = (
+            params_name[len("BinanceExchangeData") :]
+            if params_name.startswith("BinanceExchangeData")
+            else params_name
+        ).upper()
         endpoint_hosts = _ENDPOINTS.get((asset, environment))
         endpoint_paths = _ENDPOINT_PATHS.get(asset)
         if endpoint_hosts is None or endpoint_paths is None:
@@ -154,7 +159,12 @@ def configure_environment(params, options):
     """
     params = copy(params)
     environment = resolve_environment(options)
-    asset = type(params).__name__.removeprefix("BinanceExchangeData").upper()
+    params_name = type(params).__name__
+    asset = (
+        params_name[len("BinanceExchangeData") :]
+        if params_name.startswith("BinanceExchangeData")
+        else params_name
+    ).upper()
     # SPOT/SWAP 有专门的模拟环境端点；其余资产类型（WALLET/MARGIN/…）只存在于生产环境，
     # 其 rest/ws 端点来自配置，不做模拟改写——但仍要对 URL 做安全校验（见 _override）。
     # 历史实现对任何非 SPOT/SWAP 资产一律抛错，导致生产环境下这些资产的请求无法构造。
