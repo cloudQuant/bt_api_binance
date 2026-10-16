@@ -1,4 +1,4 @@
-﻿# bt_api_binance
+# bt_api_binance
 
 [![PyPI Version](https://img.shields.io/pypi/v/bt_api_binance.svg)](https://pypi.org/project/bt_api_binance/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/bt_api_binance.svg)](https://pypi.org/project/bt_api_binance/)
@@ -101,7 +101,7 @@ References: [USD-M demo endpoints](https://developers.binance.com/en/docs/produc
 
 ### Plugin Architecture
 
-Auto-registers at import time via `ExchangeRegistry`. Works seamlessly with `BtApi`:
+PluginLoader explicitly calls register_plugin(registry) to register direct feeds for BtApi. Importing this package alone does not mutate the registry:
 
 ```python
 from bt_api_py import BtApi
@@ -292,8 +292,6 @@ bt_api_binance/
 │   ├── market_wss_base.py     # MarketWssData base class
 │   └── account_wss_base.py    # AccountWssData base class
 ├── containers/                   # 12 normalized data container types
-├── gateway/
-│   └── adapter.py              # BinanceGatewayAdapter(PluginGatewayAdapter)
 ├── errors/
 │   └── binance_translator.py  # BinanceErrorTranslator → bt_api_base.ApiError
 └── configs/
@@ -449,7 +447,7 @@ MIT — see [LICENSE](LICENSE).
 
 ### 插件架构
 
-通过 `ExchangeRegistry` 在导入时自动注册，与 `BtApi` 无缝协作：
+PluginLoader 会显式调用 register_plugin(registry) 将直接 feed 注册到 ExchangeRegistry。单独导入模块不会自动注册；以下为 BtApi 调用示例：
 
 ```python
 from bt_api_py import BtApi
@@ -640,8 +638,6 @@ bt_api_binance/
 │   ├── market_wss_base.py    # MarketWssData 基类
 │   └── account_wss_base.py   # AccountWssData 基类
 ├── containers/                   # 12 种规范化数据容器类型
-├── gateway/
-│   └── adapter.py             # BinanceGatewayAdapter(PluginGatewayAdapter)
 ├── errors/
 │   └── binance_translator.py # BinanceErrorTranslator → bt_api_base.ApiError
 └── configs/

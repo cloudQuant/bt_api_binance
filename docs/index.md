@@ -1,4 +1,4 @@
-﻿---
+---
 title: Home | bt_api_binance
 ---
 
@@ -21,7 +21,7 @@ This package is a **runtime plugin dependency** for `bt_api` applications connec
 
 - **12+ Asset Types**: Spot, USDT-M Futures, COIN-M Futures, Margin, Options, Algo, Grid, Staking, Mining, VIP Loans, Wallet, Sub-Accounts, Portfolio Margin
 - **Dual API Modes**: Synchronous REST and asynchronous WebSocket streaming
-- **Plugin Architecture**: Integrates via `ExchangeRegistry` — auto-registers at import time
+- **Plugin Architecture**: PluginLoader explicitly calls register_plugin(registry) to register direct feeds
 - **Direct Client Mode**: `BinanceDirectClient` for standalone use without the full bt_api framework
 - **Unified Data Model**: All responses normalized to bt_api_base container types (Ticker, OrderBook, Bar, Order, Position, Balance...)
 - **Config-Driven**: YAML-based exchange configuration — no hardcoded endpoints
@@ -52,8 +52,6 @@ bt_api_binance/
 │   ├── portfolio.py         # Portfolio margin feeds
 │   └── (bases: request_base.py, market_wss_base.py, account_wss_base.py)
 ├── containers/               # 12 data container types (orders, balances, positions, tickers...)
-├── gateway/
-│   └── adapter.py           # BinanceGatewayAdapter(PluginGatewayAdapter)
 ├── errors/
 │   └── binance_translator.py  # BinanceErrorTranslator
 └── configs/
@@ -166,7 +164,7 @@ while True:
 - [Exchange Data](api/exchange_data.md) — Exchange configuration classes
 - [Containers](api/containers.md) — Normalized data containers
 - [WebSocket](api/websocket.md) — WebSocket adapter
-- [Gateway](api/gateway.md) — Gateway adapter
+- [ServiceHost boundary](api/gateway.md) — Direct provider and managed-write boundary
 
 ## Online Documentation
 
@@ -194,7 +192,7 @@ while True:
 
 - **12+ 资产类型**: 现货、U本位合约、币本位合约、杠杆、期权、算法单、网格交易、质押、矿池、VIP借贷、钱包、子账户、组合保证金
 - **双 API 模式**: 同步 REST 和异步 WebSocket 流
-- **插件架构**: 通过 `ExchangeRegistry` 集成 — 导入时自动注册
+- **插件架构**: PluginLoader 显式调用 register_plugin(registry) 注册直接 feed；单独导入不会自动注册
 - **独立客户端模式**: `BinanceDirectClient` 无需完整 bt_api 框架即可独立使用
 - **统一数据模型**: 所有响应规范化为 bt_api_base 容器类型（行情、订单簿、K线、订单、持仓、余额...）
 - **配置驱动**: YAML 配置文件 — 无硬编码端点
@@ -217,8 +215,6 @@ bt_api_binance/
 │   │   mining.py, vip_loan.py, sub_account.py, wallet.py, portfolio.py
 │   └── (基类: request_base.py, market_wss_base.py, account_wss_base.py)
 ├── containers/               # 12 种数据容器类型
-├── gateway/
-│   └── adapter.py           # BinanceGatewayAdapter(PluginGatewayAdapter)
 ├── errors/
 │   └── binance_translator.py  # BinanceErrorTranslator
 └── configs/
@@ -293,7 +289,7 @@ ticker = api.get_tick("BINANCE___SPOT", "BTCUSDT")
 - [交易所数据](api/exchange_data.md) — 交易所配置类
 - [容器](api/containers.md) — 规范化数据容器
 - [WebSocket](api/websocket.md) — WebSocket 适配器
-- [网关](api/gateway.md) — 网关适配器
+- [ServiceHost 边界](api/gateway.md) — 直连 provider 与托管写入边界
 
 ### 在线文档
 

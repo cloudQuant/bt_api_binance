@@ -1,4 +1,4 @@
-﻿# bt_api_binance test layout
+# bt_api_binance test layout
 
 This directory contains all Binance-specific tests, consolidated from the root `tests/` tree and `examples/`.
 
@@ -59,5 +59,4 @@ The following files in the root `tests/` tree still contain Binance references b
 
 - `tests/test_registry_and_balance.py` — multi-exchange registry smoke test
 - `tests/plugins/test_bt_api_startup.py` — plugin loader startup behavior
-- `tests/test_gateway_runtime.py` — gateway adapter wiring (multi-exchange)
 - `tests/test_stage1_exchange_integration.py` — cross-exchange feed/error/rate-limiter integration
