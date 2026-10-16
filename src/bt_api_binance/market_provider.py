@@ -184,10 +184,10 @@ class BinanceUsdMDemoMarketProvider:
             raise TypeError("Binance stream factory must return a startable and stoppable stream")
         try:
             start(connect_timeout=self._connect_timeout)
-        except Exception:
+        except BaseException:
             try:
                 stopped = stop()
-            except Exception:
+            except BaseException:
                 stopped = False
             if stopped is False:
                 self._pending_start_cleanup.append(stream)
@@ -209,6 +209,7 @@ class BinanceUsdMDemoMarketProvider:
             return False
         handle.active = False
         handle.queue.clear()
+        self._handles.remove(handle)
         return True
 
     def poll(self, handle: object, *, limit: int) -> tuple[MarketProviderEvent, ...]:

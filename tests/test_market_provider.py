@@ -82,6 +82,23 @@ class _UncertainStartStream(_SyntheticBinanceStream):
         return self.stop_calls > 1
 
 
+class _InterruptedStartStream(_SyntheticBinanceStream):
+    def __init__(self, sink: BoundedBinanceTickerQueue) -> None:
+        super().__init__(sink)
+        self.worker_active = False
+
+    def start(self, *, connect_timeout: float) -> None:
+        self.worker_active = True
+        raise KeyboardInterrupt("synthetic startup interrupted")
+
+    def stop(self) -> bool:
+        self.stop_calls += 1
+        if self.stop_calls == 1:
+            raise SystemExit("synthetic cleanup interrupted")
+        self.worker_active = False
+        return True
+
+
 def test_demo_ticker_provider_projects_existing_feed_event_and_closes() -> None:
     key = _key()
     streams: list[_SyntheticBinanceStream] = []
@@ -147,6 +164,48 @@ def test_failed_start_retains_exact_stream_until_provider_close_confirms_stop() 
     assert provider.close() is True
     assert streams[0].stop_calls == 2
     assert provider.diagnostics["pending_start_cleanup"] == 0
+
+
+def test_baseexception_start_retains_stream_when_cleanup_is_uncertain() -> None:
+    streams: list[_InterruptedStartStream] = []
+
+    def stream_factory(_key, sink):
+        stream = _InterruptedStartStream(sink)
+        streams.append(stream)
+        return stream
+
+    provider = BinanceUsdMDemoMarketProvider(stream_factory=stream_factory)
+    with pytest.raises(KeyboardInterrupt, match="synthetic startup interrupted"):
+        provider.subscribe(_key(), generation="market-generation-1")
+
+    assert streams[0].worker_active is True
+    assert provider._pending_start_cleanup == [streams[0]]
+    assert streams[0].stop_calls == 1
+    assert provider.close() is True
+    assert streams[0].worker_active is False
+    assert streams[0].stop_calls == 2
+    assert provider._pending_start_cleanup == []
+
+
+def test_successfully_unsubscribed_handle_is_removed_and_remains_idempotent() -> None:
+    streams: list[_SyntheticBinanceStream] = []
+
+    def stream_factory(_key, sink):
+        stream = _SyntheticBinanceStream(sink)
+        streams.append(stream)
+        return stream
+
+    provider = BinanceUsdMDemoMarketProvider(stream_factory=stream_factory)
+    handle = provider.subscribe(_key(), generation="market-generation-1")
+    assert len(provider._handles) == 1
+
+    assert provider.unsubscribe(handle) is True
+    assert handle.active is False
+    assert provider._handles == []
+    assert streams[0].stop_calls == 1
+    assert provider.unsubscribe(handle) is True
+    assert streams[0].stop_calls == 1
+    assert provider.close() is True
 
 
 def test_provider_rejects_non_demo_key_before_stream_factory() -> None:
