@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from bt_api_base.exceptions import InvalidOrderError
 from bt_api_base.functions.calculate_time import datetime2timestamp
 from bt_api_base.functions.utils import update_extra_data
 
@@ -15,6 +16,17 @@ from bt_api_binance.feeds.host_mixin import RestHostMixin
 
 class RestTradeMixin(RestHostMixin):
     """交易 REST 方法集合。"""
+
+    _LIMIT_TIME_IN_FORCE_BY_ASSET_TYPE = {
+        "SPOT": frozenset({"GTC", "IOC", "FOK"}),
+        # The /fapi/v1/order USDⓈ-M route accepts GTC/IOC/FOK/GTX/GTD/RPI.
+        # https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order
+        # GTD is accepted only when the native feed caller supplies its
+        # required goodTillDate; the current typed OrderRequest cannot do so.
+        "SWAP": frozenset({"GTC", "IOC", "FOK", "GTX", "GTD", "RPI"}),
+    }
+    # Other native feed asset families are intentionally left untouched until
+    # their endpoint-specific TIF contract is represented by the typed mapper.
 
     def _make_order(
         self,
@@ -36,6 +48,24 @@ class RestTradeMixin(RestHostMixin):
         side, order_type = order_type.split("-")
         side = side.upper()
         time_in_force = kwargs.get("time_in_force", "GTC")
+        good_till_date = kwargs.get("goodTillDate", kwargs.get("good_till_date"))
+        asset_type = str(getattr(self, "asset_type", "") or "").strip().upper()
+        if order_type.lower() == "limit":
+            supported_tif = self._LIMIT_TIME_IN_FORCE_BY_ASSET_TYPE.get(asset_type)
+            if supported_tif is not None and (
+                not isinstance(time_in_force, str) or time_in_force not in supported_tif
+            ):
+                detail = (
+                    f"Unsupported Binance {asset_type} LIMIT time_in_force "
+                    f"{time_in_force!r}"
+                )
+                raise InvalidOrderError(self.exchange_name, str(symbol), detail)
+            if asset_type == "SWAP" and time_in_force == "GTD" and good_till_date is None:
+                raise InvalidOrderError(
+                    self.exchange_name,
+                    str(symbol),
+                    "GTD requires goodTillDate",
+                )
         position_side = (
             kwargs.get("position_side")
             or kwargs.get("positionSide")
@@ -52,6 +82,8 @@ class RestTradeMixin(RestHostMixin):
             "type": order_type.upper(),
             "timeInForce": time_in_force,
         }
+        if asset_type == "SWAP" and order_type.lower() == "limit" and time_in_force == "GTD":
+            params["goodTillDate"] = good_till_date
         if self.asset_type == "SWAP":
             params["reduceOnly"] = (
                 str(reduce_only).lower()
