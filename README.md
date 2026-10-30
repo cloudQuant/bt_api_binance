@@ -101,7 +101,7 @@ References: [USD-M demo endpoints](https://developers.binance.com/en/docs/produc
 
 ### Plugin Architecture
 
-PluginLoader explicitly calls register_plugin(registry) to register direct feeds for BtApi. Importing this package alone does not mutate the registry:
+This package implements Binance-specific REST feeds, market/account WebSocket streams, endpoint mapping, and typed response containers; it also exposes `BinanceDirectClient` for direct use. The `bt_api.plugins` entry point is loaded by `bt_api_base.PluginLoader`, which calls `register_plugin(registry)`; importing the package alone does not mutate a registry. The current plugin hook registers only `BINANCE___SPOT` and `BINANCE___SWAP` with `BtApi`, so the 13 asset/API categories listed above are not all plugin registrations. `bt_api_py` provides the `BtApi` facade and coordinates registered provider calls/streams; Backtrader supplies the strategy and engine layer. This code wiring is not live-account acceptance. See [Trading System Architecture](https://github.com/cloudQuant/backtrader/blob/dev/docs/TRADING_SYSTEM_ARCHITECTURE.md).
 
 ```python
 from bt_api_py import BtApi
@@ -447,7 +447,7 @@ MIT — see [LICENSE](LICENSE).
 
 ### 插件架构
 
-PluginLoader 会显式调用 register_plugin(registry) 将直接 feed 注册到 ExchangeRegistry。单独导入模块不会自动注册；以下为 BtApi 调用示例：
+本包实现 Binance 专属 REST feed、行情/账户 WebSocket stream、端点映射及类型化响应容器，并提供可直接使用的 `BinanceDirectClient`。安装包的 `bt_api.plugins` 入口由 `bt_api_base.PluginLoader` 加载并调用 `register_plugin(registry)`；单独导入不会修改注册表。当前插件入口只向 `BtApi` 注册 `BINANCE___SPOT` 和 `BINANCE___SWAP`，因此上文的 13 类 API/资产分类不等于全部已作为插件注册。`bt_api_py` 提供 `BtApi` 外观并协调已注册的 provider 调用和流；Backtrader 提供策略与引擎层。源码接线不代表已通过真实账户验收。参见[交易系统架构](https://github.com/cloudQuant/backtrader/blob/dev/docs/TRADING_SYSTEM_ARCHITECTURE.md)。以下为 BtApi 调用示例：
 
 ```python
 from bt_api_py import BtApi
