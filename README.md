@@ -94,6 +94,8 @@ References: [USD-M demo endpoints](https://developers.binance.com/en/docs/produc
 | Sub-Accounts | `BINANCE___SUB_ACCOUNT` | ✅ | — | Sub-account management |
 | Portfolio Margin | `BINANCE___PORTFOLIO` | ✅ | — | Portfolio margin |
 
+This table summarizes provider-package feed/API categories, not the `BtApi` plugin registry. The codes and ✅ markers describe package source coverage; the current `register_plugin` entry advertises and registers only `BINANCE___SPOT` and `BINANCE___SWAP`. Other provider feed modules are not registered by this plugin entry. Source-level support does not establish real-account acceptance.
+
 ### Dual API Modes
 
 - **REST API** — Synchronous polling for order management, balance queries, historical data
@@ -439,6 +441,8 @@ MIT — see [LICENSE](LICENSE).
 | 钱包 | `BINANCE___WALLET` | ✅ | — | 资产管理 |
 | 子账户 | `BINANCE___SUB_ACCOUNT` | ✅ | — | 子账户管理 |
 | 组合保证金 | `BINANCE___PORTFOLIO` | ✅ | — | 组合保证金账户 |
+
+本表概括 provider 包内的 feed/API 类别，不是 `BtApi` 插件注册清单。代码和 ✅ 标记描述包内源码覆盖；当前 `register_plugin` 入口只声明并注册 `BINANCE___SPOT` 和 `BINANCE___SWAP`，其他 provider feed 模块没有由该入口注册。源码级支持不代表已通过真实账户验收。
 
 ### 双 API 模式
 
