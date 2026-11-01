@@ -110,3 +110,7 @@ BINANCE = "bt_api_binance.error_classification:classify_error"
 [project.entry-points."bt_api.order_side_projections"]
 BINANCE___SPOT = "bt_api_binance.order_side_projection:order_side_candidates"
 BINANCE___SWAP = "bt_api_binance.order_side_projection:order_side_candidates"
+
+[project.entry-points."bt_api.normalization_policies"]
+BINANCE___SPOT = "bt_api_binance.normalization_policy:normalization_policy"
+BINANCE___SWAP = "bt_api_binance.normalization_policy:normalization_policy"
