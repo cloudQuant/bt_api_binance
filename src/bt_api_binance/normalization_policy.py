@@ -7,6 +7,19 @@ from bt_api_base.normalization_policy import LegacyNormalizationPolicy
 
 class BinanceNormalizationPolicy(LegacyNormalizationPolicy):
     default_multiplier = 1.0
+    balance_nested_fields = ("assets", "balances")
+    balance_fields = MappingProxyType({
+        "currency": ("currency", "asset", "account_type", "symbol_name", "symbol"),
+        "cash": (
+            "available_cash", "availableBalance", "available", "cash", "available_margin",
+            "margin_free", "free_margin", "free",
+        ),
+        "value": ("equity", "marginBalance", "value"),
+        "wallet": ("balance", "walletBalance", "margin", "total_wallet_balance"),
+        "unrealized": ("crossUnPnl", "unrealizedProfit", "unrealized_profit"),
+        "margin_used": ("margin_used", "used_margin", "initialMargin"),
+        "account_id": ("account_id",),
+    })
     instrument_fields = MappingProxyType({
         "multiplier": ("multiplier", "contract_size"),
         "step": ("lot_size", "order_size_step", "volume_step", "stepSize"),
