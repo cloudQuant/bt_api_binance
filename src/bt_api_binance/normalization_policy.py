@@ -67,6 +67,14 @@ class BinanceNormalizationPolicy(LegacyNormalizationPolicy):
         "margin_used": ("margin_used", "used_margin", "initialMargin"),
         "account_id": ("account_id",),
     })
+    instrument_spec_fields = MappingProxyType({
+        "symbol": ("symbol", "symbol_name"),
+        "base_currency": ("base_currency", "baseAsset"),
+        "quote_currency": ("quote_currency", "quoteAsset", "marginAsset"),
+        "asset_type": ("asset_type",),
+        "contract_type": ("contract_type", "contractType"),
+    })
+    instrument_spec_linear_type_field = None
     instrument_fields = MappingProxyType({
         "multiplier": ("multiplier", "contract_size"),
         "step": ("lot_size", "order_size_step", "volume_step", "stepSize"),
