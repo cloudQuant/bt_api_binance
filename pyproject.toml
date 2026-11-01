@@ -39,6 +39,10 @@ binance = "bt_api_binance.plugin:register_plugin"
 BINANCE___SPOT = "bt_api_binance.order_identity_projection:project_order_identity"
 BINANCE___SWAP = "bt_api_binance.order_identity_projection:project_order_identity"
 
+[project.entry-points."bt_api.order_request_projections"]
+BINANCE___SPOT = "bt_api_binance.order_request_mapping:map_order_request"
+BINANCE___SWAP = "bt_api_binance.order_request_mapping:map_order_request"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
