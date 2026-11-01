@@ -103,3 +103,6 @@ BINANCE___SWAP = "bt_api_base.fee_projection:legacy_fee_projection"
 [project.entry-points."bt_api.instrument_rules_projections"]
 BINANCE___SPOT = "bt_api_binance.instrument_rules_projection:project_instrument_rules"
 BINANCE___SWAP = "bt_api_binance.instrument_rules_projection:project_instrument_rules"
+
+[project.entry-points."bt_api.error_classifiers"]
+BINANCE = "bt_api_binance.error_classification:classify_error"
