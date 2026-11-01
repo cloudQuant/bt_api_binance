@@ -49,6 +49,10 @@ BINANCE___SWAP = "bt_api_binance.order_readiness_service:collect_order_readiness
 [project.entry-points."bt_api.position_mode_writers"]
 BINANCE___SWAP = "bt_api_binance.position_mode_projection:write_position_mode"
 
+[project.entry-points."bt_api.order_quantity_unit_validators"]
+BINANCE___SPOT = "bt_api_base.order_quantity_units:validate_generic_order_quantity_units"
+BINANCE___SWAP = "bt_api_base.order_quantity_units:validate_generic_order_quantity_units"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
