@@ -35,6 +35,10 @@ test = ["scikit-learn"]
 [project.entry-points."bt_api.plugins"]
 binance = "bt_api_binance.plugin:register_plugin"
 
+[project.entry-points."bt_api.order_identity_projections"]
+BINANCE___SPOT = "bt_api_binance.order_identity_projection:project_order_identity"
+BINANCE___SWAP = "bt_api_binance.order_identity_projection:project_order_identity"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
