@@ -7,6 +7,18 @@ from bt_api_base.normalization_policy import LegacyNormalizationPolicy
 
 class BinanceNormalizationPolicy(LegacyNormalizationPolicy):
     default_multiplier = 1.0
+    position_fields = MappingProxyType({
+        "quantity": (
+            "quantity", "position_volume", "volume", "size", "positionAmt", "trade_volume",
+        ),
+        "side": ("position_side", "direction", "position_direction", "positionSide", "side"),
+        "position_id": ("position_id",),
+        "price": ("average_price", "avg_price", "price", "entryPrice"),
+        "today": ("today", "today_position", "today_volume"),
+        "yesterday": ("yesterday", "yesterday_position", "yd_position"),
+        "multiplier": ("multiplier", "contract_size", "volume_multiple"),
+        "exchange_id": ("exchange_id",),
+    })
     balance_nested_fields = ("assets", "balances")
     balance_fields = MappingProxyType({
         "currency": ("currency", "asset", "account_type", "symbol_name", "symbol"),
