@@ -7,6 +7,18 @@ from bt_api_base.normalization_policy import LegacyNormalizationPolicy
 
 class BinanceNormalizationPolicy(LegacyNormalizationPolicy):
     default_multiplier = 1.0
+    order_statuses = MappingProxyType({
+        "new": "accepted", "open": "accepted", "working": "accepted",
+        "submitted": "submitted", "accepted": "accepted", "pending": "submitted",
+        "partial": "partial", "partially_filled": "partial", "partial_filled": "partial",
+        "filled": "completed", "completed": "completed", "cancelled": "canceled",
+        "canceled": "canceled", "expired": "expired", "expired_in_match": "expired",
+        "rejected": "rejected", "unknown": "unknown", "local_pending": "submitted",
+    })
+    position_mode_fields = ("position_mode", "positionMode")
+    position_mode_aliases = MappingProxyType({
+        "oneway": "net", "one_way": "net", "hedge": "dual_side", "hedge_mode": "dual_side",
+    })
     order_fields = MappingProxyType({
         "order_id": ("order_id", "external_order_id", "orderId"),
         "client_id": ("client_order_id", "clientOrderId", "order_ref"),
