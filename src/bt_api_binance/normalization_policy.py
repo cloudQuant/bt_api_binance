@@ -7,6 +7,29 @@ from bt_api_base.normalization_policy import LegacyNormalizationPolicy
 
 class BinanceNormalizationPolicy(LegacyNormalizationPolicy):
     default_multiplier = 1.0
+    order_fields = MappingProxyType({
+        "order_id": ("order_id", "external_order_id", "orderId"),
+        "client_id": ("client_order_id", "clientOrderId", "order_ref"),
+        "filled": ("filled", "filled_quantity", "executed_qty", "executedQty"),
+        "average": ("avg_price", "average_price", "order_avg_price", "avgPrice"),
+        "cum_quote": ("cum_quote", "cumQuote", "cummulativeQuoteQty"),
+        "size": ("quantity", "size", "order_size", "origQty"),
+        "order_ref": ("order_ref",), "exchange_id": ("exchange_id",),
+        "front_id": ("front_id",), "session_id": ("session_id",),
+        "account_id": ("account_id",), "trading_day": ("trading_day",),
+        "fee_currency": ("fee_currency", "commissionAsset"),
+        "commission_currency": ("commission_currency", "fee_currency", "commissionAsset"),
+    })
+    trade_fields = MappingProxyType({
+        "trade_id": ("trade_id", "fill_id", "deal_id", "tradeId", "id"),
+        "order_id": ("order_id", "external_order_id", "orderId"),
+        "client_id": ("client_order_id",),
+        "size": ("quantity", "size", "trade_volume", "qty", "volume"),
+        "price": ("trade_price", "price"), "exchange_id": ("exchange_id",),
+        "account_id": ("account_id",), "trading_day": ("trading_day",),
+        "fee_currency": ("fee_currency", "trade_fee_symbol", "commissionAsset"),
+    })
+    signed_fee_currency_field = None
     position_fields = MappingProxyType({
         "quantity": (
             "quantity", "position_volume", "volume", "size", "positionAmt", "trade_volume",
