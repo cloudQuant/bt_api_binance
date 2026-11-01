@@ -99,3 +99,7 @@ markers = [
 [project.entry-points."bt_api.fee_projections"]
 BINANCE___SPOT = "bt_api_base.fee_projection:legacy_fee_projection"
 BINANCE___SWAP = "bt_api_base.fee_projection:legacy_fee_projection"
+
+[project.entry-points."bt_api.instrument_rules_projections"]
+BINANCE___SPOT = "bt_api_binance.instrument_rules_projection:project_instrument_rules"
+BINANCE___SWAP = "bt_api_binance.instrument_rules_projection:project_instrument_rules"
