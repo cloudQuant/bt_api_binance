@@ -1,10 +1,27 @@
 """Binance-specific normalization choices used by the unified SDK."""
 
+from types import MappingProxyType
+
 from bt_api_base.normalization_policy import LegacyNormalizationPolicy
 
 
 class BinanceNormalizationPolicy(LegacyNormalizationPolicy):
     default_multiplier = 1.0
+    instrument_fields = MappingProxyType({
+        "multiplier": ("multiplier", "contract_size"),
+        "step": ("lot_size", "order_size_step", "volume_step", "stepSize"),
+        "min_size": ("min_size", "volume_min"),
+        "max_size": ("max_size", "volume_max"),
+        "tick_size": ("tick_size", "price_tick"),
+        "settlement_currency": ("settlement_currency", "marginAsset", "currency"),
+        "base_currency": ("base_currency", "baseAsset"),
+        "margin_rate": ("margin_rate", "long_margin_rate"),
+        "commission_rate": ("commission_rate", "taker_commission_rate"),
+        "exchange_id": ("exchange_id",),
+    })
+    instrument_contract_value_field = None
+    instrument_contract_multiplier_field = None
+    instrument_linear_type_field = None
     event_id_fields = ("event_id", "trade_id", "tradeId", "fill_id", "order_id", "orderId")
     event_audit_fields = (
         "sequence", "sequence_id", "previous_sequence", "pu", "U", "u",
