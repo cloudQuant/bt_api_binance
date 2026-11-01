@@ -106,3 +106,7 @@ BINANCE___SWAP = "bt_api_binance.instrument_rules_projection:project_instrument_
 
 [project.entry-points."bt_api.error_classifiers"]
 BINANCE = "bt_api_binance.error_classification:classify_error"
+
+[project.entry-points."bt_api.order_side_projections"]
+BINANCE___SPOT = "bt_api_binance.order_side_projection:order_side_candidates"
+BINANCE___SWAP = "bt_api_binance.order_side_projection:order_side_candidates"
