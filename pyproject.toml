@@ -95,3 +95,7 @@ markers = [
     "unit: Unit tests (fast, no external dependencies)",
     "integration: Integration tests (may require external services)",
 ]
+
+[project.entry-points."bt_api.fee_projections"]
+BINANCE___SPOT = "bt_api_base.fee_projection:legacy_fee_projection"
+BINANCE___SWAP = "bt_api_base.fee_projection:legacy_fee_projection"
