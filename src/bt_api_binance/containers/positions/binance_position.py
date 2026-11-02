@@ -90,7 +90,9 @@ class BinancePositionData(PositionData):
                 "position_unrealized_pnl": self.position_unrealized_pnl,
                 "position_realized_pnl": self.position_realized_pnl,
             }
-        return self.all_data
+        # Return a copy: the cache is shared by every reader of a published
+        # container and must not be mutated through the result (contract v1).
+        return dict(self.all_data)
 
     def __str__(self):
         self.init_data()
@@ -178,6 +180,14 @@ class BinancePositionData(PositionData):
     def get_initial_margin(self):
         """# 当前所需起始保证金(基于最新标记价格)"""
         return self.initial_margin
+
+    def get_maintain_margin(self):
+        """Standard name for the maintenance margin (contract v1)."""
+        return self.get_maintenance_margin()
+
+    def get_position_fee(self):
+        """Standard name for the position commission (contract v1)."""
+        return self.get_position_commission()
 
     def get_maintenance_margin(self):
         """# """

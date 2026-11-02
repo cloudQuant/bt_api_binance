@@ -5,6 +5,7 @@ import json
 import time
 from typing import TYPE_CHECKING, Any
 
+from bt_api_base.containers.semantics import VOLUME_LAST_TRADE
 from bt_api_base.containers.tickers.ticker import TickerData
 from bt_api_base.functions.utils import from_dict_get_float, from_dict_get_string
 
@@ -71,7 +72,8 @@ class BinanceTickerData(TickerData):
                 "price_change": self.price_change,
                 "price_change_pct": self.price_change_pct,
             }
-        return self.all_data or {}
+        # Return a copy so readers cannot mutate the shared cache (contract v1).
+        return dict(self.all_data or {})
 
     def __str__(self) -> str:
         self.init_data()
@@ -190,6 +192,11 @@ class BinanceWssTickerData(BinanceTickerData):
         self.price_change_pct = from_dict_get_float(data, "P")
         self.has_been_init_data = True
         return self
+
+
+    def get_volume_semantics(self) -> str:
+        """Binance stream ``Q`` is the last trade quantity (contract v1)."""
+        return VOLUME_LAST_TRADE
 
 
 class BinanceRequestTickerData(BinanceTickerData):

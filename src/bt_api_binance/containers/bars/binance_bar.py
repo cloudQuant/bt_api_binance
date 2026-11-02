@@ -106,7 +106,9 @@ class BinanceRequestBarData(BarData):
                 "asset_type": self.asset_type,
                 "bar_status": True,
             }
-        return self.all_data
+        # Return a copy: the cache is shared by every reader of a published
+        # container and must not be mutated through the result (contract v1).
+        return dict(self.all_data)
 
     def __str__(self) -> str:
         """String representation of bar data."""
@@ -375,7 +377,9 @@ class BinanceWssBarData(BarData):
                 "taker_buy_quote_asset_volume": self.taker_buy_quote_asset_volume,
                 "bar_status": self.bar_status,
             }
-        return self.all_data
+        # Return a copy: the cache is shared by every reader of a published
+        # container and must not be mutated through the result (contract v1).
+        return dict(self.all_data)
 
     def __str__(self) -> str:
         """String representation of bar data."""

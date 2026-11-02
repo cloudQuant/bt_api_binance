@@ -105,7 +105,8 @@ class BinanceForceOrderData:
                 "last_trade_volume": self.last_trade_volume,
                 "total_trade_volume": self.total_trade_volume,
             }
-        return self.all_data
+        # Return a copy so readers cannot mutate the shared cache (contract v1).
+        return dict(self.all_data)
 
     def __str__(self) -> str:
         self.init_data()
@@ -339,7 +340,8 @@ class BinanceOrderData(OrderData):
                 "origin_order_type": self.origin_order_type,
                 "order_time_in_force": self.order_time_in_force,
             }
-        return self.all_data
+        # Return a copy so readers cannot mutate the shared cache (contract v1).
+        return dict(self.all_data)
 
     def __str__(self) -> str:
         self.init_data()
