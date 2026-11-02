@@ -18,4 +18,7 @@ def project_instrument_rules(row, *, pick, normalized_error):
     }
     max_quantity_raw = pick(row, "max_quantity", default=lot.get("maxQty"))
     quantity_unit = "base"
-    return (required, max_quantity_raw, quantity_unit, notional_filter, False)
+    min_notional_raw = pick(
+        row, "min_notional", default=pick(notional_filter, "notional", "minNotional")
+    )
+    return (required, max_quantity_raw, quantity_unit, min_notional_raw, False)

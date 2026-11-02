@@ -684,20 +684,21 @@ class RestDerivativesMixin(RestHostMixin):
         # if body is None:
         #     body = {}
         method, path = path.split(" ", 1)
+        binding = self._capture_credential_binding()
         if is_sign is False:
             req = params
         else:
-            self._require_private_credentials()
+            self._require_private_credentials(binding)
             req = {
                 "recvWindow": 3000,
                 "timestamp": int(time.time() * 1000),
             }
             req.update(params)
             sign = urlencode(req)
-            req["signature"] = self.sign(sign)
+            req["signature"] = binding.sign(sign)
         req = urlencode(req)
         url = f"{self._params.rest_url}{path}?{req}"
-        headers = {"X-MBX-APIKEY": self.public_key} if self.public_key else {}
+        headers = {"X-MBX-APIKEY": binding.public_key} if binding.public_key else {}
         res = await self.async_http_request(method, url, headers, body, timeout)
         self._raise_if_error(res)
         # self.request_logger.info(f"""request:{get_string_tz_time()} {res}""")

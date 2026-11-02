@@ -1,18 +1,19 @@
 """Binance native order and position-side field selection."""
-
 from __future__ import annotations
 
-from bt_api_base.order_side_projection import legacy_order_side_candidates
+from bt_api_base.order_side_projection import selected_order_side_candidates
 
 
-def order_side_candidates(row, native, *, position=False):
-    """Select S and ps independently before the legacy common aliases."""
-    candidates = []
+def order_side_candidates(row, *, position=False):
     key = "ps" if position else "S"
-    if isinstance(native, dict):
-        candidates.append(native.get(key))
+    native = row.get("o")
+    candidates = [native.get(key)] if isinstance(native, dict) else []
     candidates.append(row.get(key))
-    candidates.extend(legacy_order_side_candidates(row, native, position=position))
+    candidates.extend(selected_order_side_candidates(
+        row, position=position,
+        side_fields=("side", "order_side", "trade_side"),
+        position_side_fields=("position_side", "positionSide"),
+    ))
     return candidates
 
 

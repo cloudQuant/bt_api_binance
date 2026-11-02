@@ -35,6 +35,27 @@ test = ["scikit-learn"]
 [project.entry-points."bt_api.plugins"]
 binance = "bt_api_binance.plugin:register_plugin"
 
+[project.entry-points."bt_api.provider_configurations"]
+BINANCE___SWAP = "bt_api_binance.provider_configuration_registration:register_binance_provider_configuration"
+
+[project.entry-points."bt_api.managed_runtime_providers"]
+BINANCE___SWAP = "bt_api_binance.managed_runtime_provider:register_binance_managed_runtime_provider"
+
+[project.entry-points."bt_api.read_only_route_owners"]
+BINANCE___SWAP = "bt_api_binance.managed_runtime_provider:register_binance_read_only_route_owner"
+
+[project.entry-points."bt_api.execution_identity_assurance_providers"]
+BINANCE___SWAP = "bt_api_binance.execution_identity_assurance_provider:register_binance_execution_identity_assurance_provider"
+
+[project.entry-points."bt_api.query_providers"]
+BINANCE___SWAP = "bt_api_binance.unified_account_provider:register_binance_query_provider"
+
+[project.entry-points."bt_api.account_session_providers"]
+BINANCE___SWAP = "bt_api_binance.unified_account_provider:register_binance_account_session_provider"
+
+[project.entry-points."bt_api.market_stream_providers"]
+BINANCE___SWAP = "bt_api_binance.market_stream_provider:register_binance_market_stream_provider"
+
 [project.entry-points."bt_api.order_identity_projections"]
 BINANCE___SPOT = "bt_api_binance.order_identity_projection:project_order_identity"
 BINANCE___SWAP = "bt_api_binance.order_identity_projection:project_order_identity"
@@ -48,6 +69,10 @@ BINANCE___SWAP = "bt_api_binance.order_readiness_service:collect_order_readiness
 
 [project.entry-points."bt_api.position_mode_writers"]
 BINANCE___SWAP = "bt_api_binance.position_mode_projection:write_position_mode"
+
+[project.entry-points."bt_api.account_config_read_aliases"]
+BINANCE___SPOT = "bt_api_binance.account_config_projection:account_config_read_aliases"
+BINANCE___SWAP = "bt_api_binance.account_config_projection:account_config_read_aliases"
 
 [project.entry-points."bt_api.order_quantity_unit_validators"]
 BINANCE___SPOT = "bt_api_base.order_quantity_units:validate_generic_order_quantity_units"
@@ -114,3 +139,13 @@ BINANCE___SWAP = "bt_api_binance.order_side_projection:order_side_candidates"
 [project.entry-points."bt_api.normalization_policies"]
 BINANCE___SPOT = "bt_api_binance.normalization_policy:normalization_policy"
 BINANCE___SWAP = "bt_api_binance.normalization_policy:normalization_policy"
+
+[project.entry-points."bt_api.execution_configuration_policies"]
+BINANCE___SPOT = "bt_api_binance.execution_configuration_policy:execution_configuration_policy"
+BINANCE___SWAP = "bt_api_binance.execution_configuration_policy:execution_configuration_policy"
+
+[project.entry-points."bt_api.execution_ledger_identity_policies"]
+BINANCE = "bt_api_base.execution_ledger_identity_policy:credential_bound_ledger_policy"
+
+[project.entry-points."bt_api.account_risk_source_policies"]
+BINANCE = "bt_api_base.account_risk_source_policy:legacy_account_risk_source_policy"

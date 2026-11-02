@@ -1,5 +1,17 @@
 # bt_api_binance
 
+Position-mode acknowledgement codes are provider declarations: the Base default is unspecified. Binance, CTP and non-swap OKX preserve the previous `200`; OKX swap preserves `0`, and ten historical policies retain `200`. These inherited values do not prove venue capability. Third-party Base subclasses no longer receive a default; dynamic policies, packaging and behavior remain unvalidated.
+
+Binance/OKX bound read-only runtime registration and exact owner/config checks live in their providers; Base carries the SDK-injected API type, and SDK owns composition and finite error mapping. The two SDK-specific registration modules and `compose_binance_read_only_runtime` / `compose_okx_read_only_runtime` are removed. `compose_read_only_runtime` creates a new owner and differs from reusing an existing one. Entry points, thread/cleanup and behavior remain unaccepted.
+
+Execution-ledger identity format is declared per provider via `bt_api_base.execution_ledger_identity_policy`, not hard-coded venue names. The 13 built-in providers retain their prior format choices; this does not prove identity. Missing or undiscoverable declarations fail, including historical/custom providers, and successful selections are process-cached. Migration, packaging and behavior remain unaccepted.
+
+Order-status and trade-fee field candidates are selected by provider policy. Binance, OKX, CTP and the historical policy retain the prior aliases and order; a policy without declarations fails explicitly. Third-party policies, field coverage and behavior remain unvalidated. Placement position-mode fencing is also provider-declared: OKX/Binance retain the existing guard, other built-in routes retain the previous unguarded behavior, and undeclared routes reject placement. This breaking change does not prove venue capability.
+
+The working-tree normalizer uses neutral tick trading/action day fields and declares Binance order-book sequence/audit aliases. The working-tree normalizer declares its native order identity aliases, order provenance fields and scoped v5/v6 source schemas; field coverage and behavior remain unvalidated.
+
+The working-tree normalization policy declares the Binance user-stream nested order identity fields `o`, `S`, and `ps`; cross-package behavior remains unvalidated.
+
 [![PyPI Version](https://img.shields.io/pypi/v/bt_api_binance.svg)](https://pypi.org/project/bt_api_binance/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/bt_api_binance.svg)](https://pypi.org/project/bt_api_binance/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -14,6 +26,12 @@
 > **Binance exchange plugin for bt_api** — Unified REST and WebSocket API for **Spot**, **Futures**, **Margin**, **Options**, and more.
 
 `bt_api_binance` is a runtime plugin for [bt_api](https://github.com/cloudQuant/bt_api_py) that connects to **Binance** exchange. It depends on [bt_api_base](https://github.com/cloudQuant/bt_api_base) for core infrastructure. It also ships `BinanceDirectClient` for **standalone use** without the full bt_api framework.
+
+The working-tree provider declares its native `get_config` account-configuration alias for the SDK; this integration has not been validated.
+
+The working-tree provider owns execution credential-field/environment declarations, Binance funding-row selection, schedule completion and the opt-in for normalized terminal-order fee reconciliation; its SDK integration remains unaccepted source work.
+
+The working-tree order-side projector also selects Binance's nested `o` field locally. Its updated SDK entry-point signature has not been behavior- or installation-validated.
 
 | Resource | Link |
 |----------|------|
