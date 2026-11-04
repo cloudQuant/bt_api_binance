@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Any, Callable
 
+from bt_api_base.containers.auto_init_mixin import container_class
 from bt_api_base.feeds.my_websocket_app import MyWebsocketApp
 from bt_api_base.logging_factory import get_logger
 from bt_api_base.market_orderbook_protocol import MarketOrderBookEvent, MarketOrderBookLevel
@@ -746,7 +747,8 @@ class BinanceMarketStreamSession:
         sequence: int | None = None,
         previous_provider_sequence: int | None = None,
     ) -> MarketOrderBookEvent:
-        if type(record.item) is not BinanceWssOrderBookData:
+        # Exact class, also for a published (frozen) container.
+        if container_class(record.item) is not BinanceWssOrderBookData:
             raise BinanceMarketStreamProviderError("BINANCE_MARKET_STREAM_EVENT_INVALID")
         item = record.item
         try:

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from typing import Callable
 from urllib.parse import urlsplit, urlunsplit
 
+from bt_api_base.containers.auto_init_mixin import container_class
 from bt_api_base.market_protocol import MarketProviderEvent, MarketSubscriptionKey
 
 from bt_api_binance.containers.tickers.binance_ticker import BinanceWssTickerData
@@ -218,7 +219,8 @@ class BinanceUsdMDemoMarketProvider:
         raw_items = handle.queue.drain(limit)
         events = []
         for raw_item in raw_items:
-            if type(raw_item) is not BinanceWssTickerData:
+            # Exact class, also for a published (frozen) container.
+            if container_class(raw_item) is not BinanceWssTickerData:
                 self._invalid_ticker_events += 1
                 raise ValueError("INVALID_BINANCE_TICKER_EVENT")
             projection, observed_at_utc = _project_ticker(raw_item, handle.key)
