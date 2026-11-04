@@ -18,6 +18,7 @@ pytest.importorskip("bt_api_gateway")
 from bt_api_base.execution_row_observation_protocol import (  # noqa: E402
     EXECUTION_TRADE_EVENT_KIND,
     execution_observation_from_event,
+    strategy_client_order_id,
     strategy_client_order_prefix,
 )
 from test_iter60_gateway_execution_observations import (  # noqa: E402
@@ -119,7 +120,10 @@ def test_binance_fills_route_by_strategy_prefix_with_fee_corrections_and_restart
     clock = Clock()
     venue = FakeUsdmVenue(clock=clock)
     prefix = strategy_client_order_prefix("strategy-a")
-    venue.add_order(order_row(1001, client=prefix + "0001"))
+    # The id a prefixed order-entry owner sends: venue grammar-valid (Base v2).
+    strategy_id = strategy_client_order_id("strategy-a", "ab" * 32)
+    assert strategy_id.isalnum() and len(strategy_id) <= 32
+    venue.add_order(order_row(1001, client=strategy_id))
     venue.trades.append(trade_row(5001, 1001, commission="0.02"))
     venue.add_order(order_row(1002, client="web_manual_order"))
     venue.trades.append(trade_row(5002, 1002, commission="0.01"))
@@ -130,7 +134,7 @@ def test_binance_fills_route_by_strategy_prefix_with_fee_corrections_and_restart
     assert (result.appended, result.duplicates, result.unattributed_dropped) == (4, 0, 0)
     stream_a = gateway.events(EXEC_A)
     assert [observation.order.client_order_id for _kind, observation in stream_a[:1]] == [
-        prefix + "0001"
+        strategy_id
     ]
     (_k, order_a), (trade_kind, fill_a) = stream_a
     assert trade_kind == EXECUTION_TRADE_EVENT_KIND
