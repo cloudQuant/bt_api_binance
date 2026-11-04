@@ -6,6 +6,12 @@ or other mutating endpoint. Binance's account response does not provide the
 provider-authoritative monotonic revision required by DIM03, so this adapter
 returns an ordinary ``AccountObservation`` and never mints a full-position
 snapshot receipt.
+
+With an explicit ``BinanceUsdMExecutionScope`` (iteration 60) the provider also
+implements the Gateway worker's optional execution capability
+(``read_execution_observations`` / ``confirm_execution_observations``): typed
+order and per-fill observations of the configured symbols from further signed
+``GET`` query routes, see :mod:`bt_api_binance.gateway_execution_observations`.
 """
 
 from __future__ import annotations
@@ -38,6 +44,8 @@ from bt_api_base.account_protocol import (
 )
 from bt_api_base.market_protocol import MarketInstrumentKey
 
+from bt_api_binance import gateway_execution_observations as _execution
+
 _BASE_URL = "https://demo-fapi.binance.com"
 _MAX_TIMEOUT_SECONDS = 30.0
 _SERVER_TIME_MAX_AGE_SECONDS = 60.0
@@ -53,6 +61,18 @@ _ROUTES = {
     "account": "/fapi/v2/account",
     "open_orders": "/fapi/v1/openOrders",
     "open_algo_orders": "/fapi/v1/openAlgoOrders",
+    # Execution observations (iteration 60): read-only queries. The transport
+    # only ever sends GET, so /fapi/v1/order is the order *query* here.
+    "user_trades": "/fapi/v1/userTrades",
+    "all_orders": "/fapi/v1/allOrders",
+    "order": "/fapi/v1/order",
+}
+# Query parameters a signed route may carry besides recvWindow/timestamp.
+_ROUTE_PARAMS = {
+    "open_orders": frozenset({"symbol"}),
+    "user_trades": frozenset({"symbol", "fromId", "startTime", "endTime", "limit"}),
+    "all_orders": frozenset({"symbol", "startTime", "endTime", "limit"}),
+    "order": frozenset({"symbol", "orderId"}),
 }
 
 
@@ -92,6 +112,16 @@ class BinanceUsdMProviderError(RuntimeError):
             "RESPONSE_TOO_LARGE",
             "TRANSPORT_FAILED",
             "INVALID_JSON_RESPONSE",
+            "INVALID_EXECUTION_SCOPE",
+            "INVALID_LIMIT",
+            "EXECUTION_OBSERVATIONS_NOT_CONFIGURED",
+            "EXECUTION_READ_FAILED",
+            "EXECUTION_ROW_INVALID",
+            "EXECUTION_LOOKBACK_TRUNCATED",
+            "EXECUTION_TRACKED_ORDERS_EXCEEDED",
+            "EXECUTION_IDENTITY_UNAVAILABLE",
+            "EXECUTION_MARGIN_POOL_UNVERIFIED",
+            "EXECUTION_CONFIRM_INVALID",
         }
     )
 
@@ -124,6 +154,53 @@ class BinanceUsdMApiCredentials:
         return "BinanceUsdMApiCredentials(<redacted>)"
 
 
+@dataclass(frozen=True)
+class BinanceUsdMExecutionScope:
+    """Explicit execution-observation scope of one Gateway provider session.
+
+    ``symbols`` are the USDⓈ-M symbols whose orders and fills are read; they are
+    configuration and never guessed. ``lookback_seconds`` is the window re-read
+    after each ``connect`` (a restart): facts already published are produced
+    again with identical fact ids. ``observation_issuer`` issues the stable
+    opaque order/trade ids (``issue_order_observation_id`` and
+    ``issue_trade_observation_id`` of ``bt_api_base``'s
+    ``ManagedOrderObservationIssuer``, e.g. the SDK's durable issuer; ids must
+    survive restarts, so the issuer must be durable). ``poll_interval_seconds``
+    throttles venue queries; pending observations are returned without one.
+    """
+
+    symbols: tuple[str, ...]
+    lookback_seconds: int
+    observation_issuer: object = field(repr=False, compare=False)
+    poll_interval_seconds: float = 5.0
+
+    def __post_init__(self) -> None:
+        symbols = self.symbols
+        if (
+            type(symbols) is not tuple
+            or not 1 <= len(symbols) <= _execution.MAX_SYMBOLS
+            or len(set(symbols)) != len(symbols)
+            or any(type(item) is not str or _SYMBOL.fullmatch(item) is None for item in symbols)
+        ):
+            raise BinanceUsdMProviderError("INVALID_EXECUTION_SCOPE")
+        lookback = self.lookback_seconds
+        if type(lookback) is not int or not (
+            _execution.MIN_LOOKBACK_SECONDS <= lookback <= _execution.MAX_LOOKBACK_SECONDS
+        ):
+            raise BinanceUsdMProviderError("INVALID_EXECUTION_SCOPE")
+        interval = self.poll_interval_seconds
+        if type(interval) not in (int, float) or not math.isfinite(interval) or not (
+            0 <= interval <= _execution.MAX_POLL_INTERVAL_SECONDS
+        ):
+            raise BinanceUsdMProviderError("INVALID_EXECUTION_SCOPE")
+        issuer = self.observation_issuer
+        if not all(
+            callable(getattr(issuer, name, None))
+            for name in ("issue_order_observation_id", "issue_trade_observation_id")
+        ):
+            raise BinanceUsdMProviderError("INVALID_EXECUTION_SCOPE")
+
+
 class BinanceUsdMAccountSessionProvider:
     """One-shot, owner-thread USDⓈ-M Demo reader compatible with Gateway.
 
@@ -140,9 +217,15 @@ class BinanceUsdMAccountSessionProvider:
         transport: Callable[[str, str, Mapping[str, str], float, int], bytes] | None = None,
         wall_clock: Callable[[], float] = time.time,
         monotonic_clock: Callable[[], float] = time.monotonic,
+        execution: BinanceUsdMExecutionScope | None = None,
     ) -> None:
         if environment != "demo":
             raise BinanceUsdMProviderError("INVALID_ACCOUNT_IDENTITY")
+        if execution is not None and type(execution) is not BinanceUsdMExecutionScope:
+            raise BinanceUsdMProviderError("INVALID_EXECUTION_SCOPE")
+        self._execution_scope = execution
+        self._execution_reader: _execution.BinanceUsdMExecutionReader | None = None
+        self._margin_by_symbol: dict[str, bool] | None = None
         self._credentials = _credentials(credentials)
         self._transport = transport or _https_get
         if not callable(self._transport) or not callable(wall_clock) or not callable(
@@ -183,6 +266,10 @@ class BinanceUsdMAccountSessionProvider:
         self._owner_thread = threading.get_ident()
         self._account_key = account_key
         self._generation = generation
+        self._margin_by_symbol = None
+        if self._execution_scope is not None:
+            # One pending queue per generation; nothing carries over.
+            self._execution_reader = self._new_execution_reader(account_key)
 
         # Establish exchange-clock offset before the worker's first signed
         # account snapshot. The formal C01 server-time operation performs its
@@ -275,7 +362,7 @@ class BinanceUsdMAccountSessionProvider:
                 account_key=self._account_key,
                 observed_at=completed,
             )
-            return AccountObservation(
+            observation = AccountObservation(
                 account_key=self._account_key,
                 observation_id="binance-usdm-" + uuid.uuid4().hex,
                 coverage=(_RESOURCE,),
@@ -294,6 +381,85 @@ class BinanceUsdMAccountSessionProvider:
             raise
         except Exception:
             raise BinanceUsdMProviderError("ACCOUNT_SNAPSHOT_READ_FAILED") from None
+        # Execution rows carry the cross resource only for symbols this
+        # generation's latest complete account read showed as cross margin.
+        self._margin_by_symbol = margin_by_symbol
+        return observation
+
+    @property
+    def execution_counters(self) -> Mapping[str, int]:
+        """Finite refusal/diagnostic counters of the current execution queue."""
+
+        reader = self._execution_reader
+        return {} if reader is None else reader.counters
+
+    def read_execution_observations(
+        self, *, generation: str, timeout: float, limit: int
+    ) -> tuple[Any, ...]:
+        """Return (without removing) up to ``limit`` pending execution observations.
+
+        Pending observations are returned again until confirmed; the venue is
+        queried only when nothing is pending and the poll interval elapsed.
+        """
+
+        self._assert_active(generation)
+        reader = self._execution_reader
+        if reader is None:
+            raise BinanceUsdMProviderError("EXECUTION_OBSERVATIONS_NOT_CONFIGURED")
+        deadline = _deadline(self._monotonic_clock, timeout)
+        try:
+            return reader.read(limit=limit, deadline=deadline)
+        except BinanceUsdMProviderError:
+            raise
+        except _execution.ExecutionReadIssue as issue:
+            raise BinanceUsdMProviderError(issue.code) from None
+        except Exception:
+            raise BinanceUsdMProviderError("EXECUTION_READ_FAILED") from None
+
+    def confirm_execution_observations(self, *, generation: str, count: int) -> None:
+        """Remove the first ``count`` observations handed out by the last read."""
+
+        self._assert_active(generation)
+        reader = self._execution_reader
+        if reader is None:
+            raise BinanceUsdMProviderError("EXECUTION_OBSERVATIONS_NOT_CONFIGURED")
+        try:
+            reader.confirm(count)
+        except _execution.ExecutionReadIssue as issue:
+            raise BinanceUsdMProviderError(issue.code) from None
+
+    def _new_execution_reader(
+        self, account_key: AccountKey
+    ) -> _execution.BinanceUsdMExecutionReader:
+        scope = self._execution_scope
+        assert scope is not None
+
+        def request(route: str, params: Mapping[str, str], deadline: float) -> Any:
+            self._ensure_server_time(deadline)
+            return self._request_json(route, deadline=deadline, signed=True, params=params)
+
+        def exchange_now_ms(deadline: float) -> int:
+            self._ensure_server_time(deadline)
+            offset = self._server_time_offset_ms
+            if offset is None:
+                raise BinanceUsdMProviderError("SERVER_TIME_PROBE_REQUIRED")
+            return int(_clock_value(self._wall_clock) * 1000) + offset
+
+        def margin_pools() -> Mapping[str, bool] | None:
+            return self._margin_by_symbol
+
+        return _execution.BinanceUsdMExecutionReader(
+            account_key=account_key,
+            symbols=scope.symbols,
+            lookback_seconds=scope.lookback_seconds,
+            poll_interval_seconds=scope.poll_interval_seconds,
+            observation_issuer=scope.observation_issuer,
+            request=request,
+            exchange_now_ms=exchange_now_ms,
+            utc_now=lambda: _utc_now(self._wall_clock),
+            monotonic=lambda: _clock_value(self._monotonic_clock),
+            margin_pools=margin_pools,
+        )
 
     def close(self) -> bool:
         """Drop local credential references; no remote session exists to mutate."""
@@ -305,6 +471,10 @@ class BinanceUsdMAccountSessionProvider:
         self._credentials = None
         self._server_time_offset_ms = None
         self._server_time_observed_monotonic = None
+        # Unconfirmed execution observations are dropped with the generation;
+        # the next session re-reads them from the venue (same fact ids).
+        self._execution_reader = None
+        self._margin_by_symbol = None
         self._closed = True
         return True
 
@@ -338,15 +508,36 @@ class BinanceUsdMAccountSessionProvider:
         self._server_time_observed_monotonic = mono_after
         return response["serverTime"], rtt, mono_after
 
-    def _request_json(self, route: str, *, deadline: float, signed: bool) -> Any:
+    def _request_json(
+        self,
+        route: str,
+        *,
+        deadline: float,
+        signed: bool,
+        params: Mapping[str, str] | None = None,
+    ) -> Any:
         path = _ROUTES.get(route)
         if path is None:
             raise BinanceUsdMProviderError("TRANSPORT_FAILED")
+        extra: dict[str, str] = {}
+        if params:
+            allowed = _ROUTE_PARAMS.get(route, frozenset())
+            if not signed or any(
+                type(key) is not str
+                or key not in allowed
+                or type(value) is not str
+                or not value
+                or len(value) > 64
+                or not value.isascii()
+                or not value.isalnum()
+                for key, value in params.items()
+            ):
+                raise BinanceUsdMProviderError("TRANSPORT_FAILED")
+            extra = dict(params)
         remaining = deadline - _clock_value(self._monotonic_clock)
         if remaining <= 0:
             raise BinanceUsdMProviderError("REQUEST_TIMEOUT")
         headers = {"Accept": "application/json"}
-        params: dict[str, str] = {}
         if signed:
             credentials = self._credentials
             offset = self._server_time_offset_ms
@@ -355,8 +546,12 @@ class BinanceUsdMAccountSessionProvider:
             timestamp = int(self._wall_clock() * 1000) + offset
             if timestamp < 0:
                 raise BinanceUsdMProviderError("SERVER_TIME_INVALID")
-            params = {"recvWindow": str(_MAX_RECV_WINDOW_MS), "timestamp": str(timestamp)}
-            query = urlencode(sorted(params.items()))
+            query_params = {
+                **extra,
+                "recvWindow": str(_MAX_RECV_WINDOW_MS),
+                "timestamp": str(timestamp),
+            }
+            query = urlencode(sorted(query_params.items()))
             signature = hmac.new(
                 credentials.api_secret.encode("ascii"),
                 query.encode("ascii"),
@@ -408,13 +603,22 @@ class BinanceUsdMAccountSessionProvider:
 
 
 def make_binance_usdm_demo_provider(
-    session_ref: str, credential_obj: object
+    session_ref: str,
+    credential_obj: object,
+    *,
+    execution: BinanceUsdMExecutionScope | None = None,
 ) -> BinanceUsdMAccountSessionProvider:
-    """GatewaySessionOwner-compatible factory for trusted Demo credentials."""
+    """GatewaySessionOwner-compatible factory for trusted Demo credentials.
+
+    A composition that publishes execution events binds ``execution`` (for
+    example with ``functools.partial``); the default stays account-only.
+    """
 
     if type(session_ref) is not str or _SESSION_REF.fullmatch(session_ref) is None:
         raise BinanceUsdMProviderError("INVALID_ACCOUNT_IDENTITY")
-    return BinanceUsdMAccountSessionProvider(credential_obj)  # type: ignore[arg-type]
+    return BinanceUsdMAccountSessionProvider(
+        credential_obj, execution=execution  # type: ignore[arg-type]
+    )
 
 
 def _credentials(value: object) -> BinanceUsdMApiCredentials:
@@ -795,6 +999,7 @@ def _optional_bool(value: Any) -> bool | None:
 __all__ = [
     "BinanceUsdMAccountSessionProvider",
     "BinanceUsdMApiCredentials",
+    "BinanceUsdMExecutionScope",
     "BinanceUsdMProviderError",
     "make_binance_usdm_demo_provider",
 ]
