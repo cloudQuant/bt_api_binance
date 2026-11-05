@@ -67,6 +67,9 @@ BINANCE___SWAP = "bt_api_binance.order_request_mapping:map_order_request"
 [project.entry-points."bt_api.order_readiness_providers"]
 BINANCE___SWAP = "bt_api_binance.order_readiness_service:collect_order_readiness"
 
+[project.entry-points."bt_api.direct_write_providers"]
+BINANCE___SWAP = "bt_api_binance.direct_write_provider:create_binance_direct_write_provider"
+
 [project.entry-points."bt_api.position_mode_writers"]
 BINANCE___SWAP = "bt_api_binance.position_mode_projection:write_position_mode"
 

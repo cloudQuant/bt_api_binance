@@ -1,4 +1,8 @@
-"""Binance USDⓈ-M order-book adapter for the neutral market-stream port.
+"""Binance USDⓈ-M adapter for the neutral market-stream port.
+
+Iteration 62 advertises the ``tick`` channel (public ``bookTicker`` +
+``aggTrade`` pushes, see :mod:`bt_api_binance.market_tick_stream`). The order
+book session below stays implemented but unadvertised.
 
 This module keeps the existing Binance diff-depth reconstruction and REST
 snapshot bridge inside the Binance SDK package. It binds those observations to
@@ -421,15 +425,21 @@ class BinanceMarketStreamAdapter:
         self._route = route
 
     def capabilities(self) -> tuple[MarketStreamChannelCapability, ...]:
-        # The production WSS endpoint and related native-source assumptions are
-        # pending independent verification. Keep the implementation available
-        # for review, but advertise no channel until that evidence is resolved.
-        return ()
+        """Declare the public tick channel only (no I/O).
 
-    def open_session(self, *, wake_callback: Callable[[], None]) -> BinanceMarketStreamSession:
+        The order-book source (diff depth + REST snapshot bridge) stays
+        unadvertised: its production WSS endpoint and native-source
+        assumptions are pending independent verification.
+        """
+        return (MarketStreamChannelCapability(channel="tick", max_depth=None),)
+
+    def open_session(self, *, wake_callback: Callable[[], None]) -> Any:
+        """Create an unstarted tick session shell; the first subscribe starts WSS."""
+        from bt_api_binance.market_tick_stream import BinanceTickMarketStreamSession
+
         if not callable(wake_callback):
             raise BinanceMarketStreamProviderError("BINANCE_MARKET_STREAM_ROUTE_UNAVAILABLE")
-        return BinanceMarketStreamSession(self._route, wake_callback=wake_callback)
+        return BinanceTickMarketStreamSession(self._route, wake_callback=wake_callback)
 
 
 class BinanceMarketStreamSession:
